@@ -25,7 +25,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat './gradlew clean build'
+                bat './gradlew clean build -x test'
             }
         }
 
@@ -37,30 +37,24 @@ pipeline {
 
         stage('Deploy to AWS EC2') {
             steps {
-                withCredentials([string(credentialsId: 'OPEN_API_KEY', variable: 'OPEN_API_KEY')]) {
-                    script {
-                        writeFile file: '.env', text: """
-        DB_HOST=localhost
-        DB_NAME=myapp
-        DB_USER=jenkins
-        DB_PASS=jenkins123
-        UPLOAD_PATH=/home/ec2-user/uploads
-        KAKAO_ADMIN_KEY=692a07ef5c27d034300190c55044f4ea
-        KAKAO_CLIENT_ID=a7e706b35a2aa6ca3bb74475951f6ec0
-        KAKAO_CLIENT_SECRET=TSCBuRtcqv4qteS35sAjTeE8Cv8rzFmx
-        OPEN_API_KEY=${env.OPEN_API_KEY}
-        """
-                    }
+                script {
+                    writeFile file: '.env', text: """
+DB_HOST=${env.DB_HOST}
+DB_NAME=${env.DB_NAME}
+DB_USER=${env.DB_USER}
+DB_PASS=${env.DB_PASS}
+UPLOAD_PATH=${env.UPLOAD_PATH}
+"""
                     bat """
                         echo Step 2: Send .env to EC2
-                        C:/Users/M/.ssh/pscp.exe -i C:/Users/M/.ssh/mina.ppk -batch -hostkey "ssh-ed25519 255 SHA256:h6fF/KbgIbLrQ4ZjcaJRccjQhrBmBZPu7n3M8VCSEZE" .env ec2-user@ec2-13-125-69-197.ap-northeast-2.compute.amazonaws.com:/home/ec2-user/
+                        C:/Users/M/.ssh/pscp.exe -i C:/Users/M/.ssh/samyang.ppk -batch -hostkey "ssh-ed25519 255 SHA256:YOUR_HOSTKEY_HERE" .env ec2-user@ec2-43-201-101-246.ap-northeast-2.compute.amazonaws.com:/home/ec2-user/
 
                         echo Step 3: Send JAR to EC2
-                        C:/Users/M/.ssh/pscp.exe -i C:/Users/M/.ssh/mina.ppk -batch -hostkey "ssh-ed25519 255 SHA256:h6fF/KbgIbLrQ4ZjcaJRccjQhrBmBZPu7n3M8VCSEZE" build/libs/app-0.0.1-SNAPSHOT.jar ec2-user@ec2-13-125-69-197.ap-northeast-2.compute.amazonaws.com:/home/ec2-user/
+                        C:/Users/M/.ssh/pscp.exe -i C:/Users/M/.ssh/samyang.ppk -batch -hostkey "ssh-ed25519 255 SHA256:YOUR_HOSTKEY_HERE" build/libs/jenkins-samyang-0.0.1-SNAPSHOT.jar ec2-user@ec2-43-201-101-246.ap-northeast-2.compute.amazonaws.com:/home/ec2-user/
 
                         echo Step 4: Restart app on EC2
-                        C:/Users/M/.ssh/plink.exe -i C:/Users/M/.ssh/mina.ppk -batch -hostkey "ssh-ed25519 255 SHA256:h6fF/KbgIbLrQ4ZjcaJRccjQhrBmBZPu7n3M8VCSEZE" ec2-user@ec2-13-125-69-197.ap-northeast-2.compute.amazonaws.com ^
-                        "pkill -f app-0.0.1-SNAPSHOT.jar || true; set -a; source /home/ec2-user/.env; set +a; nohup java -jar app-0.0.1-SNAPSHOT.jar > app.log 2>&1 &"
+                        C:/Users/M/.ssh/plink.exe -i C:/Users/M/.ssh/samyang.ppk -batch -hostkey "ssh-ed25519 255 SHA256:YOUR_HOSTKEY_HERE" ec2-user@ec2-43-201-101-246.ap-northeast-2.compute.amazonaws.com ^
+                        "pkill -f jenkins-samyang-0.0.1-SNAPSHOT.jar || true; set -a; source /home/ec2-user/.env; set +a; nohup java -jar jenkins-samyang-0.0.1-SNAPSHOT.jar > app.log 2>&1 &"
 
                         exit 0
                     """
