@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="link">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>삼양 헤더</title>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<style th:fragment="style">
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		a {
+			text-decoration: none;
+			color: #333;
+		}
+
+		ul,
+		li {
+			list-style: none;
+		}
+
+		.header {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			z-index: 1000;
+			background: transparent;
+			transition: background 0.3s ease;
+		}
+
+
+		.header.active {
+			background: #fff;
+			border-bottom: 1px solid #e6e6e6;
+		}
+
+		.header.active .menu>li>a {
+			color: #111;
+		}
+
+		.navbar {
+			width: 1140px;
+			margin: 0 auto;
+			height: 111px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.logo {
+			margin-left: -25px;
+			transform: translate(-150px, 10px);
+		}
+
+		.logo img {
+			width: 186px;
+		}
+
+		.menu {
+			display: flex;
+			flex: 1;
+			justify-content: space-between;
+			width: 100%;
+			padding-left: 20px;
+		}
+
+		.menu>li {
+			flex: 1;
+			text-align: center;
+		}
+
+		.menu>li>a {
+			display: block;
+			width: 170px;
+			height: 65px;
+			line-height: 65px;
+			font-size: 18px;
+			font-weight: 500;
+			color: white;
+			transition: color 0.3s ease;
+		}
+
+		.submenu-wrap {
+			display: none;
+			position: absolute;
+			top: 111px;
+			left: 0;
+			width: 100%;
+			background: #fff;
+			z-index: 99;
+		}
+
+		.submenu-inner {
+			width: 1140px;
+			margin: 0 auto;
+			display: flex;
+			padding-left: 180px;
+		}
+
+		.submenu-box {
+			width: 170px;
+			flex: 1;
+			text-align: center;
+			padding: 0 0 20px;
+		}
+
+		.submenu-box li {
+			width: 170px;
+			line-height: 32px;
+		}
+
+		.submenu-box a {
+			color: #867d77;
+			font-size: 15px;
+		}
+
+		.login-box {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			margin-right: -15px;
+			transform: translate(50px);
+		}
+
+		.login-box a {
+			width: 80px;
+			height: 40px;
+			background-color: transparent;
+			color: white;
+			border: 1px solid white;
+			font-size: 14px;
+			text-decoration: none;
+			text-align: center;
+			border-radius: 20px;
+			line-height: 38px;
+			padding: 0 5px;
+			transition: all 0.3s ease;
+		}
+
+		.header.active .login-box a {
+			color: #333;
+			border-color: #333;
+		}
+	</style>
+</head>
+
+<body>
+	<header th:fragment="header" class="header">
+		<nav class="navbar">
+			<h1 class="logo">
+				<a href="/"><img id="logoImg" src="/img/mainlogo1.png" alt="Samyang Logo"></a>
+			</h1>
+			<ul class="menu">
+				<li><a href="#">회사소개</a></li>
+				<li><a href="#">화학사업</a></li>
+				<li><a href="/product/list">식품사업</a></li>
+				<li><a href="#">투자정보</a></li>
+				<li><a href="#">ESG</a></li>
+				<li><a href="#">미디어</a></li>
+			</ul>
+
+			<div class="login-box">
+				<a href="/review" class="login-btn">리뷰</a>
+				<a href="/cart" class="login-btn">장바구니</a>
+
+				<!-- 로그인 / 로그아웃 -->
+				<a href="/member/login" th:if="${session.loginMember == null}" class="login-btn">로그인</a>
+				<a href="/member/logout" th:if="${session.loginMember != null}" class="login-btn">로그아웃</a>
+			</div>
+		</nav>
+
+		<div class="submenu-wrap">
+			<div class="submenu-inner">
+				<ul class="submenu-box">
+					<li><a href="#">회사개요</a></li>
+					<li><a href="#">PURPOSE</a></li>
+					<li><a href="#">연혁</a></li>
+					<li><a href="#">창업자와 창업정신</a></li>
+					<li><a href="#">온라인 역사관</a></li>
+					<li><a href="#">글로벌 네트워크</a></li>
+					<li><a href="#">채용</a></li>
+				</ul>
+				<ul class="submenu-box">
+					<li><a href="#">엔지니어링 플라스틱</a></li>
+					<li><a href="#">이온교환수지</a></li>
+					<li><a href="#">정보전자소재</a></li>
+					<li><a href="#">R&amp;D</a></li>
+				</ul>
+				<ul class="submenu-box">
+					<li><a href="#">식품소재</a></li>
+					<li><a href="#">식자재유통</a></li>
+					<li><a href="#">소비재</a></li>
+					<li><a href="#">R&amp;D</a></li>
+				</ul>
+				<ul class="submenu-box">
+					<li><a href="#">주식정보</a></li>
+					<li><a href="#">재무정보</a></li>
+					<li><a href="#">IR 자료실</a></li>
+					<li><a href="#">주주총회</a></li>
+					<li><a href="#">공고</a></li>
+				</ul>
+				<ul class="submenu-box">
+					<li><a href="#">삼양 ESG</a></li>
+					<li><a href="#">환경</a></li>
+					<li><a href="#">사회</a></li>
+					<li><a href="#">지배구조</a></li>
+					<li><a href="#">윤리경영</a></li>
+					<li><a href="#">보고서 및 정책</a></li>
+				</ul>
+				<ul class="submenu-box">
+					<li><a href="#">뉴스룸</a></li>
+					<li><a href="#">소셜채널</a></li>
+					<li><a href="/member/mypage">마이페이지</a></li>
+					<li><a href="#">웨비나</a></li>
+					<li><a href="#">문의하기</a></li>
+				</ul>
+			</div>
+		</div>
+	</header>
+
+	<script>
+		$(document).ready(function () {
+			const header = $('.header');
+			const logo = $('#logoImg');
+
+			header.hover(
+				function () {
+					header.addClass('active');
+					logo.attr('src', '/img/mainlogo2.png'); // 남색 로고
+					$('.submenu-wrap').stop().slideDown(200);
+				},
+				function () {
+					header.removeClass('active');
+					logo.attr('src', '/img/mainlogo1.png'); // 흰색 로고
+					$('.submenu-wrap').stop().slideUp(200);
+				}
+			);
+		});
+	</script>
+</body>
+
+</html>

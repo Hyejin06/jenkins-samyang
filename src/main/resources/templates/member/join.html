@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>삼양 회원가입</title>
+	<link rel="stylesheet" href="/css/join.css" />
+	<th:block th:replace="~{fragments/header :: style}"></th:block>
+	<th:block th:replace="~{fragments/header :: script}"></th:block>
+	<th:block th:replace="~{fragments/footer :: style}"></th:block>
+	<th:block th:replace="~{fragments/footer :: script}"></th:block>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		.header {
+			background: #fff !important;
+			border-bottom: 1px solid #e6e6e6 !important;
+		}
+
+		.header .menu>li>a {
+			color: #111 !important;
+		}
+
+		.header .login-box a {
+			color: #111 !important;
+			border-color: #333;
+		}
+
+		#logoImg {
+			content: url('/img/mainlogo2.png');
+			/* 남색 로고 고정 */
+		}
+
+		.submenu-wrap {
+			display: none;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/header :: header}"></th:block>
+
+	<div class="join-container">
+		<h2 class="join-title">회원가입 <span class="required-desc">* 필수입력항목</span></h2>
+
+		<!-- ✅ 회원정보 입력 폼 -->
+		<form class="join-form" method="post" th:action="@{/member/join}" th:object="${member}">
+			<div class="form-group">
+				<label for="id">아이디 <span class="required">*</span></label>
+				<input type="text" id="id" th:field="*{id}" required />
+				<button type="button" id="checkIdBtn">중복확인</button>
+				<p id="idCheckMessage" class="check-message"></p>
+			</div>
+
+			<div class="form-group">
+				<label for="pw">비밀번호 <span class="required">*</span></label>
+				<input type="password" id="pw" name="pw" th:field="*{pw}" required />
+			</div>
+
+			<div class="form-group">
+				<label for="pwCheck">비밀번호 확인 <span class="required">*</span></label>
+				<input type="password" id="pwCheck" required />
+				<p id="pwMessage" style="font-size: 13px; color: red; margin-top: 5px;"></p>
+			</div>
+
+			<div class="form-group">
+				<label for="name">이름 <span class="required">*</span></label>
+				<input type="text" id="name" th:field="*{name}" required />
+			</div>
+
+			<div class="form-group">
+				<label for="email">이메일 <span class="required">*</span></label>
+				<input type="email" id="email" th:field="*{email}" required />
+				<button type="button" id="checkEmailBtn">중복확인</button>
+				<p id="emailCheckMessage" class="check-message"></p>
+			</div>
+
+			<div class="form-group">
+				<label for="tel">휴대폰번호 <span class="required">*</span></label>
+				<input type="tel" id="tel" th:field="*{tel}" required />
+			</div>
+
+			<div class="submit-btn">
+				<button type="submit">회원가입</button>
+			</div>
+		</form>
+	</div>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			const form = document.querySelector(".join-form");
+			const pw = document.getElementById("pw");
+			const pwCheck = document.getElementById("pwCheck");
+			const pwMessage = document.getElementById("pwMessage");
+
+			form.addEventListener("submit", function (e) {
+				if (pw.value !== pwCheck.value) {
+					e.preventDefault();
+					pwMessage.textContent = "비밀번호가 일치하지 않습니다.";
+					pwCheck.focus();
+				} else {
+					pwMessage.textContent = "";
+				}
+			});
+
+			pwCheck.addEventListener("input", function () {
+				if (pw.value !== pwCheck.value) {
+					pwMessage.textContent = "비밀번호가 일치하지 않습니다.";
+					pwMessage.style.color = "red";
+				} else {
+					pwMessage.textContent = "비밀번호가 일치합니다.";
+					pwMessage.style.color = "green";
+				}
+			});
+
+			// ✅ 아이디 중복 확인
+			$("#checkIdBtn").click(function () {
+				let id = $("#id").val();
+				if (!id) {
+					alert("아이디를 입력하세요.");
+					return;
+				}
+				$.ajax({
+					url: "/member/checkId",
+					type: "GET",
+					data: {id: id},
+					success: function (exists) {
+						if (exists) {
+							$("#idCheckMessage").text("이미 존재하는 아이디입니다.").css("color", "red");
+						} else {
+							$("#idCheckMessage").text("사용 가능한 아이디입니다.").css("color", "green");
+						}
+					}
+				});
+			});
+
+			// ✅ 이메일 중복 확인
+			$("#checkEmailBtn").click(function () {
+				let email = $("#email").val();
+				if (!email) {
+					alert("이메일을 입력하세요.");
+					return;
+				}
+				$.ajax({
+					url: "/member/checkEmail",
+					type: "GET",
+					data: {email: email},
+					success: function (exists) {
+						if (exists) {
+							$("#emailCheckMessage").text("이미 존재하는 이메일입니다.").css("color", "red");
+						} else {
+							$("#emailCheckMessage").text("사용 가능한 이메일입니다.").css("color", "green");
+						}
+					}
+				});
+			});
+		});
+	</script>
+
+	<th:block th:replace="fragments/footer :: footer" />
+</body>
+
+</html>

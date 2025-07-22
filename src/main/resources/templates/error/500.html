@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>500 오류 페이지</title>
+	<!-- 리셋 & 공통 스타일/스크립트 -->
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<th:block th:replace="~{fragments/header :: style}"></th:block>
+	<th:block th:replace="~{fragments/header :: script}"></th:block>
+	<th:block th:replace="~{fragments/footer :: style}"></th:block>
+	<th:block th:replace="~{fragments/footer :: script}"></th:block>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			overflow-x: hidden;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+		
+		.header {
+			background: #fff !important;
+			border-bottom: 1px solid #e6e6e6 !important;
+		}
+
+		.header .menu>li>a {
+			color: #111 !important;
+		}
+
+		.header .login-box a {
+			color: #111 !important;
+			border-color: #333;
+		}
+
+		#logoImg {
+			content: url('/img/mainlogo2.png');
+		}
+
+		.submenu-wrap {
+			display: none;
+		}
+
+		.title {
+			text-align: center;
+		}
+
+		.img-wrap {
+			display: block;
+			clear: both;
+			width: 1000px;
+			margin: 0 auto;
+		}
+
+		.container {
+			margin: 0 auto;
+			padding: 200px 20px 100px;
+		}
+
+		.btn-wrap {
+			width: 147px;
+			margin: 0 auto;
+		}
+
+		.btn-wrap .btn {
+			display: inline-block;
+			width: 100%;
+			padding: 12px 20px;
+			background: #000;
+			color: #fff;
+			border-radius: 6px;
+			text-decoration: none;
+			font-size: 14px;
+			transition: background 0.2s;
+		}
+
+		.btn-wrap .btn:hover {
+			background: #444;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/header :: header}"></th:block>
+
+	<div class="container">
+		<h2 class="title">해당 요청을 처리할 수 없습니다.</h2>
+		<figure class="img-wrap">
+			<img src="/img/500.png" alt="500 오류" />
+		</figure>
+		<div class="btn-wrap">
+			<a href="/" class="btn btn-primary">메인으로 돌아가기</a>
+		</div>
+
+	</div>
+
+	<th:block th:replace="~{fragments/footer :: footer}"></th:block>
+</body>
+
+</html>

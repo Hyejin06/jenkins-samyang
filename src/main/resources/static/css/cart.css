@@ -1,0 +1,262 @@
+.cart-container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 180px 20px 100px;
+	font-family: 'Noto Sans KR', sans-serif;
+	color: #222;
+}
+
+/* 제목 */
+.cart-title {
+	font-size: 26px;
+	font-weight: 600;
+	margin-bottom: 30px;
+}
+
+.check-all-box {
+	margin: 10px 0;
+	font-weight: bold;
+}
+
+/* 주문 단계 */
+.cart-steps {
+	font-size: 14px;
+	color: #888;
+	margin-bottom: 60px;
+}
+
+.cart-steps strong {
+	color: #222;
+	font-weight: 500;
+}
+
+/* ✅ 장바구니 리스트 */
+.cart-list {
+	border-top: 2px solid #000;
+	margin-bottom: 30px;
+}
+
+.cart-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 20px 0;
+	border-bottom: 1px solid #ddd;
+}
+
+.cart-item .name {
+	font-weight: 500;
+	font-size: 15px;
+	width: 300px;
+}
+
+.cart-item .price,
+.cart-item .total {
+	width: 120px;
+	text-align: right;
+	font-size: 15px;
+	color: #444;
+}
+
+.quantity-box {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.quantity-box button {
+	width: 28px;
+	height: 28px;
+	border: 1px solid #ccc;
+	background: #fff;
+	cursor: pointer;
+	font-size: 16px;
+	line-height: 1;
+	color: #333;
+}
+
+.quantity-box input {
+	width: 40px;
+	height: 28px;
+	text-align: center;
+	border: 1px solid #ccc;
+	font-size: 14px;
+}
+
+
+.cart-steps span {
+	margin: 0 8px;
+}
+
+/* 빈 장바구니 안내 */
+.empty-cart {
+	text-align: center;
+	font-size: 15px;
+	color: #888;
+	margin-bottom: 60px;
+}
+
+/* 요약 박스 */
+.summary-box {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: #fbf6f0;
+	padding: 30px 20px;
+	gap: 40px;
+}
+
+.summary-item {
+	text-align: center;
+	min-width: 180px;
+}
+
+.summary-item .label {
+	font-size: 15px;
+	margin-bottom: 5px;
+	color: #333;
+}
+
+.summary-item .price {
+	font-size: 22px;
+	font-weight: 700;
+	color: #000;
+}
+
+.summary-item .price.total {
+	font-weight: 800;
+}
+
+.symbol {
+	font-size: 30px;
+	color: #888;
+	font-weight: bold;
+}
+
+/* ✅ 장바구니 리스트 */
+.cart-list {
+	border-top: 2px solid #000;
+	margin-bottom: 30px;
+}
+
+.cart-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 20px 0;
+	border-bottom: 1px solid #ddd;
+}
+
+.cart-item .name {
+	font-weight: 500;
+	font-size: 15px;
+	width: 300px;
+}
+
+.cart-item .price,
+.cart-item .total {
+	width: 120px;
+	text-align: right;
+	font-size: 15px;
+	color: #444;
+}
+
+.quantity-box {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.quantity-box button {
+	width: 28px;
+	height: 28px;
+	border: 1px solid #ccc;
+	background: #fff;
+	cursor: pointer;
+	font-size: 16px;
+	line-height: 1;
+	color: #333;
+}
+
+.quantity-box input {
+	width: 40px;
+	height: 28px;
+	text-align: center;
+	border: 1px solid #ccc;
+	font-size: 14px;
+}
+
+/* 삭제 버튼 */
+.delete-form {
+	width: 40px;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.delete-btn {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+}
+
+.delete-btn img {
+	width: 18px;
+	height: 18px;
+	filter: brightness(0);
+	/* 검정색으로 표시 */
+}
+
+.cart-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+/* 썸네일 */
+.product-thumb img {
+	width: 60px;
+	height: 60px;
+	object-fit: cover;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+}
+
+/* 체크박스 */
+.cart-check {
+	transform: scale(1.3);
+	margin-right: 10px;
+}
+
+/* 버튼 영역 */
+.cart-buttons {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	margin: 40px 0;
+}
+
+.cart-buttons a,
+.cart-buttons button {
+	padding: 12px 20px;
+	font-size: 15px;
+	border-radius: 5px;
+	cursor: pointer;
+	border: none;
+}
+
+.btn-continue {
+	background: #eee;
+	color: #333;
+}
+
+.btn-order-select {
+	width: 130px;
+	background: #ff6b00;
+	color: #fff;
+}
+
+.btn-order-all {
+	background: #000;
+	color: #fff;
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<title>어바웃미 리뷰 목록</title>
+	<link rel="stylesheet" href="/css/reset.css">
+	<link rel="stylesheet" href="/css/review.css">
+	<th:block th:replace="~{fragments/jyheader2 :: header}" />
+	<th:block th:replace="~{fragments/jyheader2 :: link}" />
+	<th:block th:replace="~{fragments/jyheader2 :: script}" />
+	<th:block th:replace="~{fragments/jyfooter :: link}" />
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+	<div class="review-list-container">
+		<h2 class="review-title">전체 리뷰 목록</h2>
+
+		<!-- ✅ 리뷰 작성 버튼 -->
+		<div class="review-write-wrap">
+			<a th:if="${session.jyloginMember != null}" href="/jyreview/jywrite" class="btn-write-review">리뷰 작성</a>
+			<a th:if="${session.jyloginMember == null}" href="/member/jylogin" class="btn-write-review">리뷰 작성</a>
+		</div>
+
+		<div th:if="${#lists.isEmpty(reviews)}" class="no-review">
+			<p>등록된 리뷰가 없습니다.</p>
+		</div>
+
+		<ul class="review-list" th:if="${!#lists.isEmpty(reviews)}">
+			<li class="review-item" th:each="r : ${reviews}">
+				<!-- ✅ 상품 이미지 및 이름 -->
+				<div class="review-product">
+					<img th:src="@{${r.product.img1}}" alt="상품 이미지">
+					<p class="review-product-name" th:text="${r.product.pname}">상품명</p>
+				</div>
+
+				<!-- ✅ 리뷰 정보 -->
+				<div class="review-meta">
+					<span class="review-writer" th:text="${r.writer}">작성자</span>
+					<span class="review-rating">★ <span th:text="${r.rating}">5</span></span>
+					<span class="review-date" th:text="${#temporals.format(r.resdate, 'yyyy.MM.dd')}">날짜</span>
+				</div>
+				<p class="review-content" th:text="${r.content}">리뷰 내용</p>
+
+				<!-- ✅ 삭제 버튼: 본인만 -->
+				<form th:if="${session.jyloginMember != null and session.jyloginMember.id == r.writer}"
+					th:action="@{'/jyreview/jydelete/' + ${r.id}}" method="post"
+					onsubmit="return confirm('리뷰를 삭제하시겠습니까?');">
+					<button type="submit" class="btn-delete-review">삭제</button>
+				</form>
+			</li>
+		</ul>
+	</div>
+
+
+	<th:block th:replace="~{fragments/jyfooter :: footer}" />
+</body>
+
+</html>

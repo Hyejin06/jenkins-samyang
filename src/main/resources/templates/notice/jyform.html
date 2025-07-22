@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>어바웃미 공지사항 글 등록</title>
+  <link rel="stylesheet" href="/css/reset.css" />
+  <link rel="stylesheet" href="/css/noticeform.css" />
+  <th:block th:replace="fragments/jyheader2 :: header" />
+  <th:block th:replace="fragments/jyheader2 :: link" />
+  <th:block th:replace="fragments/jyheader2 :: script" />
+  <th:block th:replace="fragments/jyfooter :: link" />
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+  <div class="notice-form-container">
+    <h2>공지사항 등록</h2>
+
+    <form th:action="@{/notice/jysave}" method="post" class="notice-form">
+      <div class="form-group">
+        <label for="title">제목</label>
+        <input type="text" id="title" name="title" required />
+      </div>
+
+      <div class="form-group">
+        <label for="content">내용</label>
+        <textarea id="content" name="content" rows="10" required></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-submit">등록</button>
+        <a href="/notice/jylist" class="btn-cancel">취소</a>
+      </div>
+    </form>
+  </div>
+
+  <th:block th:replace="fragments/jyfooter :: footer" />
+</body>
+
+</html>

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>삼양 질문 목록</title>
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<th:block th:replace="~{fragments/header :: style}"></th:block>
+	<th:block th:replace="~{fragments/header :: script}"></th:block>
+	<th:block th:replace="~{fragments/footer :: style}"></th:block>
+	<th:block th:replace="~{fragments/footer :: script}"></th:block>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		.header {
+			background: #fff !important;
+			border-bottom: 1px solid #e6e6e6 !important;
+		}
+
+		.header .menu>li>a {
+			color: #111 !important;
+		}
+
+		.header .login-box a {
+			color: #111 !important;
+			border-color: #333;
+		}
+
+		#logoImg {
+			content: url('/img/mainlogo2.png');
+			/* 남색 로고 고정 */
+		}
+
+		.submenu-wrap {
+			display: none;
+		}
+
+		.support-banner {
+			width: 100%;
+			height: 240px;
+			margin-top: 111px;
+			background: url('/img/faqbg.png') center center / cover no-repeat;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+		}
+
+		.support-inner {
+			text-align: center;
+			color: white;
+			position: relative;
+			z-index: 2;
+		}
+
+		.support-inner h2 {
+			font-size: 40px;
+			font-weight: 700;
+			margin-bottom: 10px;
+		}
+
+		.support-inner p {
+			font-size: 18px;
+			font-weight: 400;
+		}
+
+		/* Optional: 흐림 효과를 위해 배경 위에 어두운 필터 넣고 싶다면 */
+		.support-banner::after {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.25);
+			/* 흐림 효과를 더 진하게 조절 가능 */
+			z-index: 1;
+		}
+
+		.faq-container {
+			max-width: 1200px;
+			margin: 60px auto;
+			padding: 0 20px;
+		}
+
+		.faq-top {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 40px;
+		}
+
+		.faq-btn {
+			background-color: #005BAC;
+			/* 메인 파랑 */
+			color: white;
+			padding: 10px 22px;
+			font-size: 15px;
+			border-radius: 20px;
+			text-decoration: none;
+			border: none;
+			cursor: pointer;
+			transition: background 0.3s ease;
+		}
+
+		.faq-btn:hover {
+			background-color: #003F87;
+			/* hover용 진한 파랑 */
+		}
+
+		h2.faq-title {
+			font-size: 32px;
+			font-weight: bold;
+			margin-bottom: 40px;
+		}
+
+		.faq-tabs ul {
+			display: flex;
+			border: 1px solid #ddd;
+			border-bottom: none;
+		}
+
+		.faq-tabs li {
+			flex: 1;
+			text-align: center;
+			border-right: 1px solid #ddd;
+		}
+
+		.faq-tabs li:last-child {
+			border-right: none;
+		}
+
+		.faq-tabs li a {
+			display: block;
+			padding: 16px 0;
+			font-size: 16px;
+			color: #666;
+			text-decoration: none;
+		}
+
+		.faq-tabs li.active {
+			border-top: 3px solid #005BAC;
+		}
+
+		.faq-tabs li.active a {
+			color: #000;
+			font-weight: bold;
+		}
+
+		.faq-list {
+			list-style: none;
+			padding: 0;
+			margin-top: 30px;
+			border-top: 1px solid #ccc;
+		}
+
+		.faq-question {
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			padding: 18px;
+			border-bottom: 1px solid #eee;
+		}
+
+		.faq-answer {
+			background: #f5f5f7;
+			padding: 25px 20px;
+			border-bottom: 1px solid #eee;
+			position: relative; /* ✅ 추가해줘야 img 위치가 제자리로 나옴 */
+		}
+
+		.faq-icon {
+			object-fit: contain;
+			image-rendering: auto;
+		}
+
+		/* Q 아이콘 - 정중앙 정렬 */
+		.faq-icon-q {
+			width: 29px;
+			height: 29px;
+			margin-right: 12px;
+		}
+
+		/* A 아이콘 - 질문 위치와 동일하게 조정 */
+		.faq-icon-a {
+			width: 56px;
+			height: 29px;
+			position: absolute;
+			left: 5px;
+			top: 23px;
+		}
+
+
+		.faq-title {
+			font-size: 17px;
+			font-weight: 500;
+			color: #222;
+		}
+
+		.faq-answer-content {
+			font-size: 15px;
+			color: #333;
+			line-height: 1.6;
+			padding-left: 55px;
+			position: relative;
+		}
+
+		.faq-reply-form {
+			display: none;
+			padding: 20px;
+			background: #f9f9f9;
+			border-bottom: 1px solid #ddd;
+		}
+
+		.faq-reply-textarea {
+			width: 100%;
+			height: 100px;
+			padding: 10px;
+			font-size: 14px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			resize: vertical;
+		}
+
+		.faq-reply-submit {
+			margin-top: 10px;
+			background: #005BAC;
+			color: white;
+			padding: 8px 16px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 14px;
+			transition: background 0.3s ease;
+		}
+
+		.faq-reply-submit:hover {
+			background: #003F87;
+		}
+
+		.faq-btn-group {
+			display: flex;
+			gap: 8px;
+			margin-left: auto;
+		}
+
+		.faq-btn-group .btn-reply,
+		.faq-btn-group .btn-edit,
+		.faq-btn-group .btn-delete {
+			padding: 6px 12px;
+			font-size: 14px;
+			border-radius: 4px;
+			cursor: pointer;
+			text-decoration: none;
+			text-align: center;
+			display: inline-block;
+		}
+
+		/* 답글 달기 버튼 */
+		.faq-btn-group .btn-reply {
+			background: #005BAC;
+			color: white;
+			border: none;
+		}
+
+		/* 수정 버튼 */
+		.faq-btn-group .btn-edit {
+			background: #ffc107;
+			color: #111;
+			border: none;
+		}
+
+		/* 삭제 버튼 */
+		.faq-btn-group .btn-delete {
+			background: #dc3545;
+			color: white;
+			border: none;
+		}
+
+		.pagination {
+			display: flex;
+			justify-content: center;
+			margin: 40px auto 100px;
+			list-style: none;
+			gap: 8px;
+		}
+
+		.pagination li {
+			display: inline-block;
+		}
+
+		.page-link.disabled {
+			pointer-events: none;
+			color: #111;
+			cursor: default;
+		}
+
+		.pagination a {
+			width: 32px;
+			height: 32px;
+			line-height: 32px;
+			text-align: center;
+			border-radius: 50%;
+			font-size: 14px;
+			color: #111;
+			/* ✅ 일반 페이지는 검정 글씨 */
+			text-decoration: none;
+			display: inline-block;
+			transition: all 0.2s ease;
+		}
+
+		.pagination a:hover {
+			color: #003F87;
+			/* ✅ hover 시 파란 글씨 */
+			font-weight: bold;
+		}
+
+		/* ✅ 현재 페이지 */
+		.pagination .active a {
+			background-color: #003F87;
+			color: #fff !important;
+			font-weight: bold;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/header :: header}"></th:block>
+
+	<section class="support-banner">
+		<div class="support-inner">
+			<h2>고객지원</h2>
+			<p>삼양식품은 항상 고객의 의견을 듣겠습니다.</p>
+		</div>
+	</section>
+
+
+	<div class="faq-container">
+		<div class="faq-top">
+			<h2 class="faq-title">FAQ</h2>
+			<a href="/qna/ins" class="faq-btn" th:if="${session.loginMember != null}">질문 등록</a>
+		</div>
+
+		<!-- ✅ 탭 메뉴 -->
+		<div class="faq-tabs">
+			<ul>
+				<li th:classappend="${selectedType == 'product'} ? ' active'">
+					<a th:href="@{/qna/faq(type='product')}">라면(제품)</a>
+				</li>
+				<li th:classappend="${selectedType == 'company'} ? ' active'">
+					<a th:href="@{/qna/faq(type='company')}">기업 일반 정보</a>
+				</li>
+				<li th:classappend="${selectedType == 'site'} ? ' active'">
+					<a th:href="@{/qna/faq(type='site')}">홈페이지 이용</a>
+				</li>
+				<li th:classappend="${selectedType == 'recruit'} ? ' active'">
+					<a th:href="@{/qna/faq(type='recruit')}">채용</a>
+				</li>
+				<li th:classappend="${selectedType == 'etc'} ? ' active'">
+					<a th:href="@{/qna/faq(type='etc')}">기타</a>
+				</li>
+			</ul>
+		</div>
+
+		<!-- ✅ FAQ 리스트 -->
+		<ul class="faq-list">
+			<li th:each="q : ${qnas}" th:if="${q.level == 1}">
+				<!-- 질문 -->
+				<div class="faq-question" th:data-no="${q.no}">
+					<img src="/img/ico_faq_q.png" class="faq-icon faq-icon-q" alt="Q">
+					<span class="faq-title" th:text="${q.title}"></span>
+
+					<!-- 관리자 전용 답글 달기 -->
+					<div class="faq-btn-group"
+						th:if="${session.loginMember != null and session.loginMember.id == 'admin'}">
+						<button class="btn-reply reply-btn">답글 달기</button>
+						<a th:href="@{/qna/edit/{no}(no=${q.no})}" class="btn-edit">수정</a>
+						<a th:href="@{/qna/reply/del/{no}(no=${q.no})}" class="btn-delete"
+							onclick="return confirm('삭제하시겠습니까?')">삭제</a>
+					</div>
+				</div>
+
+				<!-- 답변 영역 -->
+				<div class="faq-answer-group" th:id="'answer-box-' + ${q.no}" style="display:none;">
+
+					<!-- 질문 본문 내용 -->
+					<div class="faq-question-content"
+						style="padding: 20px; font-size: 15px; background: #f1f1f1; border-bottom: 1px solid #ddd;"
+						th:text="${q.content}"></div>
+
+					<!-- 답변들 -->
+					<th:block th:each="a : ${replies}">
+						<div th:if="${a.parno.toString() == q.no.toString()}" class="faq-answer">
+							<img src="/img/ico_faq_a.png" class="faq-icon faq-icon-a" alt="A">
+							<div class="faq-answer-content" th:text="${a.content}"></div>
+						</div>
+					</th:block>
+
+
+
+					<!-- 답글 입력폼 -->
+					<div class="faq-reply-form">
+						<form th:action="@{/qna/reply}" method="post">
+							<input type="hidden" name="parno" th:value="${q.no}" />
+							<input type="hidden" name="level" value="2" />
+							<input type="hidden" name="type" th:value="${selectedType}" />
+							<textarea name="content" placeholder="답변을 입력하세요." class="faq-reply-textarea"></textarea>
+							<button type="submit" class="faq-reply-submit">등록</button>
+						</form>
+					</div>
+				</div>
+
+			</li>
+		</ul>
+	</div>
+
+	<nav aria-label="Page navigation">
+		<ul class="pagination justify-content-center">
+
+			<!-- 이전 버튼 -->
+			<li class="page-item" th:classappend="${qnas.first} ? 'disabled'">
+				<a class="page-link" th:if="${!qnas.first}" th:href="@{/qna/list(page=${qnas.number - 1})}"
+					aria-label="Previous">
+					<span aria-hidden="true">&laquo;</span>
+				</a>
+				<span class="page-link disabled" th:if="${qnas.first}">&laquo;</span>
+			</li>
+
+			<!-- 번호 -->
+			<li class="page-item" th:each="i : ${#numbers.sequence(0, qnas.totalPages - 1)}"
+				th:classappend="${qnas.number == i} ? 'active'">
+				<a class="page-link" th:href="@{/qna/list(page=${i})}" th:text="${i + 1}"></a>
+			</li>
+
+			<!-- 다음 버튼 -->
+			<li class="page-item" th:classappend="${qnas.last} ? 'disabled'">
+				<a class="page-link" th:if="${!qnas.last}" th:href="@{/qna/list(page=${qnas.number + 1})}"
+					aria-label="Next">
+					<span aria-hidden="true">&raquo;</span>
+				</a>
+				<span class="page-link disabled" th:if="${qnas.last}">&raquo;</span>
+			</li>
+
+		</ul>
+	</nav>
+
+
+
+	<script>
+		$(document).ready(function () {
+			// 질문 클릭 → 답변 영역 전체 열고 닫기 (답글 입력 폼은 숨김)
+			$('.faq-question').on('click', function () {
+				const no = $(this).data('no');
+				const $answerBox = $('#answer-box-' + no);
+				const $form = $answerBox.find('.faq-reply-form');
+
+				$form.hide(); // 답글 폼 숨기기
+				$answerBox.stop(true, true).slideToggle(); // 전체 영역 열기
+			});
+
+			// 답글 달기 클릭 → 답글 입력 폼만 토글
+			$('.reply-btn').on('click', function (e) {
+				e.stopPropagation();
+
+				const no = $(this).closest('.faq-question').data('no');
+				const $answerBox = $('#answer-box-' + no);
+				const $form = $answerBox.find('.faq-reply-form');
+
+				if (!$answerBox.is(':visible')) {
+					// 전체 영역 먼저 열고 → 답글 폼만 슬라이드
+					$answerBox.slideDown(() => {
+						$form.stop(true, true).slideDown();
+					});
+				} else {
+					$form.stop(true, true).slideToggle();
+				}
+			});
+		});
+	</script>
+
+
+	<th:block th:replace="~{fragments/footer :: footer}"></th:block>
+
+</body>
+
+</html>

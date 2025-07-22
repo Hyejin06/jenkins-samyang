@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>서브큐 faq 글 상세보기</title>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<th:block th:replace="~{fragments/hjheader :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjheader :: script}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: script}"></th:block>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		.mypage-title {
+			text-align: center;
+			font-size: 32px;
+			font-weight: 700;
+			margin: 100px 0 40px;
+		}
+
+		.container-detail {
+			max-width: 1100px;
+			margin: 80px auto 80px;
+			padding: 0 20px;
+		}
+
+		/* ✅ 제목 영역 */
+		.qna-header {
+			border-top: 1px solid #121212;
+			border-bottom: 1px solid #ccc;
+			padding: 25px 0;
+		}
+
+		.qna-header h2 {
+			font-size: 24px;
+			font-weight: 700;
+			text-align: center;
+			margin-bottom: 18px;
+		}
+
+		.qna-header .subinfo {
+			display: flex;
+			justify-content: center;
+			gap: 12px;
+			font-size: 14px;
+			color: #999;
+		}
+
+		.qna-header .subinfo span::after {
+			content: '|';
+			margin: 0 6px;
+			color: #ddd;
+		}
+
+		.qna-header .subinfo span:last-child::after {
+			content: '';
+			margin: 0;
+		}
+
+		/* ✅ 본문 내용 */
+		.qna-content {
+			padding: 60px 0;
+			border-bottom: 1px solid #eee;
+			font-size: 16px;
+			line-height: 1.9;
+			color: #444;
+			white-space: pre-wrap;
+			text-align: center;
+		}
+
+		.notice-reply-box {
+			background-color: #f9f9f9;
+			border-radius: 10px;
+			padding: 20px;
+			margin-top: 20px;
+			font-size: 15px;
+			color: #333;
+		}
+
+		.reply-insert-box {
+			text-align: center;
+			margin-top: 30px;
+		}
+
+		.reply-insert-box a {
+			display: inline-block;
+			background-color: #005BAC;
+			color: white;
+			padding: 10px 20px;
+			border-radius: 6px;
+			font-size: 14px;
+			font-weight: 600;
+			text-decoration: none;
+			transition: background-color 0.3s ease;
+		}
+
+		.reply-insert-box a:hover {
+			background-color: #003e80;
+		}
+
+		/* ✅ 버튼 영역 */
+		.qna-buttons {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-top: 40px;
+		}
+
+		.qna-buttons .left,
+		.qna-buttons .right {
+			display: flex;
+			gap: 10px;
+		}
+
+		.qna-buttons a {
+			width: 140px;
+			height: 48px;
+			line-height: 48px;
+			text-align: center;
+			font-weight: 500;
+			font-size: 15px;
+			text-decoration: none;
+			transition: 0.3s ease;
+			border-radius: 4px;
+		}
+
+		.btn-list {
+			border: 1px solid #dcdcdc;
+			border-radius: 10px;
+			background: #fff;
+			color: #121212;
+		}
+
+		.btn-list:hover {
+			background-color: #f5f5f5;
+		}
+
+		.btn-edit {
+			background: #bbb;
+			color: #fff;
+		}
+
+		.btn-edit:hover {
+			background: #999;
+		}
+
+		.btn-delete {
+			background: #b84c4c;
+			color: #fff;
+		}
+
+		.btn-delete:hover {
+			background: #993939;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/hjheader :: header}"></th:block>
+
+	<h2 class="mypage-title">FAQ</h2>
+
+	<div class="container-detail">
+		<!-- 제목 / 날짜 / 조회수 -->
+		<div class="qna-header">
+			<h2 th:text="${qna.title}">제목</h2>
+			<div class="subinfo">
+				<span class="date" th:text="${#temporals.format(qna.resdate, 'yyyy.MM.dd')}">20xx.xx.xx</span>
+				<span class="hits">조회수 <span th:text="${qna.hits}">5</span></span>
+			</div>
+		</div>
+
+		<!-- 본문 내용 -->
+		<div class="qna-content" th:if="${qna.level == 1}" th:text="${qna.content}">
+			내용이 표시됩니다.
+		</div>
+
+		<!-- ✅ 답변 목록 표시 -->
+		<div th:if="${replies != null and !replies.isEmpty()}">
+			<h3 style="margin-top: 40px; text-align:center; font-size: 20px; font-weight: bold;">[답변]</h3>
+			<div th:each="reply : ${replies}" th:if="${reply.level == 2}" class="notice-reply-box">
+				<div style="text-align: right; color: #999; font-size: 13px;">
+					작성자: <span th:text="${reply.author}">관리자</span>
+				</div>
+				<div th:text="${reply.content}">답변 내용</div>
+			</div>
+		</div>
+
+		<div class="reply-insert-box" th:if="${session.hjloginMember != null and session.hjloginMember.id == 'admin'}">
+			<a th:href="@{/qna/hjreply/ins/{no}(no=${qna.no})}">답변 등록</a>
+		</div>
+
+		<!-- 버튼 영역 -->
+		<div class="qna-buttons">
+			<div class="left">
+				<a href="/qna/hjlist" class="btn-list">목록</a>
+			</div>
+			<div class="right">
+				<a th:if="${session.hjloginMember != null and session.hjloginMember.id == qna.author}"
+					th:href="@{/qna/hjedit/{no}(no=${qna.no})}" class="btn-edit">수정</a>
+				<a th:if="${session.hjloginMember != null and session.hjloginMember.id == qna.author}"
+					th:href="@{/qna/hjdelete/{no}(no=${qna.no})}" class="btn-delete"
+					onclick="return confirm('삭제하시겠습니까?')">삭제</a>
+			</div>
+		</div>
+	</div>
+
+	<th:block th:replace="fragments/hjfooter :: footer"></th:block>
+</body>
+
+</html>

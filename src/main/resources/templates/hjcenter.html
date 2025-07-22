@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>서브큐 고객센터 메인</title>
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<th:block th:replace="~{fragments/hjheader :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjheader :: script}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: script}"></th:block>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			overflow-x: hidden;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		.mypage-title {
+			text-align: center;
+			font-size: 32px;
+			font-weight: 700;
+			margin: 100px 0 40px;
+		}
+
+		.customer-box {
+			max-width: 1240px;
+			margin: 0 auto;
+			background-color: #f9f9f9;
+			border: 1px solid #e0e0e0;
+			border-radius: 10px;
+			padding: 40px 60px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.info-row {
+			display: flex;
+			justify-content: flex-start;
+			align-items: baseline;
+			gap: 20px;
+			/* ✅ 좌우 간격 조절 */
+			margin-bottom: 8px;
+		}
+
+		.label {
+			color: #777;
+			font-size: 15px;
+			font-weight: 500;
+			display: block;
+		}
+
+		.number {
+			font-size: 26px;
+			color: #222;
+			font-weight: 700;
+			margin-bottom: 5px;
+		}
+
+		.desc {
+			font-size: 15px;
+			color: #888;
+			margin-top: 5px;
+			line-height: 1.6;
+		}
+
+		.divider {
+			margin: 0 8px;
+		}
+
+		.bulk-button {
+			padding: 10px 20px;
+			border: 1px solid #d90000;
+			color: #d90000;
+			background: white;
+			border-radius: 8px;
+			cursor: pointer;
+			font-size: 14px;
+			transition: all 0.2s ease;
+		}
+
+		.bulk-button:hover {
+			background: #ffe6e6;
+		}
+
+		.board-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 60px 40px;
+			max-width: 1240px;
+			margin: 100px auto;
+			padding: 0 20px;
+		}
+		
+		.board-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 25px;
+		}
+		
+		.board-header h3 {
+			font-size: 26px;
+			font-weight: 700;
+		}
+
+		.board-box {
+			width: 100%;
+		}
+
+		.board-box table {
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 14px;
+			min-height: 240px;
+		}
+
+		/* 제목은 넓게, 작성일은 좁게 */
+		.board-box table thead tr,
+		.board-box table tbody tr {
+			display: grid;
+			grid-template-columns: auto 120px;
+			align-items: center;
+		}
+
+		/* 헤더 위에 굵은 선 */
+		.board-box thead {
+			border-top: 1px solid #121212;
+		}
+
+		.board-box thead th {
+			height: 60px;
+			padding: 18px 12px;
+			text-align: center;
+			color: #121212;
+			font-size: 15px;
+			font-weight: 400;
+			border-bottom: 1px solid #dcdcdc;
+			vertical-align: middle;
+			white-space: nowrap;
+		}
+
+		/* 본문 셀 스타일 */
+		.board-box tbody td {
+			height: 60px;
+			padding: 18px 12px;
+			color: #333;
+			border-bottom: 1px solid #eee;
+		}
+
+		/* 제목은 왼쪽 정렬 */
+		.board-box td.title {
+			text-align: left;
+			height: 60px;
+			padding: 18px 12px;
+		}
+
+		/* 작성일 오른쪽 정렬 */
+		.board-box td:last-child,
+		.board-box th:last-child {
+			text-align: center;
+			height: 60px;
+			padding: 18px 12px;
+		}
+
+		/* 마우스 오버 시 배경색 */
+		.board-box tbody tr:hover td {
+			background-color: #fafafa;
+		}
+
+		.more-btn {
+			border: 1px solid #ccc;
+			background: #fff;
+			font-size: 13px;
+			padding: 6px 12px;
+			border-radius: 6px;
+			text-decoration: none;
+			color: #333;
+		}
+
+		.more-btn:hover {
+			background-color: #f5f5f5;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/hjheader :: header}"></th:block>
+
+	<h2 class="mypage-title">고객센터</h2>
+
+	<div class="customer-box">
+		<div class="customer-info">
+			<div class="info-row">
+				<span class="label">고객센터</span>
+				<strong class="number">1668-4486</strong>
+			</div>
+
+			<div class="desc">
+				<span>평일 : 10:00 ~ 16:00 (주말 공휴일 휴무)</span>
+				<span class="divider">｜</span>
+				<span>점심 : 12:00 ~ 13:00</span>
+			</div>
+			<div class="desc">당일 주문 마감 : 10:00</div>
+		</div>
+		<button class="bulk-button">대량구매신청</button>
+	</div>
+
+	<div class="board-grid">
+		<!-- 공지사항 -->
+		<div class="board-box">
+			<div class="board-header">
+				<h3>공지사항</h3>
+				<a href="/notice/hjlist" class="more-btn">더보기</a>
+			</div>
+			<table>
+				<thead>
+					<tr>
+						<th>제목</th>
+						<th>작성일</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="notice : ${hjNotices.content}">
+						<td class="title">
+							<a th:href="@{/notice/hjdetail/{no}(no=${notice.no})}" th:text="${notice.title}">제목입니다</a>
+						</td>
+						<td th:text="${#temporals.format(notice.resdate, 'yyyy.MM.dd')}">2025.05.18</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<!-- FAQ -->
+		<div class="board-box">
+			<div class="board-header">
+				<h3>FAQ</h3>
+				<a href="/qna/hjlist" class="more-btn">더보기</a> <!-- 경로 수정됨 -->
+			</div>
+			<table>
+				<thead>
+					<tr>
+						<th>제목</th>
+						<th>작성일</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="qna : ${hjQnas.content}">
+						<td class="title">
+							<a th:href="@{/qna/hjdetail/{no}(no=${qna.no})}" th:text="${qna.title}">FAQ 제목</a>
+						</td>
+						<td th:text="${#temporals.format(qna.resdate, 'yyyy.MM.dd')}">2025.05.18</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<th:block th:replace="~{fragments/hjfooter :: footer}"></th:block>
+</body>
+
+</html>

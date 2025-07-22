@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<title>어바웃미 상품 목록</title>
+	<link rel="stylesheet" href="/css/reset.css">
+	<link rel="stylesheet" href="/css/productlist.css">
+	<th:block th:replace="~{fragments/jyheader2 :: header}" />
+	<th:block th:replace="~{fragments/jyheader2 :: link}" />
+	<th:block th:replace="~{fragments/jyheader2 :: script}" />
+	<th:block th:replace="~{fragments/jyfooter :: link}" />
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+	<div class="product-list-container">
+		<h2 class="product-title">상품 목록</h2>
+
+		<div class="list-meta">
+			<p class="product-count">총 <span th:text="${products.size()}"></span>개</p>
+			<a th:if="${session.jyloginMember != null and session.jyloginMember.id == 'admin'}"
+				th:href="@{/product/jyform}" class="btn-add-product">상품 등록하기</a>
+		</div>
+
+		<ul class="product-list">
+			<li th:each="p : ${products}" class="product-card">
+				<div class="product-img">
+					<a th:href="@{'/product/jydetail/' + ${p.no}}">
+						<img th:src="@{${p.img1}}" alt="상품 이미지">
+					</a>
+					<div class="badge-box">
+						<span class="badge" th:if="${p.cate == 'new'}">신상품</span>
+						<span class="badge" th:if="${p.cate == 'best'}">베스트</span>
+					</div>
+				</div>
+				<div class="product-info">
+					<a th:href="@{'/product/jydetail/' + ${p.no}}" class="pname-link">
+						<p class="pname" th:text="${p.pname}">상품명</p>
+					</a>
+					<p class="price" th:text="${#numbers.formatInteger(p.price, 3, 'COMMA')} + '원'">가격</p>
+					<div class="rating-review">
+						<span class="star">★</span>
+						<span class="rating" th:text="${p.rating != null ? p.rating : 0}">0</span>
+						<span class="review">/ 리뷰 <span
+								th:text="${p.reviewCount != null ? p.reviewCount : 0}">0</span></span>
+
+						<img src="/img/icon_basket_cart2.png" alt="장바구니" class="cart-icon">
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<th:block th:replace="~{fragments/jyfooter :: footer}" />
+</body>
+
+</html>

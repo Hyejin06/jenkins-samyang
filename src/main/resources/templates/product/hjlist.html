@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>서브큐 제품 목록</title>
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<th:block th:replace="~{fragments/hjheader :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjheader :: script}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: script}"></th:block>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			overflow-x: hidden;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		.mypage-title {
+			text-align: center;
+			font-size: 40px;
+			font-weight: 700;
+			margin: 100px 0 40px;
+		}
+
+		.catenav {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 40px;
+			margin-bottom: 60px;
+			list-style: none;
+			padding: 0;
+		}
+
+		.catenav li {
+			text-align: center;
+		}
+
+		.catenav a {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			text-decoration: none;
+			color: #111;
+		}
+
+		.catenav a img {
+			width: 106px;
+			height: 106px;
+			object-fit: contain;
+			margin-bottom: 16px;
+		}
+
+		.catenav a span {
+			line-height: 1.38;
+			font-size: 15px;
+			font-weight: 500;
+			position: relative;
+		}
+
+		.catenav a:hover span::after {
+			content: '';
+			position: absolute;
+			left: 0;
+			bottom: -4px;
+			width: 100%;
+			height: 2px;
+			background-color: #111;
+		}
+
+		.catenav li.active a img {
+			border: 2px solid #ee3424;
+			border-radius: 50%;
+		}
+
+		.catenav li.active a span {
+			color: #ee3424;
+			font-weight: 700;
+		}
+
+		.path-wrap {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 1296px;
+			margin: 20px auto 40px;
+			padding-left: 10px;
+		}
+
+		.path {
+			display: flex;
+			align-items: center;
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		.path li {
+			display: flex;
+			align-items: center;
+			font-size: 14px;
+			color: #666;
+		}
+
+		.path li a {
+			color: #666;
+			text-decoration: none;
+			display: flex;
+			align-items: center;
+			gap: 4px;
+		}
+
+		.path li img {
+			width: 16px;
+			height: 18px;
+		}
+
+		.path li+li::before {
+			content: '';
+			width: 8px;
+			height: 16px;
+			margin: 0 8px;
+			background: transparent url(/img/arrow_path.png) no-repeat center / auto 14px;
+			display: inline-block;
+		}
+
+		/* ✅ 등록 버튼 스타일 */
+		.btn-register {
+			background-color: #ee3424;
+			color: white;
+			padding: 6px 14px;
+			font-size: 14px;
+			font-weight: 500;
+			border: none;
+			border-radius: 4px;
+			text-decoration: none;
+		}
+
+		.container {
+			max-width: 1240px;
+			margin: 0 auto 80px;
+		}
+
+		.product-list {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 40px;
+			list-style: none;
+			padding: 0;
+		}
+
+		.card {
+			width: 280px;
+			border-radius: 10px;
+			transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+			cursor: pointer;
+			/* 마우스 오버 시 손가락 커서 */
+		}
+
+		/* 카드 전체를 감싸는 a태그에 대한 스타일 */
+		.product-list a {
+			display: block;
+			text-decoration: none;
+			color: inherit;
+		}
+
+		.card-body {
+			padding: 1rem;
+			text-align: left;
+		}
+
+		.card-title {
+			line-height: 1.4;
+			font-size: 16px;
+			font-weight: 500;
+			color: #121212;
+		}
+
+		.card-text {
+			margin-top: 6px;
+			line-height: 1.48;
+			font-size: 14px;
+			font-weight: 500;
+			color: #999;
+		}
+
+		.fw-bold {
+			color: #121212;
+			margin-top: 14px;
+			line-height: 20px;
+			font-size: 18px;
+			font-weight: 700;
+		}
+
+		.text-muted {
+			font-size: 12px;
+			color: #999 !important;
+		}
+
+		.review-wrap {
+			font-size: 12px;
+			color: #999999;
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			gap: 6px;
+			margin-top: 12px;
+		}
+
+		.review-wrap img {
+			width: 16px;
+			height: 16px;
+			vertical-align: middle;
+		}
+
+		.card img {
+			object-fit: cover;
+			text-align: center;
+		}
+		
+		.card-img-top {
+			display: block;
+			margin: 0 auto;
+		}
+
+		img.status-img {
+			height: 20px;
+			margin-top: 8px;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/hjheader :: header}"></th:block>
+
+	<h2 class="mypage-title">전체상품</h2>
+
+	<!-- 전체상품 카테고리 네비게이션 -->
+	<ul class="catenav">
+		<li class="cate-tab" th:classappend="${cate == '전체'} ? ' active'">
+			<a href="/product/hjlist?cate=전체">
+				<img src="/img/cateall.png" alt="전체"><span>전체</span>
+			</a>
+		</li>
+		<li class="cate-tab" th:classappend="${cate == '냉동베이커리'} ? ' active'">
+			<a href="/product/hjlist?cate=냉동베이커리">
+				<img src="/img/subnav1.png" alt="냉동베이커리"><span>냉동베이커리</span>
+			</a>
+		</li>
+		<li class="cate-tab" th:classappend="${cate == '냉동완제품'} ? ' active'">
+			<a href="/product/hjlist?cate=냉동완제품">
+				<img src="/img/subnav2.png" alt="냉동완제품"><span>냉동완제품</span>
+			</a>
+		</li>
+		<li class="cate-tab" th:classappend="${cate == '유제품'} ? ' active'">
+			<a href="/product/hjlist?cate=유제품">
+				<img src="/img/subnav3.png" alt="유제품"><span>유제품</span>
+			</a>
+		</li>
+		<li class="cate-tab" th:classappend="${cate == '소스'} ? ' active'">
+			<a href="/product/hjlist?cate=소스">
+				<img src="/img/subnav4.png" alt="소스"><span>소스</span>
+			</a>
+		</li>
+		<li class="cate-tab" th:classappend="${cate == '육가공품'} ? ' active'">
+			<a href="/product/hjlist?cate=육가공품">
+				<img src="/img/subnav5.png" alt="육가공품"><span>육가공품</span>
+			</a>
+		</li>
+		<li class="cate-tab" th:classappend="${cate == '커피&커피재료'} ? ' active'">
+			<a href="/product/hjlist?cate=커피%26커피재료">
+				<img src="/img/subnav6.png" alt="커피&커피재료"><span>커피&커피재료</span>
+			</a>
+		</li>
+		<li class="cate-tab" th:classappend="${cate == '제철과일'} ? ' active'">
+			<a href="/product/hjlist?cate=제철과일">
+				<img src="/img/subnav7.png" alt="제철과일"><span>제철과일</span>
+			</a>
+		</li>
+		<li class="cate-tab" th:classappend="${cate == '간편식'} ? ' active'">
+			<a href="/product/hjlist?cate=간편식">
+				<img src="/img/subnav8.png" alt="간편식"><span>간편식</span>
+			</a>
+		</li>
+	</ul>
+	
+	<!-- ✅ 카테고리별 베너 이미지 표시 -->
+	<div class="containerbanner" style="margin-bottom: 60px;">
+		<div th:if="${cate == '냉동베이커리'}">
+			<img src="/img/cate1.png" alt="냉동베이커리 베너" style="width:100%;">
+		</div>
+		<div th:if="${cate == '냉동완제품'}">
+			<img src="/img/cate2.png" alt="냉동완제품 베너" style="width:100%;">
+		</div>
+		<div th:if="${cate == '유제품'}">
+			<img src="/img/cate3.png" alt="유제품 베너" style="width:100%;">
+		</div>
+		<div th:if="${cate == '소스'}">
+			<img src="/img/cate4.png" alt="소스 베너" style="width:100%;">
+		</div>
+		<div th:if="${cate == '육가공품'}">
+			<img src="/img/cate5.png" alt="육가공품 베너" style="width:100%;">
+		</div>
+		<div th:if="${cate == '커피&커피재료'}">
+			<img src="/img/cate6.png" alt="커피&커피재료 베너" style="width:100%;">
+		</div>
+		<div th:if="${cate == '제철과일'}">
+			<img src="/img/cate7.png" alt="제철과일 베너" style="width:100%;">
+		</div>
+		<div th:if="${cate == '간편식'}">
+			<img src="/img/cate8.jpg" alt="간편식 베너" style="width:100%;">
+		</div>
+	</div>
+
+	<div class="path-wrap">
+		<!-- ✅ 경로 표시 영역 -->
+		<ul class="path">
+			<li>
+				<a href="/hj"><img src="/img/icon_home.png" alt="홈 아이콘"><span>홈</span></a>
+			</li>
+			<li><a href="/product/hjlist">전체상품</a></li>
+		</ul>
+
+		<!-- ✅ 관리자 전용 버튼 -->
+		<a href="/product/hjins" class="btn-register"
+			th:if="${session.hjloginMember != null and session.hjloginMember.id == 'admin'}">상품 등록</a>
+	</div>
+
+	<div class="container">
+		<ul class="product-list">
+			<li th:each="product : ${products}">
+				<a th:href="@{/product/hjdetail/{no}(no=${product.no})}">
+					<div class="card h-100 border-0">
+						<img th:src="@{${product.img1}}" class="card-img-top" alt="제품 이미지"
+							style="height: 240px; object-fit: cover;">
+						<div class="card-body">
+							<small class="text-muted" th:text="${product.cate}"></small>
+							<h5 class="card-title mt-2 mb-1" th:text="${product.pname}"></h5>
+							<p class="card-text" th:text="${product.comment}"></p>
+							<div class="fw-bold mt-2"
+								th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'"></div>
+							<div class="review-wrap">
+								<span th:text="${product.reviewCount} + '건'"></span>
+								<span>|</span>
+								<img src="/img/review.png" alt="리뷰">
+								<span th:text="${product.reviewAvg} + '점'"></span>
+							</div>
+							<div class="mt-3">
+								<img th:if="${product.statusImg != null and !#strings.isEmpty(product.statusImg)}"
+									th:src="@{${product.statusImg}}" alt="상태 이미지" class="status-img">
+							</div>
+						</div>
+					</div>
+				</a>
+			</li>
+
+			<li th:if="${products == null or products.size() == 0}">
+				<p class="text-center">등록된 제품이 없습니다.</p>
+			</li>
+		</ul>
+	</div>
+
+	<th:block th:replace="~{fragments/hjfooter :: footer}"></th:block>
+</body>
+
+</html>

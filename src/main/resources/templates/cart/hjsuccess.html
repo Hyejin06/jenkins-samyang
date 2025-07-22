@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>서브큐 주문성공</title>
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<th:block th:replace="~{fragments/hjheader :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjheader :: script}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: script}"></th:block>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			overflow-x: hidden;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		.order-complete-container {
+			max-width: 600px;
+			margin: 200px auto;
+			padding: 40px;
+			background: #f9fffa;
+			border: 2px solid #66bb6a;
+			border-radius: 12px;
+			text-align: center;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		.order-complete-container h2 {
+			color: #2e7d32;
+			font-size: 24px;
+			margin-bottom: 30px;
+		}
+
+		.order-result p {
+			margin: 10px 0;
+			font-size: 16px;
+			color: #444;
+		}
+
+		.btn-order {
+			margin-top: 30px;
+			display: inline-block;
+			background: #2e7d32;
+			color: #fff;
+			padding: 12px 30px;
+			border-radius: 6px;
+			text-decoration: none;
+			font-weight: bold;
+			transition: background 0.3s;
+		}
+
+		.btn-order:hover {
+			background: #1b5e20;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/hjheader :: header}"></th:block>
+
+	<div class="order-complete-container">
+		<h2>🎉 결제가 완료되었습니다!</h2>
+
+		<div class="order-result">
+			<p><strong>주문번호:</strong> <span th:text="${result['orderId']}"></span></p>
+			<p><strong>배송정보:</strong>
+				<span th:text="|(${result['postcode']}) ${result['address']} ${result['detailAddress']}|"></span>
+			</p>
+			<p><strong>결제금액:</strong>
+				<span th:text="${#numbers.formatInteger(result['amount'], 3, 'COMMA')} + '원'"></span>
+			</p>
+		</div>
+
+		<a href="/hj" class="btn-order">메인으로 가기</a>
+	</div>
+
+	<th:block th:replace="~{fragments/hjfooter :: footer}"></th:block>
+</body>
+
+</html>

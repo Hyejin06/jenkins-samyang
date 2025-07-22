@@ -1,0 +1,376 @@
+header {
+	width: 100%;
+	background: rgba(255, 255, 255, 0.85);
+	position: fixed;
+	top: 0; /* ← 여기를 0으로 변경 */
+	left: 0;
+	z-index: 999;
+	height: 109px;
+	transition: all 0.3s ease;
+	border-bottom: 1px solid rgb(205, 205, 205, 0.25);
+}
+
+/* ✅ brand 서브메뉴 */
+.submenu {
+	position: relative;
+}
+
+.submenu .sub-list {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: -35px;
+	background: #fff;
+	padding: 30px 0;
+	z-index: 1000;
+	width: 180px;
+	border-top: 1px solid rgb(205, 205, 205, 0.25);
+}
+
+.submenu:hover .sub-list {
+	display: block;
+}
+
+.submenu .sub-list li {
+	padding: 3px 40px;
+	white-space: nowrap;
+}
+
+.submenu .sub-list li a {
+	color: #333;
+	font-size: 14px;
+	text-decoration: none;
+}
+
+.submenu .sub-list li a:hover {
+	color: #000;
+	text-decoration: underline;
+}
+
+#mainHeader.hovered {
+	background: #fff;
+}
+
+/* ✅ nav wrapper */
+.nav-wrapper {
+	max-width: 1620px;
+	height: 100%;
+	margin: 0 auto;
+	padding: 0 40px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+/* ✅ 로고 그룹 */
+.logo-group {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+#logoImage {
+	width: 171px;
+	height: auto;
+	display: block;
+}
+
+.logo-medianswer {
+	position: relative;
+	display: inline-block;
+	padding-right: 25px;
+}
+
+.logo-medianswer img {
+	width: 110px;
+	display: block;
+}
+
+.logo-medianswer::after {
+	content: url("/img/arrow.png");
+	position: absolute;
+	right: 0;
+	top: 60%;
+	transform: translateY(-50%);
+	opacity: 0;
+	transition: opacity 0.2s ease;
+}
+
+.logo-medianswer:hover::after {
+	opacity: 1;
+}
+
+/* ✅ 메뉴 */
+.gnb-menu ul {
+	display: flex;
+	list-style: none;
+	gap: 60px;
+	margin: 0;
+	padding: 0;
+}
+
+.gnb-menu ul li {
+	position: relative;
+}
+
+.gnb-menu>ul>li>a {
+	text-decoration: none;
+	color: black;
+	font-weight: 500;
+	font-size: 17px;
+	line-height: 109px;
+	padding: 0 5px;
+	font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+}
+
+/* ✅ 아이콘 */
+.icon-group {
+	display: flex;
+	align-items: center;
+	gap: 30px;
+}
+
+.icon-group a img {
+	display: block;
+	height: auto;
+	cursor: pointer;
+}
+
+/* ✅ 해시태그 중앙 정렬 영역 */
+.search-bar {
+	width: 100%;
+	background-color: white;
+	display: none;
+	padding: 25px 0 10px;
+	position: absolute;
+	top: 109px;
+	left: 0;
+	z-index: 997;
+}
+
+.search-bar .search-hashtag-right {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0;
+	border-bottom: 2px solid #000;
+	width: fit-content;
+	margin: 0 auto;
+	padding-bottom: 2px;
+}
+
+.search-bar input[type="text"] {
+	border: none;
+	outline: none;
+	padding: 10px;
+	font-size: 15px;
+	color: #777;
+	font-family: 'Noto Sans KR', sans-serif;
+	width: 400px;
+}
+
+.search-hashtag-right a img {
+	width: 23px;
+	height: 25px;
+	display: inline-block;
+	vertical-align: middle;
+	cursor: pointer;
+	margin-left: 6px;
+}
+
+/* ✅ 해시태그 링크 목록 */
+.search-tags {
+	display: flex;
+	justify-content: center;
+	gap: 30px;
+	margin: 20px;
+	font-size: 16px;
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+.search-tags a {
+	color: #222;
+	text-decoration: none;
+}
+
+
+/* ✅ hover 효과 */
+.gnb-menu a:hover,
+.icon-group a:hover {
+	background-color: transparent;
+}
+
+/* ✅ mega menu */
+.mega-menu {
+	width: 600px;
+	background: #fff;
+	position: absolute;
+	top: 109px;
+	left: 0;
+	z-index: 998;
+	display: none;
+	padding: 40px 0 30px;
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+	border-top: 1px solid rgb(205, 205, 205, 0.25);
+}
+
+.gnb-item:hover .mega-menu {
+	display: block;
+}
+
+.mega-inner {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 40px;
+	display: flex;
+	justify-content: space-between;
+	gap: 40px;
+}
+
+.mega-column {
+	flex: 1;
+	min-width: 160px;
+}
+
+.mega-column strong a {
+	display: inline-block;
+	font-size: 14px;
+	font-weight: 500;
+	background-color: #f9f3ec;
+	padding: 4px 10px;
+	margin-bottom: 10px;
+	text-decoration: none;
+	color: #000;
+}
+
+.mega-column strong a:hover {
+	background-color: #f9f3ec;
+}
+
+.mega-column ul {
+	display: block;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.mega-column ul li {
+	display: block;
+	margin-bottom: 15px;
+	font-size: 14px;
+	white-space: normal;
+}
+
+.mega-column ul li a {
+	color: #000;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+.mega-column ul li a:hover {
+	text-decoration: underline;
+	color: #222;
+}
+
+.mega-banner {
+	margin-top: 30px;
+	text-align: center;
+}
+
+.mega-banner img {
+	max-width: 500px;
+	height: auto;
+	display: block;
+	margin: 0 auto;
+}
+
+
+
+/* ✅ 반응형 */
+@media (max-width: 768px) {
+	.nav-wrapper {
+		flex-direction: column;
+		align-items: center;
+		gap: 15px;
+	}
+
+	.gnb-menu ul {
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	.logo-group {
+		flex-direction: column;
+	}
+
+	#logoImage {
+		width: 120px;
+	}
+
+	.logo-medianswer img {
+		width: 80px;
+	}
+
+	.logo-medianswer::after {
+		right: -6px;
+		height: 9px;
+	}
+}
+
+/* ✅ 로그인 wrapper + dropdown menu */
+.login-wrapper {
+  position: relative;
+}
+.login-menu {
+  display: none;
+  position: absolute;
+  top: 67px;
+  right: -100px;
+  width: 220px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  z-index: 1001;
+  padding: 10px 0;
+}
+.login-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.login-menu li {
+  border-bottom: 1px solid #f2f2f2;
+}
+.login-menu li a {
+  display: block;
+  padding: 12px 18px;
+  font-size: 14px;
+  color: #333;
+}
+.login-menu li a:hover {
+	text-decoration: underline;
+}
+.login-menu li.login-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 18px;
+}
+.join-btn {
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 10px;
+  border: none;
+  background-color: #4b4b3f;
+  color: white;
+  cursor: pointer;
+}
+.login-menu li.login-bottom a {
+  font-weight: bold;
+  text-align: center;
+  position: relative;
+  text-decoration: none;
+}
+.login-menu li.login-bottom span {
+  margin-left: 4px;
+}

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>어바웃미 헤더</title>
+	<link rel="stylesheet" href="/css/header.css" />
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+	<header id="mainHeader" th:fragment="header">
+		<div class="nav-wrapper">
+			<div class="logo-group">
+				<a href="/jy"><img id="logoImage" src="/img/jylogo1.png" alt="AboutMe 로고"></a>
+				<span class="dot">&#183;</span>
+				<a href="/" class="logo-medianswer">
+					<img src="/img/logo3.png" alt="MediAnswer">
+				</a>
+			</div>
+			<nav class="gnb-menu">
+				<ul class="gnb-ul">
+					<li class="gnb-item">
+						<a href="/product/jylist">어바웃미 상품</a>
+						<div class="mega-menu">
+							<div class="mega-inner">
+								<div class="mega-column">
+									<strong><a href="#">유형별</a></strong>
+									<ul>
+										<li><a href="#">스킨·미스트</a></li>
+										<li><a href="#">세럼·에센스</a></li>
+										<li><a href="#">로션·크림</a></li>
+										<li><a href="#">마스크·패드·마사지</a></li>
+										<li><a href="#">선케어</a></li>
+										<li><a href="#">세트</a></li>
+										<li><a href="#">클렌징</a></li>
+										<li><a href="#">기타</a></li>
+									</ul>
+								</div>
+								<div class="mega-column">
+									<strong><a href="#">피부고민별</a></strong>
+									<ul>
+										<li><a href="#">각질·모공케어</a></li>
+										<li><a href="#">보습·장벽강화</a></li>
+										<li><a href="#">수분·진정</a></li>
+										<li><a href="#">자외선차단</a></li>
+										<li><a href="#">잡티·미백·브라이트닝</a></li>
+										<li><a href="#">탄력·주름·안티에이징</a></li>
+									</ul>
+								</div>
+								<div class="mega-column">
+									<strong><a href="#">라인별</a></strong>
+									<ul>
+										<li><a href="#">돌콩코어라인</a></li>
+										<li><a href="#">숲 진정 수분</a></li>
+										<li><a href="#">쌀막걸리</a></li>
+										<li><a href="#">비 클린</a></li>
+										<li><a href="#">새싹 클렌징</a></li>
+										<li><a href="#">카카듐C</a></li>
+										<li><a href="#">메이플씨타</a></li>
+										<li><a href="#">기타</a></li>
+									</ul>
+								</div>
+							</div>
+							<div class="mega-banner">
+								<img src="/img/gnb_btm.png" alt="비건뷰티 배너">
+							</div>
+						</div>
+					</li>
+					<li><a href="#">#첫만남혜택</a></li>
+					<li class="submenu">
+						<a href="#">#비건클린뷰티</a>
+						<ul class="sub-list">
+							<li><a href="#">비건 화장품</a></li>
+							<li><a href="#">공병 수거 캠페인</a></li>
+							<li><a href="#">클리뷰티 캠페인</a></li>
+						</ul>
+					</li>
+					<li class="submenu">
+						<a href="#">브랜드</a>
+						<ul class="sub-list">
+							<li><a href="#">브랜드 스토리</a></li>
+							<li><a href="#">About Me Way</a></li>
+							<li><a href="#">뉴스</a></li>
+						</ul>
+					</li>
+					<li><a href="#">이벤트</a></li>
+					<li><a href="/jyreview">리뷰</a></li>
+				</ul>
+			</nav>
+			<!-- icon-group 내부에서 해당 부분만 수정 -->
+			<div class="icon-group">
+				<a href="#" id="searchToggleBtn">
+					<img src="/img/icon_top_search.png" alt="검색" id="searchIcon">
+				</a>
+
+				<div class="login-wrapper">
+					<a href=""><img src="/img/icon_top_mypage.png" alt="마이페이지"></a>
+					<div class="login-menu">
+						<ul>
+							<li class="login-top">
+								<a href="/member/jylogin" th:if="${session.jyloginMember == null}">로그인</a>
+								<a href="/member/jylogout" th:if="${session.jyloginMember != null}">로그아웃</a>
+								<button class="join-btn">회원혜택</button>
+							</li>
+							<li><a href="/member/jymypage">마이페이지</a></li>
+							<li><a href="#">주문배송조회</a></li>
+							<li><a href="#">마일리지</a></li>
+							<li><a href="#">쿠폰</a></li>
+							<li><a href="#">나의리뷰</a></li>
+							<li><a href="/notice/jylist">공지사항</a></li>
+							<li><a href="/qna/jylist">고객센터</a></li>
+							<li class="login-bottom">
+								<a href="/member/jyform" th:if="${session.jyloginMember == null}">간편회원가입
+									<span>&rarr;</span></a>
+							</li>
+						</ul>
+					</div>
+
+				</div>
+
+				<a href="#"><img src="/img/top_recently_icn.png" alt="최근본상품"></a>
+				<a href="/jycart"><img src="/img/icon_top_cart.png" alt="장바구니"></a>
+			</div>
+
+			<!-- ✅ 검색창 입력란 (header 태그 안 가장 마지막 위치) -->
+			<div class="search-bar" id="searchBar">
+				<div class="search-hashtag-right">
+					<input type="text" placeholder="“찐하게 짠” 쌀막걸리 라인 출시" />
+					<a href="#"><img src="/img/icon_top_search.png" alt="검색"></a>
+				</div>
+				<div class="search-tags">
+					<a href="#">#쌀막걸리스킨</a>
+					<a href="#">#쌀막걸리클렌징폼</a>
+					<a href="#">#비타클라겐</a>
+				</div>
+			</div>
+		</div>
+
+
+	</header>
+
+	<script>
+		$(document).ready(function () {
+			const logoImg = $("#logoImage");
+			const logoSources = ["/img/jylogo1.png", "/img/jylogo2.png"];
+			let current = 0;
+
+			setInterval(() => {
+				logoImg.fadeOut(500, function () {
+					current = (current + 1) % logoSources.length;
+					logoImg.attr("src", logoSources[current]).fadeIn(500);
+				});
+			}, 7000);
+
+			function activateHeader() {
+				$("#mainHeader").addClass("hovered");
+			}
+
+			function deactivateHeader() {
+				if (!$('.mega-menu:hover').length && !$('.submenu:hover').length && !$('.gnb-ul:hover').length && !$('.icon-group:hover').length) {
+					$("#mainHeader").removeClass("hovered");
+				}
+			}
+
+			$(".gnb-menu li a, .icon-group a, .mega-menu, .submenu, .gnb-ul").on("mouseenter", activateHeader).on("mouseleave", deactivateHeader);
+
+			$(".gnb-item").on("mouseenter", function () {
+				$(this).find(".mega-menu").stop(true, true).fadeIn(300);
+			}).on("mouseleave", function () {
+				$(this).find(".mega-menu").stop(true, true).fadeOut(200);
+			});
+
+			$(window).on("scroll", function () {
+				const scrollTop = $(this).scrollTop();
+				const header = $("#mainHeader");
+				if (scrollTop > 50) {
+					header.addClass("scrolled");
+				} else {
+					header.removeClass("scrolled");
+				}
+			});
+
+			// ✅ 검색 아이콘 토글
+			let isSearchOpen = false;
+			$("#searchToggleBtn").on("click", function (e) {
+				e.preventDefault();
+				isSearchOpen = !isSearchOpen;
+
+				if (isSearchOpen) {
+					$("#searchBar").slideDown(200);
+					$("#searchIcon").attr("src", "/img/close.png");
+				} else {
+					$("#searchBar").slideUp(200);
+					$("#searchIcon").attr("src", "/img/icon_top_search.png");
+				}
+			});
+
+
+
+			$('.login-wrapper').on('mouseenter', function () {
+				$(this).find('.login-menu').stop(true, true).fadeIn(150);
+			}).on('mouseleave', function () {
+				$(this).find('.login-menu').stop(true, true).fadeOut(150);
+			});
+		});
+	</script>
+</body>
+
+</html>

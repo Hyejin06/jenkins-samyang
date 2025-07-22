@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>삼양 질문 및 수정</title>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+		<th:block th:replace="~{fragments/header :: style}"></th:block>
+		<th:block th:replace="~{fragments/header :: script}"></th:block>
+		<th:block th:replace="~{fragments/footer :: style}"></th:block>
+		<th:block th:replace="~{fragments/footer :: script}"></th:block>
+
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				margin: 0;
+				padding: 0;
+			}
+
+			.header {
+				background: #fff !important;
+				border-bottom: 1px solid #e6e6e6 !important;
+			}
+
+			.header .menu>li>a {
+				color: #111 !important;
+			}
+
+			.header .login-box a {
+				color: #111 !important;
+				border-color: #333;
+			}
+
+			#logoImg {
+				content: url('/img/mainlogo2.png');
+				/* 남색 로고 고정 */
+			}
+
+			.submenu-wrap {
+				display: none;
+			}
+
+		.containerqe {
+			max-width: 800px;
+			margin: 160px auto 100px;
+			font-family: 'Noto Sans KR', sans-serif;
+			padding: 0 20px;
+		}
+
+		h2 {
+			font-size: 2rem;
+			font-weight: bold;
+			margin-bottom: 30px;
+			color: #333;
+		}
+
+		label {
+			font-weight: 600;
+			margin-bottom: 8px;
+			display: block;
+			color: #333;
+		}
+
+		input.form-control,
+		textarea.form-control {
+			width: 100%;
+			padding: 12px;
+			border: 1px solid #ccc;
+			border-radius: 6px;
+			margin-bottom: 20px;
+			font-size: 1rem;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		textarea.form-control {
+			height: 180px;
+			resize: vertical;
+		}
+
+		.qna-button-group {
+			display: flex;
+			justify-content: center;
+			gap: 16px;
+			margin-top: 40px;
+		}
+
+		.btn {
+			width: 165px;
+			height: 52px;
+			line-height: 52px;
+			font-size: 16px;
+			font-weight: bold;
+			text-align: center;
+			text-decoration: none;
+			transition: all 0.3s ease;
+			border: none;
+			cursor: pointer;
+		}
+
+		.btn-yellow {
+			background-color: #ffc107;
+			color: #333;
+		}
+
+		.btn-yellow:hover {
+			background-color: #e0a800;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/header :: header}"></th:block>
+
+	<div class="containerqe">
+		<h2>글 수정</h2>
+		<form th:action="@{/qna/update}" method="post" th:object="${qna}">
+			<input type="hidden" th:field="*{no}">
+			<input type="hidden" th:field="*{level}">
+			<input type="hidden" th:field="*{parno}">
+
+			<div class="mb-3">
+				<label>제목</label>
+				<input type="text" class="form-control" th:field="*{title}" required>
+			</div>
+
+			<div class="mb-3">
+				<label>내용</label>
+				<textarea class="form-control" th:field="*{content}" required></textarea>
+			</div>
+
+			<div class="mb-3">
+				<label>작성자</label>
+				<input type="text" class="form-control" th:field="*{author}" required>
+			</div>
+
+			<div class="qna-button-group">
+				<button type="submit" class="btn btn-yellow">수정</button>
+			</div>
+		</form>
+	</div>
+	
+	<th:block th:replace="fragments/footer :: footer"></th:block>
+</body>
+
+</html>

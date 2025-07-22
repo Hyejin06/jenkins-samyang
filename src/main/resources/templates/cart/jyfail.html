@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>어바웃미 주문실패</title>
+	<link rel="stylesheet" href="/css/reset.css" />
+	<th:block th:replace="fragments/jyheader2 :: header" />
+	<th:block th:replace="fragments/jyheader2 :: link" />
+	<th:block th:replace="fragments/jyheader2 :: script" />
+	<th:block th:replace="fragments/jyfooter :: link" />
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<style>
+		.order-fail-container {
+			max-width: 600px;
+			margin: 100px auto;
+			padding: 40px;
+			background: #fff5f5;
+			border: 2px solid #ef5350;
+			border-radius: 12px;
+			text-align: center;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		.order-fail-container h2 {
+			color: #c62828;
+			font-size: 24px;
+			margin-bottom: 30px;
+		}
+
+		.order-result p {
+			margin: 10px 0;
+			font-size: 16px;
+			color: #555;
+		}
+
+		.btn-order {
+			margin-top: 30px;
+			display: inline-block;
+			background: #c62828;
+			color: #fff;
+			padding: 12px 30px;
+			border-radius: 6px;
+			text-decoration: none;
+			font-weight: bold;
+			transition: background 0.3s;
+		}
+
+		.btn-order:hover {
+			background: #8e0000;
+		}
+	</style>
+
+</head>
+
+<body>
+	<div class="order-fail-container">
+		<h2>❌ 결제에 실패했습니다.</h2>
+
+		<div class="order-result">
+			<p><strong>에러코드:</strong> <span th:text="${error.code}">에러코드</span></p>
+			<p><strong>메시지:</strong> <span th:text="${error.message}">에러 메시지</span></p>
+		</div>
+
+		<a href="/jycart" class="btn-order">장바구니로 돌아가기</a>
+	</div>
+
+	<th:block th:replace="fragments/jyfooter :: footer" />
+</body>
+
+</html>

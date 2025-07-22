@@ -1,0 +1,105 @@
+.notice-container {
+	display: flex;
+	max-width: 1400px;
+	margin: 200px auto;
+	padding: 0 20px;
+}
+
+.notice-sidebar {
+	width: 200px;
+	height: 170px;
+	margin: 55px 50px 0 0px;
+	border-top: 1px solid #cbcbcb;
+}
+
+.notice-sidebar h3 {
+	font-size: 22px;
+	margin-bottom: 15px;
+	padding: 20px;
+	border-bottom: 1px solid #cbcbcb;
+}
+
+.notice-sidebar ul {
+	list-style: none;
+	padding: 18px;
+}
+
+.notice-sidebar li {
+	margin-bottom: 15px;
+}
+
+.notice-sidebar a {
+	text-decoration: none;
+	color: #333;
+	font-size: 16px;
+}
+
+.notice-sidebar a.on {
+	font-weight: bold;
+	color: red;
+}
+
+.notice-content {
+	flex: 1;
+}
+
+/* ✅ FAQ 제목 + 질문 등록 버튼 */
+.notice-header {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 30px;
+}
+
+.notice-header h2 {
+	font-size: 28px;
+	margin: 0 auto;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.notice-header .add-notice-btn {
+	position: absolute;
+	right: 0;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.add-notice-btn {
+	display: inline-block;
+	padding: 10px 20px;
+	background-color: #000;
+	color: #fff;
+	text-decoration: none;
+	font-size: 14px;
+	border-radius: 5px;
+}
+
+/* ✅ 테이블 스타일 */
+.notice-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.notice-table th,
+.notice-table td {
+	border-bottom: 1px solid #ddd;
+	padding: 15px;
+	text-align: center;
+	font-size: 16px;
+}
+
+.notice-title {
+	text-align: left;
+}
+
+.notice-title a {
+	color: #333;
+	text-decoration: none;
+}
+
+.notice-title a:hover {
+	text-decoration: underline;
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${product.pname} + ' 상세보기'">어바웃미 상품 상세</title>
+	<link rel="stylesheet" href="/css/reset.css">
+	<link rel="stylesheet" href="/css/productdetail.css">
+	<th:block th:replace="~{fragments/jyheader2 :: header}" />
+	<th:block th:replace="~{fragments/jyheader2 :: link}" />
+	<th:block th:replace="~{fragments/jyheader2 :: script}" />
+	<th:block th:replace="~{fragments/jyfooter :: link}" />
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+	<div class="product-detail-container">
+		<div class="product-detail-wrapper">
+			<div class="product-image">
+				<img th:src="${product.img1}" th:alt="${product.pname}" />
+			</div>
+			<div class="product-info">
+				<h1 th:text="${product.pname}" class="product-title">상품명</h1>
+				<p class="product-cate" th:text="'카테고리: ' + ${product.cate}"></p>
+				<p class="product-price" th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'"
+					id="unitPrice"></p>
+				<p class="product-rating">
+					★ <span th:text="${product.rating}"></span> / 리뷰 <span th:text="${product.reviewCount}"></span>
+				</p>
+
+				<form th:action="@{/cart/jyadd}" method="post" class="product-actions">
+					<input type="hidden" name="productId" th:value="${product.no}" />
+					<div class="product-quantity">
+						<label>수량</label>
+						<input type="number" id="quantity" name="quantity" value="1" min="1" />
+						<p class="total-price" id="totalPrice"></p>
+					</div>
+
+					<!-- 버튼 2개를 flex로 반반 배치 -->
+					<div class="action-buttons">
+						<button type="submit" class="btn-cart">장바구니</button>
+						<button type="button" class="btn-buy" onclick="buyNow()">바로 구매</button>
+					</div>
+				</form>
+
+				<!-- 관리자만 삭제 버튼 노출 -->
+				<th:block th:if="${session.jyloginMember != null and session.jyloginMember.id == 'admin'}">
+					<form th:action="@{/product/jydelete/{no}(no=${product.no})}" method="post"
+						onsubmit="return confirm('정말 삭제하시겠습니까?');">
+						<button type="submit" class="btn-delete">상품 삭제</button>
+					</form>
+				</th:block>
+				
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(function () {
+			const unitPrice = parseInt($('#unitPrice').text().replace(/[^0-9]/g, ''));
+
+			function updateTotal() {
+				const quantity = parseInt($('#quantity').val());
+				const total = unitPrice * quantity;
+				$('#totalPrice').text('총 합계금액: ' + total.toLocaleString() + '원');
+			}
+
+			$('#quantity').on('input', updateTotal);
+			updateTotal();
+		});
+	</script>
+
+	<th:block th:replace="~{fragments/jyfooter :: footer}" />
+</body>
+
+</html>

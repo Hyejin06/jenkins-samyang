@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>어바웃미 공지사항 목록</title>
+  <link rel="stylesheet" href="/css/reset.css" />
+  <link rel="stylesheet" href="/css/noticelist.css" />
+  <th:block th:replace="fragments/jyheader2 :: header" />
+  <th:block th:replace="fragments/jyheader2 :: link" />
+  <th:block th:replace="fragments/jyheader2 :: script" />
+  <th:block th:replace="fragments/jyfooter :: link" />
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+  <div class="notice-container">
+    <!-- 왼쪽 고객센터 메뉴 -->
+    <aside class="notice-sidebar">
+      <h3>고객센터</h3>
+      <ul>
+        <li><a href="/notice/jylist" class="on">공지사항</a></li>
+        <li><a href="/qna/jylist">FAQ</a></li>
+      </ul>
+    </aside>
+
+    <!-- 오른쪽 공지사항 본문 -->
+    <section class="notice-content">
+      <div class="notice-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>공지사항</h2>
+        <div th:if="${session.jyloginMember != null and session.jyloginMember.id == 'admin'}">
+          <a href="/notice/jyins" class="add-notice-btn">공지사항 등록</a>
+        </div>
+      </div>
+
+      <table class="notice-table">
+        <thead>
+          <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>조회수</th>
+            <th>날짜</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="notice : ${page.content}">
+            <td th:text="${notice.no}">1</td>
+            <td class="notice-title">
+              <a th:href="@{'/notice/jydetail/' + ${notice.no}}" th:text="${notice.title}">공지사항 제목</a>
+            </td>
+            <td th:text="${notice.hits}">0</td>
+            <td th:text="${#temporals.format(notice.resdate, 'yyyy-MM-dd')}"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ✅ 부트스트랩 스타일 페이징 -->
+      <nav aria-label="Page navigation" th:if="${page.totalPages > 1}">
+        <ul class="pagination justify-content-center">
+          <!-- 이전 -->
+          <li class="page-item" th:classappend="${page.first} ? 'disabled'">
+            <a class="page-link" th:href="@{'/notice/jylist?page=' + ${page.number - 1}}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+
+          <!-- 페이지 번호 -->
+          <li class="page-item" th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+              th:classappend="${page.number == i} ? 'active'">
+            <a class="page-link" th:href="@{'/notice/jylist?page=' + ${i}}" th:text="${i + 1}">1</a>
+          </li>
+
+          <!-- 다음 -->
+          <li class="page-item" th:classappend="${page.last} ? 'disabled'">
+            <a class="page-link" th:href="@{'/notice/jylist?page=' + ${page.number + 1}}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </section>
+  </div>
+
+  <th:block th:replace="fragments/jyfooter :: footer" />
+</body>
+
+</html>

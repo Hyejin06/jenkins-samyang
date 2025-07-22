@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<title>서브큐 리뷰 작성</title>
+
+	<link rel="stylesheet" href="/css/write.css">
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<th:block th:replace="~{fragments/hjheader :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjheader :: script}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: script}"></th:block>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			overflow-x: hidden;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/hjheader :: header}"></th:block>
+
+	<div class="review-container">
+		<h2>리뷰 작성</h2>
+
+		<form th:action="@{/hjreview/hjsave}" method="post" th:object="${review}">
+			<label for="productId">상품 선택</label>
+			<select id="product" name="product.no" required>
+				<option value="">-- 선택하세요 --</option>
+				<option th:each="p : ${myProducts}" th:value="${p.no}" th:text="${p.pname}"></option>
+			</select>
+
+			<label for="rating">별점 (1~5)</label>
+			<input type="number" id="rating" name="rating" min="1" max="5" required>
+
+			<label for="content">리뷰 내용</label>
+			<textarea id="content" name="content" rows="5" placeholder="리뷰를 입력해주세요" required></textarea>
+
+			<button type="submit">등록</button>
+		</form>
+	</div>
+	
+	<th:block th:replace="~{fragments/hjfooter :: footer}"></th:block>
+</body>
+
+</html>

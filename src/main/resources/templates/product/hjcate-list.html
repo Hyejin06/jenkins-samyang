@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<th:block th:replace="fragments/header :: link"></th:block>
+	<th:block th:replace="fragments/header :: script"></th:block>
+	<th:block th:replace="fragments/header :: style"></th:block>
+    <title>제품 목록</title>
+</head>
+<body>
+<th:block th:replace="fragments/header :: header"></th:block>
+<div class="container">	
+    <hr>
+	<div>
+		배너
+	</div>
+	<div class="first-content">
+		<nav aria-label="breadcrumb">
+		  <ol class="breadcrumb">
+		    <li class="breadcrumb-item"><a href="/">Home</a></li>
+		    <li class="breadcrumb-item"><a href="/product/list">제품</a></li>
+		    <li class="breadcrumb-item active" aria-current="page" th:text="${cate}"></li>
+		  </ol>
+		</nav>
+	</div>
+    <div class="container">
+		<h2 class="mt-4" th:text="'카테고리별 제품 - ' + ${cate}"></h2>
+		<hr>
+		<a href="/product/ins" class="btn btn-primary" th:if="${session.loginMember != null and session.loginMember.id == 'admin'}">제품 등록</a>
+		<hr>
+		<div class="container">
+		      <ul class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" style="list-style:none;">
+		        <li class="col" th:each="product : ${products}">
+		          <div class="card shadow-sm">
+		            <img class="bd-placeholder-img card-img-top" width="240" height="240" th:src="${product.img2}" alt="" role="img" />
+		            <div class="card-body">
+					  <h3 th:text="${product.pname}"></h3>
+		              <p class="card-text">
+						<span th:text="${product.price2}"></span>
+						<span th:text="${product.comment}"></span>
+					  </p>
+		              <div class="d-flex justify-content-between align-items-center">
+		                <div class="btn-group">
+		                  <a th:href="@{/product/detail/{no}(no=${product.no})}" class="btn btn-sm btn-outline-secondary">View</a>
+		                  <a th:href="@{/product/edit/{no}(no=${product.no})}" th:if="${session.loginMember != null and session.loginMember.id == 'admin'}" class="btn btn-sm btn-outline-secondary">Edit</a>
+		                </div>
+		                <small class="text-body-secondary"></small>
+		              </div>
+		            </div>
+		          </a>
+		        </li>
+				<li class="col" th:if="${products == null}">
+					제품 목록이 존재하지 않습니다.
+				</li>
+		      </ul>
+		    </div>
+    </div>
+</div>
+<th:block th:replace="fragments/footer :: footer"></th:block>
+</body>
+</html>

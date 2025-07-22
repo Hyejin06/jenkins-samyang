@@ -1,0 +1,130 @@
+/* 공통 설정 */
+body {
+	font-family: 'Noto Sans KR', sans-serif;
+	color: #222;
+	background: #fff;
+}
+
+.order-container {
+	max-width: 1200px;
+	margin: 180px auto 100px;
+	padding: 0 20px;
+}
+
+/* 제목 & 단계 */
+.order-title {
+	font-size: 26px;
+	font-weight: 600;
+	margin-bottom: 30px;
+}
+
+.order-steps {
+	font-size: 14px;
+	color: #888;
+	margin-bottom: 60px;
+}
+
+.order-steps strong {
+	color: #222;
+	font-weight: 500;
+}
+
+.order-steps span {
+	margin: 0 8px;
+}
+
+/* 주문 상품 목록 */
+.order-products h3 {
+	font-size: 18px;
+	font-weight: 500;
+	margin-bottom: 15px;
+}
+
+.order-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 40px;
+	border-top: 2px solid #000;
+}
+
+.order-table th,
+.order-table td {
+	padding: 14px;
+	text-align: center;
+	border-bottom: 1px solid #ddd;
+	font-size: 15px;
+}
+
+.order-table th {
+	background-color: #f8f8f8;
+	font-weight: 600;
+	color: #333;
+}
+
+.thumb {
+	width: 60px;
+	height: 60px;
+	object-fit: cover;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+}
+
+/* 주문 요약 */
+.order-summary {
+	display: flex;
+	justify-content: flex-end;
+	gap: 30px;
+	padding: 30px 20px;
+	background: #fbf6f0;
+	margin-bottom: 40px;
+}
+
+.order-summary p {
+	font-size: 16px;
+}
+
+.order-summary .order-total {
+	font-size: 20px;
+	font-weight: 700;
+	color: #000;
+}
+
+/* 주문자 정보 */
+.order-user h3 {
+	font-size: 18px;
+	font-weight: 500;
+	margin-bottom: 15px;
+}
+
+.order-user label {
+	display: block;
+	font-weight: 500;
+	margin: 14px 0 6px;
+}
+
+.order-user input[type="text"] {
+	width: 100%;
+	padding: 10px;
+	font-size: 15px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+/* 주문 버튼 */
+.btn-order {
+	margin-top: 30px;
+	width: 100%;
+	padding: 14px;
+	font-size: 16px;
+	font-weight: 600;
+	color: #fff;
+	background: #000;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background 0.3s ease;
+}
+
+.btn-order:hover {
+	background: #333;
+}

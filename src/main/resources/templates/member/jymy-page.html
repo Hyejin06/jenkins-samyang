@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>어바웃미 마이페이지</title>
+	<link rel="stylesheet" href="/css/reset.css" />
+	<link rel="stylesheet" href="/css/mypage.css" />
+	<th:block th:replace="fragments/jyheader2 :: header" />
+	<th:block th:replace="fragments/jyheader2 :: link" />
+	<th:block th:replace="fragments/jyheader2 :: script" />
+	<th:block th:replace="fragments/jyfooter :: link" />
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+
+	<h2 class="mypage-title">마이페이지</h2>
+
+	<div class="mypage-info-bg">
+		<div class="mypage-info-box">
+			<div class="grade-info">
+				<!-- 등급 아이콘: 조건에 따라 이미지 변경 -->
+				<img th:src="${session.jyloginMember.grade == 'VIP'} ? '/img/rating2.png' 
+				        : (${session.jyloginMember.grade == 'VVIP'} ? '/img/rating3.png' : '/img/rating1.png')" alt="등급 아이콘"
+					width="60" height="60" />
+
+				<!-- 회원 이름 + 등급 표시 -->
+				<div class="grade-text-wrap">
+					<!-- 1줄: 이름님의 등급은 + 버튼 -->
+					<div class="grade-text-line">
+						<p class="grade-label">
+							<b th:text="${#strings.defaultString(session.jyloginMember.name, '이름')}">이름</b>님의 등급은
+						</p>
+						<a href="#" class="grade-btn">등급별 혜택보기</a>
+					</div>
+
+					<!-- 2줄: [ Family ] 입니다 -->
+					<p class="grade-label grade-rank">
+						[ <b th:text="${#strings.defaultString(session.jyloginMember.grade, 'Family')}">Family</b> ]
+						입니다.
+					</p>
+
+					<!-- 등급 게이지 -->
+					<div class="grade-bar"
+						th:style="'--grade-progress:' + (${session.jyloginMember.gradeProgress} != null ? session.jyloginMember.gradeProgress : 0)">
+					</div>
+
+					<!-- VIP까지 남은 금액 -->
+					<div class="grade-status"
+						th:text="'[VIP]까지 ' + (${session.jyloginMember.amountToVip} != null ? session.jyloginMember.amountToVip : 0) + '원 남음'">
+					</div>
+				</div>
+			</div>
+
+			<div class="mypage-summary-info">
+				<div class="mypage-summary-box">
+					<img src="/img/icon_my1.png" alt="총주문">
+					<span th:text="'총 주문 (' + (${orderCount} ?: 0) + '회)'">총 주문 (0회)</span>
+					<strong>
+						<a href="#" th:text="(${orderTotal} ?: 0) + '원'">0원</a>
+					</strong>
+				</div>
+
+				<div class="mypage-summary-box">
+					<img src="/img/icon_my2.png" alt="적립금">
+					<span>적립금</span>
+					<strong>
+						<a href="#" th:text="(${pointAmount} ?: 0) + '원'">0원</a>
+					</strong>
+				</div>
+
+				<div class="mypage-summary-box">
+					<img src="/img/icon_my3.png" alt="쿠폰">
+					<span>쿠폰</span>
+					<strong>
+						<a href="#" th:text="(${couponCount} ?: 0) + '개'">0개</a>
+					</strong>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="mypage-container">
+		<!-- 왼쪽 사이드바 -->
+		<div class="mypage-left">
+			<div class="mypage-sidebar">
+				<div class="sidebar-section">
+					<h4>나의 주문내역</h4>
+					<ul>
+						<li><a href="#">주문내역조회</a></li>
+						<li><a href="#">정기배송조회</a></li>
+					</ul>
+				</div>
+
+				<div class="sidebar-section">
+					<h4>나의 혜택</h4>
+					<ul>
+						<li><a href="#">적립금</a></li>
+						<li><a href="#">쿠폰</a></li>
+					</ul>
+				</div>
+
+				<div class="sidebar-section">
+					<h4>나의 활동</h4>
+					<ul>
+						<li><a href="#">관심상품</a></li>
+						<li><a href="#">최근 본 상품</a></li>
+						<li><a href="#">게시물 관리</a></li>
+						<li><a href="#">리뷰 관리</a></li>
+						<li><a href="#">추천인 관리</a></li>
+					</ul>
+				</div>
+
+				<div class="sidebar-section">
+					<h4>개인정보관리</h4>
+					<ul>
+						<li><a href="/member/edit">회원정보수정</a></li>
+						<li><a href="#">배송지 관리</a></li>
+						<li><a href="#">로그아웃</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="sidebar-qna">
+				<img src="/img/icon_qna.png" alt="1:1 문의">
+				<p>쇼핑몰 이용 중<br>궁금한 사항이 있다면?</p>
+				<a href="#">1:1 문의하기 ></a>
+			</div>
+		</div>
+
+		<!-- 오른쪽 메인 영역 -->
+		<section class="mypage-main">
+			<h3>나의 주문처리 현황 <small style="color:#888; font-size:13px;">(최근 3개월 기준)</small></h3>
+			<div class="order-box">
+				<div class="order-status">
+					<div class="status-item">
+						<img src="/img/icon_state1.png" alt="입금전">
+						<div>입금전 <strong>0</strong></div>
+					</div>
+					<div class="status-arrow">›</div>
+
+					<div class="status-item">
+						<img src="/img/icon_state2.png" alt="배송준비중">
+						<div>배송준비중 <strong>0</strong></div>
+					</div>
+					<div class="status-arrow">›</div>
+
+					<div class="status-item">
+						<img src="/img/icon_state3.png" alt="배송중">
+						<div>배송중 <strong>0</strong></div>
+					</div>
+					<div class="status-arrow">›</div>
+
+					<div class="status-item">
+						<img src="/img/icon_state4.png" alt="배송완료">
+						<div>배송완료 <strong>0</strong></div>
+					</div>
+				</div>
+
+				<!-- 라인 추가 후 하단 내역 -->
+				<hr class="order-divider">
+
+				<div class="order-info-summary">
+					<div>취소내역 <strong>0</strong></div>
+					<div>|</div>
+					<div>교환내역 <strong>0</strong></div>
+					<div>|</div>
+					<div>반품내역 <strong>0</strong></div>
+				</div>
+			</div>
+
+			<!-- 관심상품 -->
+			<div class="interest-box">
+				<div class="interest-header">
+					<h3>관심상품</h3>
+					<button>더보기</button>
+				</div>
+				<div class="interest-empty">
+					관심상품 내역이 없습니다
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<th:block th:replace="~{fragments/jyfooter :: footer}"></th:block>
+</body>
+
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>삼양 리뷰 목록</title>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<th:block th:replace="~{fragments/header :: style}" />
+	<th:block th:replace="~{fragments/header :: script}" />
+	<th:block th:replace="~{fragments/footer :: style}" />
+	<th:block th:replace="~{fragments/footer :: script}" />
+
+	<style>
+		.header {
+			background: #fff !important;
+			border-bottom: 1px solid #e6e6e6 !important;
+		}
+
+		.header .menu>li>a {
+			color: #111 !important;
+		}
+
+		.header .login-box a {
+			color: #111 !important;
+			border-color: #333;
+		}
+
+		#logoImg {
+			content: url('/img/mainlogo2.png');
+			/* 남색 로고 고정 */
+		}
+
+		.submenu-wrap {
+			display: none;
+		}
+
+		.review-list-container {
+			max-width: 960px;
+			margin: 180px auto;
+			padding: 0 20px;
+		}
+
+		.review-title {
+			font-size: 24px;
+			font-weight: bold;
+			margin-bottom: 30px;
+		}
+
+		.review-write-wrap {
+			text-align: right;
+			margin-bottom: 30px;
+		}
+
+		.btn-write-review {
+			display: inline-block;
+			background: #ff6400;
+			color: white;
+			padding: 8px 16px;
+			border-radius: 4px;
+			text-decoration: none;
+			font-weight: 500;
+		}
+
+		.review-item {
+			display: flex;
+			gap: 20px;
+			align-items: flex-start;
+			border-bottom: 1px solid #ccc;
+			padding: 20px 0;
+		}
+
+		.review-item img {
+			width: 120px;
+			height: 120px;
+			border-radius: 6px;
+		}
+
+		.review-item h4 {
+			margin: 0 0 10px;
+			font-size: 18px;
+		}
+
+		.review-meta {
+			color: #888;
+			font-size: 14px;
+			margin-bottom: 6px;
+		}
+
+		.review-rating {
+			color: #ff6400;
+			font-weight: bold;
+		}
+
+		.review-content {
+			font-size: 16px;
+			margin-top: 10px;
+		}
+
+		.btn-delete-review {
+			color: red;
+			border: none;
+			background: none;
+			cursor: pointer;
+			font-size: 13px;
+			margin-left: 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/header :: header}" />
+
+	<div class="review-list-container">
+		<h2 class="review-title">전체 리뷰 목록</h2>
+
+		<!-- 리뷰 작성 버튼 (로그인한 회원 또는 관리자만) -->
+		<div class="review-write-wrap">
+			<a th:if="${session.loginMember != null}" href="/review/write" class="btn-write-review">리뷰 작성</a>
+			<a th:if="${session.loginMember == null}" href="/member/login" class="btn-write-review">로그인 후 작성</a>
+		</div>
+
+		<div th:if="${#lists.isEmpty(reviews)}">
+			<p>등록된 리뷰가 없습니다.</p>
+		</div>
+
+		<div th:each="r : ${reviews}" class="review-item" style="display: flex; gap: 20px;">
+			<!-- ✅ 상품 이미지 -->
+			<div>
+				<img th:src="@{${r.product.img1}}" alt="상품 이미지"
+					style="width: 120px; height: 120px; border-radius: 6px;">
+			</div>
+
+			<!-- ✅ 리뷰 내용 영역 -->
+			<div style="flex: 1;">
+				<h4 th:text="${r.product.pname}">상품명</h4>
+				<div class="review-meta">
+					<span th:text="${r.writer}">작성자</span> |
+					<span th:text="${#temporals.format(r.resdate, 'yyyy.MM.dd')}">작성일</span>
+					<form th:if="${session.loginMember != null and session.loginMember.id == r.writer}"
+						th:action="@{'/review/delete/' + ${r.id}}" method="post"
+						onsubmit="return confirm('리뷰를 삭제하시겠습니까?');" style="display:inline;">
+						<button type="submit" class="btn-delete-review">삭제</button>
+					</form>
+				</div>
+				<div class="review-rating">★ <span th:text="${r.rating}">5</span>점</div>
+				<p class="review-content" th:text="${r.content}">리뷰 내용</p>
+			</div>
+		</div>
+	</div>
+
+
+	<th:block th:replace="~{fragments/footer :: footer}" />
+</body>
+
+</html>

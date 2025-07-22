@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>삼양 Footer</title>
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<style th:fragment="style">
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		.footer {
+			background-color: #fff;
+			border-top: 1px solid #e0e0e0;
+		}
+
+		.footer-top {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 20px 60px;
+			max-width: 1620px;
+			margin: 0 auto;
+		}
+
+		.footer-links {
+			display: flex;
+			gap: 30px;
+			font-size: 15px;
+		}
+
+		.footer-links a {
+			color: #999;
+			text-decoration: none;
+			transition: color 0.2s;
+		}
+
+		.footer-links a.active {
+			color: #000;
+			font-weight: bold;
+		}
+
+		.footer-icons {
+			display: flex;
+			gap: 15px;
+			align-items: center;
+		}
+
+		.footer-icons img {
+			width: 24px;
+			height: 24px;
+			cursor: pointer;
+		}
+
+		.footer-bottom {
+			background-color: #26236e;
+			color: #c6c6d0;
+			font-size: 14px;
+		}
+
+		.footer-bottom .bottom-inner {
+			max-width: 1620px;
+			margin: 0 auto;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 40px 60px;
+		}
+
+		.footer-logo img {
+			width: 160px;
+			vertical-align: middle;
+		}
+
+		.footer-info {
+			text-align: right;
+			line-height: 1.6;
+		}
+	</style>
+</head>
+
+<body>
+	<footer class="footer" th:fragment="footer">
+		<!-- 상단 링크 + 아이콘 -->
+		<div class="footer-top">
+			<div class="footer-links">
+				<a href="#" class="active">개인정보처리방침</a>
+				<a href="#">이용약관</a>
+				<a href="#">이메일무단수집거부</a>
+				<a href="#">문의하기</a>
+				<a href="#">윤리경영</a>
+				<a href="#">계열사 바로가기 +</a>
+			</div>
+			<div class="footer-icons">
+				<img src="/img/mficon1.png" alt="YouTube 아이콘" />
+				<img src="/img/mficon2.png" alt="Instagram 아이콘" />
+			</div>
+		</div>
+
+		<!-- 하단 로고 + 주소 -->
+		<div class="footer-bottom">
+			<div class="bottom-inner">
+				<div class="footer-logo">
+					<img src="/img/mainlogo1.png" alt="Samyang Logo" />
+				</div>
+				<div class="footer-info">
+					<p>서울특별시 종로구 종로33길 31 ｜ 경기도 성남시 분당구 판교로 295</p>
+					<p>© 2024 Samyang Corporation. All Rights Reserved.</p>
+				</div>
+			</div>
+		</div>
+	</footer>
+
+</body>
+
+</html>

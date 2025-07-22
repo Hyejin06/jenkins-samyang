@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>어바웃미 로그인</title>
+	<link rel="stylesheet" href="/css/reset.css" />
+	<link rel="stylesheet" href="/css/login.css" />
+	<th:block th:replace="fragments/jyheader2 :: header" />
+	<th:block th:replace="fragments/jyheader2 :: link" />
+	<th:block th:replace="fragments/jyheader2 :: script" />
+	<th:block th:replace="fragments/jyfooter :: link" />
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+	
+	<div class="login-container">
+		<h2 class="login-title">로그인</h2>
+		<div class="login-content">
+			<!-- 로그인 폼 -->
+			<div class="login-form">
+				<h3>회원 로그인</h3>
+
+				<!-- 🔽 에러 메시지 위치 (추가) -->
+				<div th:if="${param.error}">
+					<p style="color:red;">아이디 또는 비밀번호가 잘못되었습니다.</p>
+				</div>
+
+				<!-- ✅ 로그인 폼 -->
+				<form action="/member/jylogin" method="post">
+					<input type="text" name="id" placeholder="아이디" required />
+					<input type="password" name="pw" placeholder="비밀번호" required />
+					<button type="submit">로그인</button>
+					<div class="login-options">
+						<label><input type="checkbox" name="remember"> 아이디 저장</label>
+					</div>
+				</form>
+				<div class="login-links">
+					<a href="/member/jyform">회원가입</a> |
+					<a href="#">아이디 찾기</a> |
+					<a href="#">비밀번호 찾기</a>
+				</div>
+
+				<!-- SNS 로그인 -->
+				<div class="sns-login">
+					<a href="#" class="sns-btn naver">
+						<img src="/img/icon_login_naver.png" alt="네이버 로그인">
+						<span>네이버 로그인</span>
+					</a>
+					<a href="#" class="sns-btn kakao">
+						<img src="/img/icon_login_kakao.png" alt="카카오 로그인">
+						<span>카카오 로그인</span>
+					</a>
+				</div>
+
+
+			</div>
+
+			<!-- 오른쪽 이벤트 배너 -->
+			<div class="login-banner">
+				<img src="/img/login.png" alt="친구 초대 이벤트 배너">
+			</div>
+		</div>
+	</div>
+
+	<th:block th:replace="fragments/jyfooter :: footer" />
+</body>
+
+</html>

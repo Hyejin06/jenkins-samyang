@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>서브큐 푸터</title>
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<style th:fragment="style">
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		ul {
+			list-style: none;
+		}
+
+		a {
+			text-decoration: none;
+			color: inherit;
+		}
+
+		/* 전체 푸터 */
+		.footer {
+			height: 414px;
+			background-color: #fff;
+			border-top: 1px solid #f8f8f8;
+			font-size: 15px;
+			color: #777;
+		}
+
+		/* ✅ 내부 컨테이너 */
+		.footer-inner {
+			max-width: 1512px;
+			margin: 0 auto;
+			padding: 50px 20px 80px;
+			display: flex;
+			flex-direction: column;
+		}
+
+		/* ✅ 상단 메뉴 */
+		.footer-menu {
+			display: flex;
+			justify-content: flex-start;
+			gap: 24px;
+			margin-bottom: 56px;
+		}
+
+		.footer-menu li a {
+			font-size: 17px;
+			color: #121212;
+			font-weight: 400;
+		}
+
+		.footer-menu li a strong {
+			font-weight: 700;
+		}
+
+		/* ✅ 본문 좌우 정렬 */
+		.footer-content {
+			display: flex;
+			justify-content: space-between;
+			align-items: flex-start;
+			gap: 40px;
+		}
+
+		/* ✅ 왼쪽: 로고 + 회사정보 + 고객센터 */
+		.footer-main {
+			display: flex;
+			flex-grow: 1;
+			gap: 40px;
+			min-width: 0;
+		}
+
+		.footer-logo {
+			height: 46px;
+			display: block;
+			margin-right: 20px;
+			flex-shrink: 0;
+		}
+
+		/* 회사정보 */
+		.company-box {
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+		}
+
+		.company-box ul {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px 16px;
+		}
+
+		.company-box li {
+			font-size: 14px;
+			color: #777;
+			line-height: 1.6;
+		}
+
+		.company-box .biz-btn {
+			display: inline-block;
+			width: 110px;
+			line-height: 30px;
+			margin-left: 4px;
+			text-align: center;
+			font-size: 13px;
+			font-weight: 500;
+			color: #121212;
+			/* var(--bk-color1) */
+			border: 1px solid #dcdcdc;
+			/* var(--br-color1) */
+			border-radius: 8px;
+			cursor: pointer;
+		}
+
+		/* 고객센터 */
+		.cs-box {
+			min-width: 180px;
+			margin-left: 100px;
+		}
+
+		.cs-box dl {
+			display: flex;
+			align-items: center;
+			font-size: 15px;
+			color: #121212;
+			font-weight: 500;
+			margin-bottom: 8px;
+		}
+
+		.cs-box dd {
+			margin-left: 8px;
+			font-size: 26px;
+			font-weight: 700;
+		}
+
+		.cs-box p {
+			line-height: 1.7;
+			font-size: 15px;
+			color: #777;
+		}
+
+		/* ✅ 오른쪽: 패밀리 + SNS + 인증 */
+		.footer-side {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-end;
+		}
+
+		.footer-family {
+			position: relative;
+			width: 220px;
+			margin-bottom: 16px;
+			margin-top: -100px;
+		}
+
+		.site-btn {
+			width: 100%;
+			line-height: 32px;
+			padding: 0 32px 0 12px;
+			background-color: #fff;
+			border: 1px solid #eaeaea;
+			border-radius: 4px;
+			font-size: 13px;
+			font-weight: 400;
+			color: #121212;
+			text-align: left;
+			position: relative;
+			cursor: pointer;
+		}
+
+		.site-btn .arrow {
+			width: 12px;
+			height: 7px;
+			position: absolute;
+			right: 12px;
+			top: 50%;
+			transform: translateY(-50%);
+			pointer-events: none;
+		}
+
+		.site-list {
+			position: absolute;
+			top: 36px;
+			left: 0;
+			width: 100%;
+			border: 1px solid #eaeaea;
+			border-radius: 4px;
+			background-color: #fff;
+			z-index: 10;
+			display: none;
+		}
+
+		.site-list li a {
+			display: block;
+			padding: 8px 12px;
+			font-size: 13px;
+			color: #121212;
+			white-space: nowrap;
+		}
+
+		.site-list li a:hover {
+			background-color: #f8f8f8;
+		}
+
+		.footer-side .sns {
+			margin-top: 50px;
+			display: flex;
+			justify-content: flex-end;
+			gap: 10px;
+			margin-bottom: 14px;
+		}
+
+		.footer-side .sns a img {
+			width: 36px;
+			height: 36px;
+			display: block;
+		}
+
+		.footer-side .cert {
+			display: flex;
+			justify-content: flex-end;
+			gap: 10px;
+			height: 74px;
+			margin-top: 24px;
+			margin-left: 10px;
+			cursor: pointer;
+		}
+
+		.footer-side .cert a img {
+			width: 70px;
+			display: block;
+		}
+
+		.copy-bg {
+			width: 100%;
+			padding: 24px 0;
+		}
+
+		.copy-wide {
+			max-width: 1512px;
+			min-width: 1280px;
+			width: 100%;
+			padding: 0 20px;
+			margin: 0 auto;
+			line-height: 1;
+		}
+	</style>
+</head>
+
+<body>
+	<footer class="footer" th:fragment="footer">
+
+		<!-- ✅ 푸터 전체 감싸는 내부 박스 -->
+		<div class="footer-inner">
+
+			<!-- 상단 메뉴 -->
+			<ul class="footer-menu">
+				<li><a href="#">회사소개</a></li>
+				<li><a href="#">사업소개</a></li>
+				<li><a href="#">이용안내</a></li>
+				<li><a href="#">사이트 이용약관</a></li>
+				<li><a href="#"><strong>개인정보처리방침</strong></a></li>
+				<li><a href="#">임직원 인증</a></li>
+				<li><a href="#">입점/제휴문의</a></li>
+			</ul>
+
+			<!-- ✅ 좌우 영역 나눠서 flex -->
+			<div class="footer-content">
+				<!-- 왼쪽: 로고 + 회사정보 + 고객센터 -->
+				<div class="footer-main">
+					<img src="/img/footerlogo.png" alt="삼양 로고" class="footer-logo" />
+
+					<div class="company-box">
+						<ul class="corp-1">
+							<li>(주)삼양사 판교</li>
+							<li>대표명 : 최낙현, 강호성</li>
+							<li>사업자등록번호 : 781-85-00412
+								<a href="#" class="biz-btn">사업자정보확인</a>
+							</li>
+						</ul>
+						<ul class="corp-2">
+							<li>주소 : 경기 성남시 분당구 판교로 295 6층, 7층, 8층</li>
+						</ul>
+						<ul class="corp-3">
+							<li>개인정보관리책임자 : 윤재인 (serveq@samyang.com)</li>
+						</ul>
+						<ul class="corp-4">
+							<li>통신판매업신고번호 : 2016-성남분당-0530</li>
+						</ul>
+					</div>
+
+					<div class="cs-box">
+						<dl>
+							<dt>고객센터</dt>
+							<dd>1668-4486</dd>
+						</dl>
+						<p>
+							평일 : 10:00 ~ 16:00 (주말 공휴일 휴무)<br />
+							점심 : 12:00 ~ 13:00<br />
+							당일 주문 마감 : 10:00
+						</p>
+					</div>
+				</div>
+
+				<!-- 오른쪽: 패밀리사이트 + SNS + 인증 -->
+				<div class="footer-side">
+					<div class="footer-family">
+						<div class="site-toggle">
+							<button type="button" class="site-btn">
+								패밀리사이트
+								<img src="/img/down.png" alt="열기 아이콘" class="arrow" />
+							</button>
+							<ul class="site-list">
+								<li><a href="/">삼양</a></li>
+								<li><a href="/jy">어바웃미</a></li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="sns">
+						<a href="#"><img src="/img/sns1.png" alt="YouTube" /></a>
+						<a href="#"><img src="/img/sns2.png" alt="Kakao" /></a>
+						<a href="#"><img src="/img/sns3.png" alt="Instagram" /></a>
+						<a href="#"><img src="/img/sns4.png" alt="Blog" /></a>
+					</div>
+					<div class="cert">
+						<a href="#"><img src="/img/inplay1.png" alt="INIPAY" /></a>
+						<a href="#"><img src="/img/inplay2.png" alt="ESCROW" /></a>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<!-- 하단 카피 -->
+		<div class="copyright">
+			<div class="copy-bg">
+				<div class="copy-wide">
+					Copyright © 2023 서브큐 all rights reserved.
+				</div>
+			</div>
+		</div>
+	</footer>
+
+	<script>
+		$(document).ready(function () {
+			$('.site-btn').on('click', function () {
+				$('.site-list').slideToggle(150);
+			});
+		});
+	</script>
+</body>
+
+</html>

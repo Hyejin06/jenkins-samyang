@@ -1,0 +1,35 @@
+.terms-container {
+	width: 800px;
+	padding: 150px 0 80px; /* ← 위쪽 여백을 header 높이만큼 줌 */
+	margin: 0 auto;        /* 가운데 정렬 유지 */
+	font-family: 'Noto Sans KR', sans-serif;
+}
+.terms-container h2 {
+	font-size: 24px;
+	margin-bottom: 20px;
+}
+.checkbox {
+	margin-bottom: 15px;
+}
+.terms-box {
+	border: 1px solid #ccc;
+	padding: 10px;
+	height: 180px;
+	overflow-y: scroll;
+	background: #f9f9f9;
+	margin-top: 8px;
+}
+.terms-box p {
+	font-size: 14px;
+}
+.submit-btn {
+	margin-top: 30px;
+	text-align: center;
+}
+.submit-btn button {
+	padding: 10px 20px;
+	background-color: #222;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+}

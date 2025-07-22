@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<title>어바웃미 상품 등록</title>
+	<link rel="stylesheet" href="/css/reset.css">
+	<link rel="stylesheet" href="/css/productform.css">
+	<th:block th:replace="~{fragments/jyheader2 :: header}" />
+	<th:block th:replace="~{fragments/jyheader2 :: link}" />
+	<th:block th:replace="~{fragments/jyheader2 :: script}" />
+	<th:block th:replace="~{fragments/jyfooter :: link}" />
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+
+	<h2>상품 등록</h2>
+	<form th:action="@{/product/jysave}" method="post" th:object="${product}">
+		<label for="cate">카테고리</label>
+		<select id="cate" th:field="*{cate}">
+			<option value="">-- 선택하세요 --</option>
+			<option value="BEST">BEST</option>
+			<option value="NEW">NEW</option>
+		</select>
+
+		<label for="pname">상품명</label>
+		<input type="text" id="pname" th:field="*{pname}" placeholder="상품명">
+
+		<label for="price">가격</label>
+		<input type="number" id="price" th:field="*{price}" value="0" class="auto-clear">
+
+		<label for="rating">별점</label>
+		<input type="number" id="rating" th:field="*{rating}" value="0" class="auto-clear-rating">
+
+		<label for="reviewCount">리뷰 수</label>
+		<input type="number" id="reviewCount" th:field="*{reviewCount}" value="0" class="auto-clear">
+
+		<label>대표 이미지</label>
+		<div class="img-picker-wrap">
+			<button type="button" id="openImgPicker">이미지 선택</button>
+			<input type="hidden" th:field="*{img1}" id="img1">
+			<img id="imgPreview" src="" alt="미리보기">
+		</div>
+
+		<button type="submit">등록</button>
+	</form>
+
+	<!-- 이미지 선택 모달 -->
+	<div class="img-modal" id="imgModal" style="display:none;">
+		<div class="img-modal-content">
+			<span class="img-modal-close" id="closeImgModal">&times;</span>
+			<h3>이미지 선택</h3>
+			<div class="img-list">
+				<img th:each="img : ${imgFiles}" th:src="${img}" th:alt="${img}" class="img-thumb"
+					th:data-value="${img}">
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// 숫자 입력 초기화
+		document.querySelectorAll('.auto-clear').forEach(input => {
+			input.addEventListener('focus', function () {
+				if (this.value === '0') this.value = '';
+			});
+			input.addEventListener('blur', function () {
+				if (this.value === '') this.value = '0';
+			});
+		});
+
+		// 이미지 선택 모달 동작
+		$('#openImgPicker').on('click', function () {
+			$('#imgModal').fadeIn();
+		});
+
+		$('#closeImgModal').on('click', function () {
+			$('#imgModal').fadeOut();
+		});
+
+		$(document).on('click', '.img-thumb', function () {
+			const imgPath = $(this).data('value');
+			$('#img1').val(imgPath);
+			$('#imgPreview').attr('src', imgPath).show();
+			$('#imgModal').fadeOut();
+		});
+	</script>
+
+	<th:block th:replace="~{fragments/jyfooter :: footer}" />
+</body>
+
+</html>

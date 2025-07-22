@@ -1,0 +1,350 @@
+* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			overflow-x: hidden;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		.mypage-title {
+			text-align: center;
+			font-size: 32px;
+			font-weight: 700;
+			margin: 180px 0 40px;
+		}
+
+		.mypage-info-bg {
+			width: 100%;
+			background: #f8f8f8;
+			padding: 60px 0;
+		}
+
+		/* 안쪽은 기존처럼 중앙 정렬 */
+		.mypage-info-box {
+			max-width: 1400px;
+			margin: 0 auto;
+			padding: 0 60px;
+			display: flex;
+			align-items: center;
+			gap: 60px;
+			justify-content: flex-start;
+			box-sizing: border-box;
+			background: none;
+			/* ✅ 회색 제거 */
+		}
+
+		.grade-info {
+			flex: 1;
+			display: flex;
+			align-items: center;
+			gap: 20px;
+		}
+
+		.grade-info img {
+			width: 100px;
+			height: 108px;
+		}
+
+		.grade-content {
+			flex: 1;
+		}
+
+		.grade-text-wrap {
+			max-width: 400px;
+			/* 원하는 만큼 넓게 지정 가능 */
+			width: 100%;
+		}
+
+		.grade-text-line {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.grade-label {
+			font-size: 20px;
+			font-weight: 500;
+		}
+
+		.grade-label b {
+			line-height: 1.48;
+			font-size: 26px;
+			font-weight: 700;
+		}
+
+		.grade-btn {
+			padding: 6px 12px;
+			border: 1px solid #ccc;
+			background: #fff;
+			border-radius: 5px;
+			font-size: 13px;
+			cursor: pointer;
+		}
+
+		.grade-bar {
+			width: 100%;
+			height: 6px;
+			background: #e0e0e0;
+			border-radius: 4px;
+			margin-top: 10px;
+			position: relative;
+		}
+
+		.grade-bar::after {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: calc(var(--grade-progress, 0) * 1%);
+			height: 100%;
+			background: #ff5e5e;
+			border-radius: 4px;
+		}
+
+		.grade-status {
+			text-align: right;
+			font-size: 12px;
+			color: #888;
+			margin-top: 4px;
+		}
+
+		.mypage-summary-info {
+			display: flex;
+			gap: 80px;
+			align-items: center;
+			flex-shrink: 0;
+		}
+
+		.mypage-summary-box {
+			text-align: center;
+			min-width: 100px;
+		}
+
+		.mypage-summary-box img {
+			width: 60px;
+			height: 60px;
+			margin-bottom: 10px;
+		}
+
+		.mypage-summary-box span {
+			display: block;
+			font-size: 15px;
+			margin-bottom: 6px;
+		}
+
+		.mypage-summary-box strong a {
+			color: #d32f2f;
+			/* 기존 빨간색 유지 */
+			font-size: 20px;
+			font-weight: bold;
+			text-decoration: none;
+			/* 밑줄 제거 */
+		}
+
+		.mypage-container {
+			display: flex;
+			gap: 40px;
+			max-width: 1400px;
+			margin: 60px auto;
+			padding: 0 20px;
+		}
+
+		.mypage-left {
+			display: flex;
+			flex-direction: column;
+			width: 250px;
+			flex-shrink: 0;
+		}
+
+		.mypage-sidebar {
+			width: 250px;
+			flex-shrink: 0;
+			background: #fff;
+			border: 1px solid #eee;
+			border-radius: 12px;
+			padding: 24px 20px;
+		}
+
+		.sidebar-section {
+			margin-bottom: 30px;
+		}
+
+		.sidebar-section h4 {
+			font-size: 15px;
+			font-weight: 700;
+			margin-bottom: 10px;
+		}
+
+		.sidebar-section ul {
+			list-style: none;
+			padding-left: 0;
+		}
+
+		.sidebar-section ul li {
+			margin: 6px 0;
+		}
+
+		.sidebar-section ul li a {
+			text-decoration: none;
+			color: #333;
+			font-size: 14px;
+		}
+
+		.sidebar-section+.sidebar-section {
+			border-top: 1px solid #eee;
+			padding-top: 20px;
+		}
+
+		/* 마지막 QNA 박스는 별도 클래스로 분리 */
+		.sidebar-qna {
+			width: 250px;
+			margin: 20px auto 0;
+			background: #f8f8f8;
+			padding: 24px 20px;
+			border-radius: 12px;
+			text-align: center;
+			box-shadow: 0 0 4px rgba(0, 0, 0, 0.04);
+		}
+
+		.sidebar-qna img {
+			width: 48px;
+			margin-bottom: 12px;
+		}
+
+		.sidebar-qna p {
+			font-size: 14px;
+			color: #444;
+			line-height: 1.6;
+			margin-bottom: 10px;
+		}
+
+		.sidebar-qna a {
+			font-size: 14px;
+			font-weight: 700;
+			color: #000;
+			text-decoration: none;
+		}
+
+		.mypage-main {
+			flex: 1;
+		}
+
+		.mypage-main h3 {
+			font-size: 18px;
+			font-weight: 600;
+			margin-bottom: 16px;
+		}
+
+		.order-box {
+			background: #fff;
+			border: 1px solid #eee;
+			border-radius: 12px;
+			padding: 30px 20px;
+		}
+
+		.order-status {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 50px;
+			text-align: center;
+			position: relative;
+		}
+
+		/* 상태 항목 (입금전, 배송준비중 등) */
+		.status-item {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			font-size: 14px;
+			position: relative;
+			min-width: 80px;
+		}
+
+		.status-item img {
+			width: 40px;
+			/* 🔍 추천 크기 */
+			height: 40px;
+			object-fit: contain;
+			margin-bottom: 6px;
+		}
+
+		/* 숫자 (빨간색 강조) */
+		.status-item strong {
+			display: inline;
+			color: #d32f2f;
+			margin-left: 4px;
+			font-weight: 700;
+		}
+
+		/* > 화살표: 문자로 표현 (더 깔끔함) */
+		.status-arrow {
+			color: #aaa;
+			font-size: 18px;
+			margin: 0 8px;
+			opacity: 0.5;
+			user-select: none;
+		}
+
+		/* 만약 이미지로 하고 싶다면 이걸 사용 */
+		.status-arrow.img {
+			width: 14px;
+			height: 14px;
+			background: url('/img/arrow_path.png') no-repeat center / contain;
+			display: inline-block;
+		}
+
+		.order-divider {
+			margin: 30px auto 20px;
+			width: 100%;
+			border: none;
+			border-top: 1px solid #eee;
+		}
+
+		.order-info-summary {
+			display: flex;
+			justify-content: center;
+			gap: 40px;
+			font-size: 14px;
+			color: #999;
+			margin-top: 0;
+		}
+
+		.interest-box {
+			margin-top: 40px;
+		}
+
+		.interest-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 16px;
+		}
+
+		.interest-header h3 {
+			font-size: 18px;
+			font-weight: 600;
+		}
+
+		.interest-header button {
+			padding: 4px 10px;
+			border: 1px solid #ccc;
+			background: #fff;
+			border-radius: 6px;
+			cursor: pointer;
+			font-size: 13px;
+		}
+		
+		.interest-empty {
+			height: 260px;
+			line-height: 258px; /* 수직 가운데 정렬 */
+			text-align: center;
+			color: var(--bk-color2); /* 검정 계열 텍스트 */
+			border: 1px solid #eee;
+			border-radius: 10px;
+			font-size: 14px;
+			background: #fff;
+		}

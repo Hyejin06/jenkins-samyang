@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>어바웃미 faq 글 목록</title>
+  <link rel="stylesheet" href="/css/reset.css" />
+  <link rel="stylesheet" href="/css/faqlist.css" />
+  <th:block th:replace="fragments/jyheader2 :: header" />
+  <th:block th:replace="fragments/jyheader2 :: link" />
+  <th:block th:replace="fragments/jyheader2 :: script" />
+  <th:block th:replace="fragments/jyfooter :: link" />
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+  <div class="notice-container">
+    <!-- 왼쪽 고객센터 메뉴 -->
+    <aside class="notice-sidebar">
+      <h3>고객센터</h3>
+      <ul>
+        <li><a href="/notice/jylist">공지사항</a></li>
+        <li><a href="/qna/jylist" class="on">FAQ</a></li>
+      </ul>
+    </aside>
+
+    <!-- 오른쪽 FAQ 본문 -->
+    <section class="notice-content">
+      <div class="notice-header">
+        <h2>FAQ</h2>
+        <th:block th:if="${session.jyloginMember != null}">
+          <a href="/qna/jyins" class="add-notice-btn">질문 등록</a>
+        </th:block>
+      </div>
+
+      <table class="notice-table">
+        <thead>
+          <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+            <th>조회수</th>
+            <th>답글</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="qna : ${qnas}">
+            <td th:text="${qna.no}">1</td>
+            <td class="notice-title">
+              <a th:href="@{'/qna/jydetail/' + ${qna.no}}" th:text="${qna.title}">질문 제목</a>
+            </td>
+            <td th:text="${qna.author}">작성자</td>
+            <td th:text="${#temporals.format(qna.resdate, 'yyyy-MM-dd')}">작성일</td>
+            <td th:text="${qna.hits}">0</td>
+            <td>
+              <th:block th:if="${qna.answer != null}">답변 완료</th:block>
+              <th:block th:if="${qna.answer == null}">
+                <th:block th:if="${session.jyloginMember != null and session.jyloginMember.id == 'admin'}">
+                  <a th:href="@{'/qna/jyanswer/' + ${qna.no}}">답글 달기</a>
+                </th:block>
+                <th:block th:unless="${session.jyloginMember != null and session.jyloginMember.id == 'admin'}">
+                  대기중
+                </th:block>
+              </th:block>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+  <th:block th:replace="fragments/jyfooter :: footer" />
+</body>
+</html>

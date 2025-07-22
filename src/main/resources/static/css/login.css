@@ -1,0 +1,126 @@
+/* Reset 일부 중복 방지 */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Noto Sans KR', sans-serif;
+	color: #000;
+	background-color: #fff;
+}
+
+/* 로그인 전체 컨테이너 */
+.login-container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 200px 20px 100px; /* 위 여백 충분히 줘서 헤더와 겹치지 않게! */
+}
+
+/* 로그인 타이틀 */
+.login-title {
+	text-align: center;
+	font-size: 28px;
+	font-weight: bold;
+	margin-bottom: 110px;
+}
+
+/* 로그인 폼과 배너 나란히 */
+.login-content {
+	display: flex;
+	justify-content: space-between;
+	gap: 40px;
+}
+
+/* 로그인 폼 영역 */
+.login-form {
+	width: 50%;
+}
+
+.login-form h3 {
+	font-size: 23px;
+	font-weight: 600;
+	margin-bottom: 20px;
+}
+
+/* 아이디, 비밀번호 입력창 */
+.login-form input[type="text"],
+.login-form input[type="password"] {
+	width: 100%;
+	padding: 13px 15px;
+	margin-bottom: 12px;
+	border: 1px solid #ccc;
+	font-size: 15px;
+}
+
+/* 로그인 버튼 */
+.login-form button {
+	width: 100%;
+	padding: 14px;
+	background-color: #000;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	font-size: 16px;
+	margin-top: 10px;
+}
+
+/* 아이디 저장 체크박스 */
+.login-options {
+	margin-top: 10px;
+	font-size: 14px;
+	color: #333;
+}
+
+/* 회원가입/아이디찾기/비밀번호찾기 */
+.login-links {
+	margin-top: 20px;
+	font-size: 14px;
+	color: #666;
+}
+
+.login-links a {
+	color: #666;
+	text-decoration: none;
+	margin: 0 5px;
+}
+
+/* SNS 로그인 버튼들 */
+.sns-login {
+	margin-top: 30px;
+	display: flex;
+	gap: 20px;
+}
+
+/* 각각의 SNS 버튼 스타일 */
+.sns-btn {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	text-decoration: none;
+}
+
+.sns-btn img {
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+}
+
+.sns-btn span {
+	font-size: 15px;
+	color: #000;
+	font-weight: 500;
+}
+
+
+/* 우측 이벤트 배너 */
+.login-banner {
+	width: 38%;
+}
+
+.login-banner img {
+	width: 100%;
+	display: block;
+	border-radius: 8px;
+}

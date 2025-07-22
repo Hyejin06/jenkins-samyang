@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>삼양 리뷰 작성</title>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<th:block th:replace="~{fragments/header :: style}"></th:block>
+	<th:block th:replace="~{fragments/header :: script}"></th:block>
+	<th:block th:replace="~{fragments/footer :: style}"></th:block>
+	<th:block th:replace="~{fragments/footer :: script}"></th:block>
+	<style>
+		.header {
+			background: #fff !important;
+			border-bottom: 1px solid #e6e6e6 !important;
+		}
+
+		.header .menu>li>a {
+			color: #111 !important;
+		}
+
+		.header .login-box a {
+			color: #111 !important;
+			border-color: #333;
+		}
+
+		#logoImg {
+			content: url('/img/mainlogo2.png');
+			/* 남색 로고 고정 */
+		}
+
+		.submenu-wrap {
+			display: none;
+		}
+
+		.review-form-wrap {
+			max-width: 600px;
+			margin: 180px auto;
+			padding: 0 20px;
+		}
+
+		.review-form-wrap h2 {
+			font-size: 24px;
+			font-weight: bold;
+			margin-bottom: 30px;
+		}
+
+		.review-form label {
+			display: block;
+			margin: 15px 0 5px;
+			font-weight: bold;
+		}
+
+		.review-form select,
+		.review-form textarea {
+			width: 100%;
+			padding: 10px;
+			border: 1px solid #ccc;
+			border-radius: 6px;
+			font-size: 14px;
+		}
+
+		.review-form button {
+			margin-top: 20px;
+			background-color: #ff6400;
+			color: white;
+			padding: 12px 20px;
+			font-size: 16px;
+			font-weight: 600;
+			border: none;
+			border-radius: 6px;
+			cursor: pointer;
+			width: 100%;
+		}
+
+		.review-form button:hover {
+			background-color: #ff6400;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/header :: header}" />
+
+	<div class="review-form-wrap">
+		<h2>리뷰 작성</h2>
+		<form th:action="@{/review/save}" method="post" th:object="${review}" class="review-form">
+			<label for="product">상품 선택</label>
+			<select name="product.no" id="product" required>
+				<option value="" disabled selected>상품을 선택하세요</option>
+				<option th:each="p : ${myProducts}" th:value="${p.no}" th:text="${p.pname}">상품명</option>
+			</select>
+
+			<label for="rating">평점</label>
+			<select id="rating" th:field="*{rating}" required>
+				<option value="1">★ 1점</option>
+				<option value="2">★ 2점</option>
+				<option value="3">★ 3점</option>
+				<option value="4">★ 4점</option>
+				<option value="5">★ 5점</option>
+			</select>
+
+			<label for="content">리뷰 내용</label>
+			<textarea id="content" th:field="*{content}" rows="6" placeholder="리뷰를 작성해주세요" required></textarea>
+
+			<button type="submit">리뷰 등록</button>
+		</form>
+	</div>
+
+	<th:block th:replace="~{fragments/footer :: footer}" />
+</body>
+
+</html>

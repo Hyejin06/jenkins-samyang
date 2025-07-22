@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>서브큐 faq 답변 등록</title>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<th:block th:replace="~{fragments/hjheader :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjheader :: script}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: script}"></th:block>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		.container {
+			max-width: 800px;
+			margin: 100px auto;
+			padding: 0 20px;
+			background: white;
+			border-radius: 10px;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+		}
+
+		.breadcrumb {
+			padding: 20px 0;
+			background: none;
+			font-size: 14px;
+		}
+
+		h2 {
+			text-align: center;
+			font-size: 28px;
+			font-weight: 700;
+			margin: 40px 0 30px;
+		}
+
+		form {
+			padding: 0 20px 40px;
+		}
+
+		.mb-3 {
+			margin-bottom: 20px;
+		}
+
+		label {
+			display: block;
+			margin-bottom: 6px;
+			font-weight: 600;
+			font-size: 15px;
+		}
+
+		input[type="text"],
+		textarea {
+			width: 100%;
+			padding: 12px 14px;
+			border: 1px solid #ccc;
+			border-radius: 6px;
+			font-size: 15px;
+			resize: vertical;
+		}
+
+		textarea {
+			min-height: 180px;
+		}
+
+		button.btn-success {
+			display: block;
+			margin: 30px auto 0;
+			background-color: #005BAC;
+			color: white;
+			border: none;
+			padding: 12px 30px;
+			font-size: 15px;
+			font-weight: bold;
+			border-radius: 30px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/hjheader :: header}"></th:block>
+
+	<div class="container">
+		
+		<h2>답변 등록</h2>
+		
+		<form th:action="@{/qna/hjreply}" method="post" th:object="${qna}">
+			<input type="hidden" th:field="*{parno}" />
+			<input type="hidden" th:field="*{author}" />
+			<input type="hidden" th:field="*{level}" />
+
+			<div class="mb-3">
+				<label for="content">답변 내용</label>
+				<textarea class="form-control" id="content" th:field="*{content}" required></textarea>
+			</div>
+
+			<div class="btn-box">
+				<button type="submit" class="btn-primary">답변 저장</button>
+			</div>
+		</form>
+	</div>
+
+	<th:block th:replace="~{fragments/hjfooter :: footer}"></th:block>
+</body>
+
+</html>

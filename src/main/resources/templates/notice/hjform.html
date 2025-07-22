@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>서브큐 공지사항 글 등록</title>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<th:block th:replace="~{fragments/hjheader :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjheader :: script}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: script}"></th:block>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		.containernf {
+			max-width: 800px;
+			margin: 120px auto 100px;
+			padding: 0 20px;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		h2 {
+			font-size: 2rem;
+			font-weight: bold;
+			margin-bottom: 30px;
+			color: #333;
+		}
+
+		label {
+			font-weight: 600;
+			margin-bottom: 8px;
+			display: block;
+			color: #333;
+		}
+
+		.form-control {
+			width: 100%;
+			padding: 12px;
+			border: 1px solid #ccc;
+			border-radius: 6px;
+			margin-bottom: 20px;
+			font-size: 1rem;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		textarea.form-control {
+			height: 180px;
+			resize: vertical;
+		}
+
+		.notice-button-group {
+			display: flex;
+			justify-content: flex-start;
+			gap: 12px;
+			margin-top: 30px;
+		}
+
+		.btn-success {
+			background-color: #28a745;
+			color: #fff;
+			border: none;
+			border-radius: 6px;
+			padding: 12px 28px;
+			font-weight: bold;
+			cursor: pointer;
+		}
+
+		.btn-success:hover {
+			background-color: #218838;
+		}
+
+		.btn-secondary {
+			background-color: #6c757d;
+			color: #fff;
+			border: none;
+			border-radius: 6px;
+			padding: 12px 28px;
+			font-weight: bold;
+			cursor: pointer;
+			text-decoration: none;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.btn-secondary:hover {
+			background-color: #5a6268;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/hjheader :: header}"></th:block>
+	
+	<div class="containernf">
+		<h2>공지사항 등록</h2>
+		<form th:action="@{/notice/hjsave}" method="post" th:object="${notice}">
+			<div class="mb-3">
+				<label>제목</label>
+				<input type="text" class="form-control" th:field="*{title}" required>
+			</div>
+
+			<div class="mb-3">
+				<label>내용</label>
+				<textarea class="form-control" th:field="*{content}" required></textarea>
+			</div>
+
+			<div class="notice-button-group">
+				<button type="submit" class="btn-success">저장</button>
+				<a href="/notice/hjlist" class="btn-secondary">목록</a>
+			</div>
+		</form>
+	</div>
+
+	<th:block th:replace="fragments/hjfooter :: footer"></th:block>
+
+</body>
+
+</html>

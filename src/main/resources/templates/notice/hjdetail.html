@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>서브큐 공지사항 글 상세보기</title>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<th:block th:replace="~{fragments/hjheader :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjheader :: script}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: script}"></th:block>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		.mypage-title {
+			text-align: center;
+			font-size: 32px;
+			font-weight: 700;
+			margin: 100px 0 40px;
+		}
+
+		.container-detail {
+			max-width: 1100px;
+			margin: 80px auto 80px;
+			padding: 0 20px;
+		}
+
+		/* ✅ 제목 영역 */
+		.notice-header {
+			border-top: 1px solid #121212;
+			border-bottom: 1px solid #ccc;
+			padding: 25px 0;
+		}
+
+		.notice-header h2 {
+			font-size: 24px;
+			font-weight: 700;
+			text-align: center;
+			margin-bottom: 18px;
+		}
+
+		/* ✅ 작성자 / 작성일 / 조회수 줄 */
+		.notice-header .subinfo {
+			display: flex;
+			justify-content: center;
+			gap: 12px;
+			font-size: 14px;
+			color: #999;
+		}
+
+		.notice-header .subinfo span::after {
+			content: '|';
+			margin: 0 6px;
+			color: #ddd;
+		}
+
+		.notice-header .subinfo span:last-child::after {
+			content: '';
+			margin: 0;
+		}
+
+		/* ✅ 본문 내용 */
+		.notice-content {
+			padding: 60px 0;
+			border-bottom: 1px solid #eee;
+			font-size: 16px;
+			line-height: 1.9;
+			color: #444;
+			white-space: pre-wrap;
+			text-align: center;
+		}
+
+		/* ✅ 버튼 영역 */
+		.notice-buttons {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-top: 40px;
+		}
+
+		.notice-buttons .left,
+		.notice-buttons .right {
+			display: flex;
+			gap: 10px;
+		}
+
+		.notice-buttons a {
+			width: 140px;
+			height: 48px;
+			line-height: 48px;
+			text-align: center;
+			font-weight: 500;
+			font-size: 15px;
+			text-decoration: none;
+			transition: 0.3s ease;
+			border-radius: 4px;
+		}
+
+		.btn-list {
+			border: 1px solid #dcdcdc;
+			border-radius: 10px;
+			background: #fff;
+			color: #121212;
+		}
+
+		.btn-list:hover {
+			background-color: #f5f5f5;
+		}
+
+		.btn-edit {
+			background: #bbb;
+			color: #fff;
+		}
+
+		.btn-edit:hover {
+			background: #999;
+		}
+
+		.btn-delete {
+			background: #b84c4c;
+			color: #fff;
+		}
+
+		.btn-delete:hover {
+			background: #993939;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/hjheader :: header}"></th:block>
+
+	<h2 class="mypage-title">공지사항</h2>
+
+	<div class="container-detail">
+		<!-- 제목 / 날짜 / 조회수 -->
+		<div class="notice-header">
+			<h2 th:text="${notice.title}">제목</h2>
+			<div class="subinfo">
+				<span class="date" th:text="${#temporals.format(notice.resdate, 'yyyy.MM.dd')}">20xx.xx.xx</span>
+				<span class="hits">조회수 <span th:text="${notice.hits}">5</span></span>
+			</div>
+		</div>
+
+		<!-- 본문 내용 -->
+		<div class="notice-content" th:text="${notice.content}">
+			내용이 표시됩니다.
+		</div>
+
+		<!-- 버튼 영역 -->
+		<div class="notice-buttons">
+			<div class="left">
+				<a href="/notice/hjlist" class="btn-list">목록</a>
+			</div>
+			<div class="right">
+				<a th:if="${session.hjloginMember != null and session.hjloginMember.id == 'admin'}"
+					th:href="@{/notice/hjedit/{no}(no=${notice.no})}" class="btn-edit">수정</a>
+				<a th:if="${session.hjloginMember != null and session.hjloginMember.id == 'admin'}"
+					th:href="@{/notice/hjdelete/{no}(no=${notice.no})}" class="btn-delete"
+					onclick="return confirm('삭제하시겠습니까?')">삭제</a>
+			</div>
+		</div>
+	</div>
+
+	<th:block th:replace="fragments/hjfooter :: footer"></th:block>
+</body>
+
+</html>

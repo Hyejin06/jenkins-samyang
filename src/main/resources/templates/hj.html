@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>서브큐 메인 페이지</title>
+
+	<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<th:block th:replace="~{fragments/hjheader :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjheader :: script}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: script}"></th:block>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			overflow-x: hidden;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		.topbar {
+			line-height: 44px;
+			text-align: center;
+			background-color: #ee3424;
+			font-size: 15px;
+			color: #fff;
+			display: block;
+		}
+
+		.topbar strong {
+			font-weight: 700;
+		}
+
+		.main-visual {
+			position: relative;
+			width: 100%;
+			padding: 20px 0 100px;
+			background-color: #fff;
+		}
+
+		.swiper-container {
+			position: relative;
+			width: 100%;
+			margin: 0 auto;
+			overflow: visible;
+			max-width: 1336px;
+		}
+
+		.swiper-wrapper {
+			display: flex;
+		}
+
+		.swiper-slide {
+			position: relative;
+			width: 100%;
+			max-width: 1336px;
+			padding: 0 20px;
+			/* ✅ 자동으로 이미지에 맞춤 */
+			margin: 0 auto;
+			/* ✅ 좌우 간격 부여 */
+			overflow: visible;
+			border-radius: 30px;
+		}
+
+		.swiper-slide img {
+			border-radius: 30px;
+			box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.16);
+			width: 100%;
+			display: block;
+		}
+
+		.swiper-button-prev,
+		.swiper-button-next {
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+			z-index: 10;
+			width: 56px;
+			height: 56px;
+			background-color: transparent;
+			background-repeat: no-repeat;
+			background-size: cover;
+			border: none;
+			cursor: pointer;
+		}
+
+		.main-visual .swiper-button-next {
+			top: 50%;
+			right: 50%;
+			transform: translate(670px, -50%);
+			background-image: url('/img/slidernext.png');
+		}
+
+		.main-visual .swiper-button-prev {
+			top: 50%;
+			left: 50%;
+			transform: translate(-670px, -50%) scaleX(-1);
+			background-image: url('/img/slidernext.png');
+		}
+
+		/* Swiper 기본 아이콘 제거 */
+		.swiper-button-prev::after,
+		.swiper-button-next::after {
+			display: none;
+		}
+
+		.swiper-pager {
+			position: absolute;
+			left: 50%;
+			bottom: 25px;
+			width: auto;
+			min-width: 80px;
+			height: 38px;
+			line-height: 38px;
+			font-size: 15px;
+			color: #fff;
+			background-color: #12121266;
+			border-radius: 19px;
+			text-align: center;
+			z-index: 1;
+			pointer-events: none;
+		}
+
+		.swiper-pagination-total::before {
+			content: " / ";
+			display: inline;
+		}
+
+		.swiper-pagination-total {
+			opacity: 0.4;
+		}
+
+		.product-icons {
+			margin-bottom: 100px;
+		}
+
+		.product-icons .product-list {
+			display: grid;
+			grid-template-columns: repeat(8, 105px);
+			gap: 30px;
+			justify-content: center;
+			list-style: none;
+			padding: 0;
+			margin: 0 auto;
+			width: 1296px;
+		}
+
+		.product-icons .product-list li a {
+			display: block;
+			text-align: center;
+			font-size: 15px;
+			line-height: 1.6;
+		}
+
+		.product-icons .product-list li span {
+			display: block;
+			margin-top: 15px;
+			font-weight: 500;
+		}
+
+		.product-icons .product-list li img {
+			width: 100px;
+			height: 100px;
+			border-radius: 50%;
+			background-color: #f9f9f9;
+			object-fit: cover;
+		}
+
+		.instagram-section {
+			margin-bottom: 100px;
+		}
+
+		.instagram-section .title h2 {
+			text-align: center;
+			font-size: 40px;
+			line-height: 1.6;
+			color: #121212;
+			margin-bottom: 40px;
+		}
+
+		.footer-top {
+			background-color: #fff;
+			border-top: 1px solid #eee;
+			border-bottom: 1px solid #eee;
+			padding: 56px 0;
+		}
+
+		.footer-top-inner {
+			max-width: 1512px;
+			margin: 0 auto;
+			padding: 0 20px;
+			display: grid;
+			grid-template-columns: 310px 310px auto;
+			gap: 90px;
+			position: relative;
+		}
+
+		/* 공지사항 & FAQ 공통 */
+		.notice-faq {
+			display: contents;
+			/* 자식들을 grid에 직접 배치 */
+		}
+
+		.notice h3,
+		.faq h3 {
+			font-size: 22px;
+			font-weight: 500;
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			padding-right: 20px;
+			margin-bottom: 8px;
+			background-image: url(/img/main_customer--bul.png);
+			background-repeat: no-repeat;
+			background-position: right;
+			background-size: 9px 15px;
+		}
+
+		.notice h3 a,
+		.faq h3 a {
+			color: #121212;
+			text-decoration: none;
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			font-size: 22px;
+			font-weight: 500;
+			background-image: url(/img/main_customer--bul.png);
+			background-repeat: no-repeat;
+			background-position: right;
+			background-size: 9px 15px;
+		}
+
+		.notice ul li,
+		.faq ul li {
+			position: relative;
+			margin-top: 16px;
+			padding-left: 10px;
+			font-weight: 500;
+			line-height: 1.6;
+			font-size: 14px;
+			color: #121212;
+		}
+
+		.notice ul li::before,
+		.faq ul li::before {
+			content: "";
+			width: 3px;
+			height: 3px;
+			background-color: #999;
+			position: absolute;
+			left: 0;
+			top: 10px;
+		}
+
+		.notice ul li .date,
+		.faq ul li .date {
+			display: block;
+			margin-top: 4px;
+			font-size: 13px;
+			color: #999;
+		}
+
+		/* 구분선 */
+		.faq,
+		.shortcut-links {
+			position: relative;
+			/* 기준점 지정 */
+			padding-left: 70px;
+			/* 선 오른쪽 여백 */
+		}
+
+		.faq::before,
+		.shortcut-links::before {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 1px;
+			height: 100%;
+			background-color: #eaeaea;
+		}
+
+		/* 바로가기 아이콘 링크 */
+		.shortcut-links {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			align-self: start;
+			gap: 36px;
+		}
+
+		.shortcut-links a {
+			text-align: center;
+			font-size: 14px;
+			color: #121212;
+		}
+
+		.shortcut-links a img {
+			width: 118px;
+			height: 118px;
+			margin-bottom: 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="topbar">
+		신규가입 시 <strong>1만원 쿠폰</strong>을 지급해드려요!
+	</div>
+
+	<th:block th:replace="~{fragments/hjheader :: header}"></th:block>
+
+	<div class="main-visual">
+		<div class="swiper-container">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide">
+					<img src="/img/mainslider1.png" alt="슬라이드1">
+				</div>
+				<div class="swiper-slide">
+					<img src="/img/mainslider2.png" alt="슬라이드2">
+				</div>
+				<div class="swiper-slide">
+					<img src="/img/mainslider3.png" alt="슬라이드3">
+				</div>
+				<div class="swiper-slide">
+					<img src="/img/mainslider4.png" alt="슬라이드4">
+				</div>
+				<div class="swiper-slide">
+					<img src="/img/mainslider5.png" alt="슬라이드5">
+				</div>
+				<div class="swiper-slide">
+					<img src="/img/mainslider6.png" alt="슬라이드6">
+				</div>
+				<div class="swiper-slide">
+					<img src="/img/mainslider7.png" alt="슬라이드7">
+				</div>
+				<div class="swiper-slide">
+					<img src="/img/mainslider8.png" alt="슬라이드8">
+				</div>
+				<div class="swiper-slide">
+					<img src="/img/mainslider9.png" alt="슬라이드9">
+				</div>
+				<div class="swiper-slide">
+					<img src="/img/mainslider10.png" alt="슬라이드10">
+				</div>
+				<div class="swiper-slide">
+					<img src="/img/mainslider11.png" alt="슬라이드11">
+				</div>
+				<div class="swiper-slide">
+					<img src="/img/mainslider12.png" alt="슬라이드12">
+				</div>
+				<div class="swiper-slide">
+					<img src="/img/mainslider13.png" alt="슬라이드13">
+				</div>
+				<div class="swiper-slide">
+					<img src="/img/mainslider14.png" alt="슬라이드14">
+				</div>
+				<div class="swiper-slide">
+					<img src="/img/mainslider15.png" alt="슬라이드15">
+				</div>
+			</div>
+
+			<div class="swiper-pager"></div>
+
+			<!-- 좌우 화살표 -->
+			<div class="swiper-button-next"></div>
+			<div class="swiper-button-prev"></div>
+		</div>
+	</div>
+
+	<!-- 카테고리 아이콘 섹션 -->
+	<div class="product-icons">
+		<ul class="product-list">
+			<li><a href="/product/hjlist?cate=냉동베이커리"><img src="/img/subnav1.png" alt="냉동생지"><span>냉동생지</span></a></li>
+			<li><a href="/product/hjlist?cate=냉동완제품"><img src="/img/subnav2.png" alt="냉동완제품"><span>냉동완제품</span></a></li>
+			<li><a href="/product/hjlist?cate=유제품"><img src="/img/subnav3.png" alt="유제품"><span>유제품</span></a></li>
+			<li><a href="/product/hjlist?cate=소스"><img src="/img/subnav4.png" alt="소스"><span>소스</span></a></li>
+			<li><a href="/product/hjlist?cate=육가공품"><img src="/img/subnav5.png" alt="육가공품"><span>육가공품</span></a></li>
+			<li><a href="/product/hjlist?cate=커피&커피재료"><img src="/img/subnav6.png" alt="커피&커피재료"><span>커피&커피재료</span></a>
+			</li>
+			<li><a href="/product/hjlist?cate=제철과일"><img src="/img/subnav7.png" alt="제철과일"><span>제철과일</span></a></li>
+			<li><a href="/product/hjlist?cate=간편식"><img src="/img/subnav8.png" alt="간편식"><span>간편식</span></a></li>
+		</ul>
+	</div>
+
+	<!-- 서브 배너 영역 -->
+	<div id="sub_banner_section">
+		<div class="sub-banner-list layout_fix">
+			<a href="#" class="sub-banner-item" style="background-image: url('/img/benner1.png');"
+				aria-label="제과제빵 세미나 배너"></a>
+			<a href="#" class="sub-banner-item" style="background-image: url('/img/benner2.png');"
+				aria-label="아이스크림 이벤트 배너"></a>
+			<a href="#" class="sub-banner-item" style="background-image: url('/img/benner3.png');"
+				aria-label="앵커 체다치즈 배너"></a>
+		</div>
+	</div>
+
+	<div class="instagram-section">
+		<div class="title">
+			<h2>@serveq_official 인스타그램</h2>
+		</div>
+	</div>
+
+	<div class="footer-top">
+		<div class="footer-top-inner">
+			<div class="notice-faq">
+				<!-- 공지사항 -->
+				<div class="notice">
+					<h3>
+						<a href="/notice/hjlist">
+							공지사항 <img src="/img/go.png" alt="더보기">
+						</a>
+					</h3>
+					<ul>
+						<li>
+							<a href="#">개인정보처리방침 변경 안내 (25년 3월 24일자로 시행)</a>
+							<span class="date">2025-03-18</span>
+						</li>
+						<li>
+							<a href="#">삼양사 서브큐 냉동베이커리 가격 인상 안내(~2/4부터)</a>
+							<span class="date">2025-01-23</span>
+						</li>
+					</ul>
+				</div>
+
+				<!-- FAQ -->
+				<div class="faq">
+					<h3>
+						<a href="/qna/hjlist">
+							FAQ <img src="/img/go.png" alt="더보기">
+						</a>
+					</h3>
+					<ul>
+						<li>
+							<a href="#">1:1문의의 답변은 어디서 볼 수 있나요?</a>
+							<span class="date">2023-08-27</span>
+						</li>
+						<li>
+							<a href="#">배송, 교환 등 각종 문의는 어디서 하나요?</a>
+							<span class="date">2023-08-27</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<!-- 바로가기 아이콘 -->
+			<div class="shortcut-links">
+				<a href="#"><img src="/img/footericon1.png" alt="임직원 인증"><span>임직원 인증</span></a>
+				<a href="#"><img src="/img/footericon2.png" alt="세미나"><span>세미나</span></a>
+				<a href="#"><img src="/img/footericon3.png" alt="1:1 문의하기"><span>1:1 문의하기</span></a>
+				<a href="#"><img src="/img/footericon4.png" alt="대량구매 문의"><span>대량구매 문의</span></a>
+			</div>
+		</div>
+	</div>
+
+	<th:block th:replace="~{fragments/hjfooter :: footer}"></th:block>
+
+	<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+	<script>
+		const swiper = new Swiper('.swiper-container', {
+			slidesPerView: 1,
+			centeredSlides: true,
+			loop: true,
+			spaceBetween: 24,
+			speed: 800,
+			autoplay: {
+				delay: 5000,
+				disableOnInteraction: false
+			},
+			pagination: {
+				el: '.swiper-pager',
+				type: 'fraction',
+				renderFraction: function (currentClass, totalClass) {
+					return '<span class="swiper-pagination-current"></span>' +
+						'<span class="swiper-pagination-total"></span>';
+				},
+				formatFractionCurrent: function (num) {
+					return num < 10 ? '0' + num : num;
+				},
+				formatFractionTotal: function (num) {
+					return num < 10 ? '0' + num : num;
+				}
+			},
+			navigation: {
+				nextEl: '.swiper-button-next',
+				prevEl: '.swiper-button-prev'
+			}
+		});
+
+		const subslider = new Swiper('#subslider_section .swiper-container', {
+			loop: true,
+			autoplay: {
+				delay: 5000,
+				disableOnInteraction: false
+			},
+			slidesPerView: 1,
+			centeredSlides: true,
+			spaceBetween: 0,
+			pagination: {
+				el: '.subslider-pagination',
+				clickable: true
+			},
+			navigation: {
+				nextEl: '.subslider-next',
+				prevEl: '.subslider-prev'
+			}
+		});
+	</script>
+</body>
+
+</html>

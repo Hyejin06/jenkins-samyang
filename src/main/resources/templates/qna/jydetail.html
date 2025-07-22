@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>어바웃미 faq 글 상세보기</title>
+	<link rel="stylesheet" href="/css/reset.css" />
+	<link rel="stylesheet" href="/css/faqdetail.css" />
+	<th:block th:replace="fragments/jyheader2 :: header" />
+	<th:block th:replace="fragments/jyheader2 :: link" />
+	<th:block th:replace="fragments/jyheader2 :: script" />
+	<th:block th:replace="fragments/jyfooter :: link" />
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+	<div class="notice-container">
+		<!-- 왼쪽 고객센터 메뉴 -->
+		<aside class="notice-sidebar">
+			<h3>고객센터</h3>
+			<ul>
+				<li><a href="/notice/jylist">공지사항</a></li>
+				<li><a href="/qna/jylist" class="on">FAQ</a></li>
+			</ul>
+		</aside>
+
+		<!-- 오른쪽 상세보기 영역 -->
+		<section class="notice-detail">
+			<h2>FAQ</h2>
+
+			<!-- 제목 영역 -->
+			<div class="notice-box">
+				<p class="notice-title" th:text="${qna.title}">질문 제목</p>
+				<div class="notice-meta">
+					<span class="notice-writer" th:text="${qna.author}">작성자</span>|
+					<span class="notice-date"
+						th:text="${#temporals.format(qna.resdate, 'yyyy.MM.dd HH:mm:ss')}">작성일</span>|
+					<span class="notice-hits">조회수 <span th:text="${qna.hits}">0</span></span>
+				</div>
+			</div>
+
+			<!-- 내용 -->
+			<div class="notice-content" th:utext="${qna.content}">
+				질문 내용
+			</div>
+
+			<!-- 답변이 존재할 경우 -->
+			<div class="notice-answer" th:if="${qna.answer != null}">
+				<h3>답변</h3>
+				<div th:utext="${qna.answer}">답변 내용</div>
+			</div>
+
+			<!-- 목록/수정/삭제/답글 버튼 -->
+			<div class="notice-footer">
+			  <a href="/qna/list" class="btn-back">목록</a>
+
+			  <!-- 관리자 or 작성자일 경우 수정/삭제 -->
+			  <th:block
+			    th:if="${session.jyloginMember != null and (session.jyloginMember.id == 'admin' or session.jyloginMember.id == qna.author)}">
+			    <a th:href="@{'/qna/jyedit/' + ${qna.no}}" class="btn-back"
+			      style="margin-left: 10px; background: #FAF873; color: #222;">수정</a>
+			    <a th:href="@{'/qna/jydelete/' + ${qna.no}}" class="btn-back"
+			      style="margin-left: 5px; background: #dc3545; color: white;"
+			      onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+			  </th:block>
+
+			  <!-- ✅ 관리자일 경우 답글 달기 버튼 -->
+			  <th:block th:if="${session.jyloginMember != null and session.jyloginMember.id == 'admin'}">
+			    <a th:href="@{'/qna/jyanswer/' + ${qna.no}}" class="btn-back"
+			      style="margin-left: 10px; background: #198754; color: white;">답글 달기</a>
+			  </th:block>
+			</div>
+		</section>
+	</div>
+
+	<th:block th:replace="fragments/jyfooter :: footer" />
+</body>
+
+</html>

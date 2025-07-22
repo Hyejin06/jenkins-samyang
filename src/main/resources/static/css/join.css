@@ -1,0 +1,92 @@
+.join-container {
+	width: 600px;
+	padding: 200px 0 80px;
+	margin: 0 auto;
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+.join-title {
+	font-size: 26px;
+	margin-bottom: 40px;
+	font-weight: bold;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 10px;
+}
+
+.required-desc {
+	font-size: 13px;
+	color: #888;
+	margin-left: 10px;
+}
+
+.form-group {
+	margin-bottom: 25px;
+}
+
+.form-group label {
+	display: block;
+	font-size: 15px;
+	font-weight: 500;
+	margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group select {
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #ccc;
+	font-size: 15px;
+}
+
+.email-group .email-box {
+	display: flex;
+	gap: 8px;
+}
+
+.auto-info {
+	font-size: 13px;
+	color: #999;
+	margin-top: 5px;
+}
+
+.submit-btn {
+	margin-top: 30px;
+	text-align: center;
+}
+
+.submit-btn button {
+	background-color: #000;
+	color: #fff;
+	border: none;
+	padding: 10px 30px;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+.check-message {
+	font-size: 13px;
+	margin-top: 5px;
+}
+
+.form-group {
+	position: relative;
+}
+
+#checkIdBtn,
+#checkEmailBtn {
+	position: absolute;
+	right: 0;
+	top: 32px;
+	background-color: #919191;
+	color: #fff;
+	border: none;
+	padding: 6px 12px;
+	cursor: pointer;
+	font-size: 13px;
+	border-radius: 4px;
+}
+
+#checkIdBtn:hover,
+#checkEmailBtn:hover {
+	background-color: #919191;
+}

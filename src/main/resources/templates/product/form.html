@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>삼양 제품 등록</title>
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<th:block th:replace="~{fragments/header :: style}"></th:block>
+	<th:block th:replace="~{fragments/header :: script}"></th:block>
+	<th:block th:replace="~{fragments/footer :: style}"></th:block>
+	<th:block th:replace="~{fragments/footer :: script}"></th:block>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		.header {
+			background: #fff !important;
+			border-bottom: 1px solid #e6e6e6 !important;
+		}
+
+		.header .menu>li>a {
+			color: #111 !important;
+		}
+
+		.header .login-box a {
+			color: #111 !important;
+			border-color: #333;
+		}
+
+		#logoImg {
+			content: url('/img/mainlogo2.png');
+			/* 남색 로고 고정 */
+		}
+
+		.submenu-wrap {
+			display: none;
+		}
+
+		.form-wrapper {
+			width: 100%;
+			max-width: 960px;
+			margin: 130px auto 50PX;
+			padding: 50px 20px;
+			color: #333;
+		}
+
+		h2.form-title {
+			font-size: 24px;
+			font-weight: 700;
+			margin-bottom: 8px;
+		}
+
+		.form-subtext {
+			font-size: 13px;
+			color: #555;
+			line-height: 1.6;
+			margin-bottom: 25px;
+			padding-bottom: 15px;
+			position: relative;
+		}
+
+		.form-group {
+			display: flex;
+			border-bottom: 1px solid #e0e0e0;
+			background-color: #f8f8f8;
+		}
+
+		.form-group.border-top {
+			border-top: 2px solid #444;
+		}
+
+		.form-label {
+			width: 180px;
+			padding: 20px 15px;
+			font-weight: 500;
+			font-size: 14px;
+			color: #333;
+			background-color: #f8f8f8;
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+		}
+
+		.form-content {
+			flex: 1;
+			padding: 18px 20px;
+			background-color: #fff;
+		}
+
+		.form-wrapper input[type="text"],
+		.form-wrapper input[type="number"],
+		.form-wrapper select,
+		.form-wrapper textarea,
+		.form-wrapper input[type="file"] {
+			width: 100%;
+			padding: 10px;
+			font-size: 14px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			background-color: #fff;
+		}
+
+		select {
+			height: 42px;
+		}
+
+		textarea {
+			height: 120px;
+			resize: none;
+		}
+
+		.btn-area {
+			text-align: right;
+			margin-top: 40px;
+		}
+
+		.btn-submit,
+		.btn-cancel {
+			width: 100px;
+			height: 40px;
+			border: none;
+			border-radius: 3px;
+			font-size: 14px;
+			font-weight: bold;
+			cursor: pointer;
+			margin-left: 8px;
+		}
+
+		.btn-submit {
+			background-color: #ea5a0f;
+			color: #fff;
+		}
+
+		.btn-cancel {
+			background-color: #777;
+			color: #fff;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/header :: header}"></th:block>
+
+	<div class="form-wrapper">
+		<h2 class="form-title">제품 등록</h2>
+		<p class="form-subtext">신규 상품 정보를 입력해주세요.</p>
+
+		<form action="/product/new" method="post" enctype="multipart/form-data">
+			<div class="form-group border-top">
+				<div class="form-label"><span style="color:red">*</span> 카테고리</div>
+				<div class="form-content">
+					<select name="cate" required>
+						<option value="">선택안함</option>
+						<option value="ramyun">삼양라면</option>
+						<option value="buldak">불닭볶음면</option>
+						<option value="map">맵탱</option>
+						<option value="jack">잭앤펄스</option>
+						<option value="jaja">짜짜로니</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="form-label"><span style="color:red">*</span> 제품명</div>
+				<div class="form-content">
+					<input type="text" name="pname" required>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="form-label"><span style="color:red">*</span> 제품 설명</div>
+				<div class="form-content">
+					<textarea name="comment" required></textarea>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="form-label"><span style="color:red">*</span> 판매가</div>
+				<div class="form-content">
+					<input type="number" name="price" min="1000" step="10" value="1300" required>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="form-label"><span style="color:red">*</span> 메인 이미지</div>
+				<div class="form-content">
+					<input type="file" name="file1" accept=".jpg, .jpeg, .png, .gif, .webp" required>
+				</div>
+			</div>
+
+			<div class="btn-area">
+				<button type="submit" class="btn-submit">등록</button>
+				<button type="button" class="btn-cancel" onclick="history.back()">취소</button>
+			</div>
+		</form>
+	</div>
+
+	<th:block th:replace="~{fragments/footer :: footer}"></th:block>
+</body>
+
+</html>

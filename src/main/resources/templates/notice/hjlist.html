@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>서브큐 공지사항 글 목록</title>
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<th:block th:replace="~{fragments/hjheader :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjheader :: script}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: script}"></th:block>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			overflow-x: hidden;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		.mypage-title {
+			text-align: center;
+			font-size: 32px;
+			font-weight: 700;
+			margin: 100px 0 40px;
+		}
+
+		.notice-box {
+			max-width: 1240px;
+			margin: 0 auto 80px;
+			padding: 0 20px;
+		}
+
+		.notice-write-btn {
+			text-align: right;
+			margin-bottom: 14px;
+		}
+
+		.notice-write-btn a {
+			display: inline-block;
+			background-color: #ee3424;
+			color: white;
+			padding: 8px 20px;
+			border-radius: 30px;
+			font-size: 14px;
+			font-weight: bold;
+			text-decoration: none;
+			transition: background-color 0.3s ease;
+		}
+
+		.notice-write-btn a:hover {
+			background-color: #d52c1a;
+		}
+
+		/* 테이블 */
+		.notice-box table {
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 15px;
+			table-layout: auto;
+		}
+
+		/* 테이블 헤더 */
+		.notice-box thead {
+			border-top: 2px solid #000;
+			border-bottom: 1px solid #ccc;
+		}
+
+		.notice-box thead th {
+			padding: 18px 12px;
+			color: #999;
+			font-weight: 600;
+			text-align: center;
+			font-size: 14px;
+		}
+
+		/* ✅ 열 너비 비율 지정 */
+		.notice-box thead th:nth-child(1),
+		.notice-box tbody td:nth-child(1) {
+			width: 8%;
+		}
+
+		.notice-box thead th:nth-child(2) {
+			width: 52%;
+			text-align: center;
+		}
+
+		.notice-box tbody td:nth-child(2) {
+			width: 52%;
+			text-align: left;
+		}
+
+		.notice-box thead th:nth-child(3),
+		.notice-box tbody td:nth-child(3) {
+			width: 13%;
+		}
+
+		.notice-box thead th:nth-child(4),
+		.notice-box tbody td:nth-child(4) {
+			width: 15%;
+		}
+
+		.notice-box thead th:nth-child(5),
+		.notice-box tbody td:nth-child(5) {
+			width: 12%;
+		}
+
+		/* 테이블 바디 */
+		.notice-box tbody td {
+			padding: 20px 12px;
+			border-bottom: 1px solid #eee;
+			text-align: center;
+			font-size: 15px;
+			vertical-align: middle;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		/* 제목 링크 */
+		.notice-box tbody td a {
+			color: #222;
+			text-decoration: none;
+			font-weight: 500;
+			display: inline-block;
+			max-width: 100%;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.notice-box tbody td a:hover {
+			color: #ee3424;
+			text-decoration: underline;
+		}
+
+		/* 페이지네이션 */
+		.pagination {
+			display: flex;
+			justify-content: center;
+			margin-top: 40px;
+			margin-bottom: 100px;
+			list-style: none;
+			gap: 10px;
+		}
+
+		.pagination li {
+			display: inline-block;
+		}
+
+		/* 공통: 페이지 번호 & 화살표 */
+		.pagination a,
+		.pagination .page-link {
+			width: 36px;
+			height: 36px;
+			line-height: 36px;
+			text-align: center;
+			border-radius: 50%;
+			font-size: 14px;
+			color: #111;
+			/* ✅ 기본 글씨 검정 */
+			text-decoration: none;
+			display: inline-block;
+			transition: all 0.2s ease;
+		}
+
+		/* 현재 페이지 */
+		.pagination .active a {
+			background-color: #ee3424;
+			color: #fff !important;
+			font-weight: bold;
+			pointer-events: none;
+		}
+
+		/* ◀ ▶ 비활성 */
+		.pagination .disabled a,
+		.pagination .disabled .page-link {
+			color: #ccc;
+			cursor: default;
+			pointer-events: none;
+			background: none;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/hjheader :: header}"></th:block>
+
+	<h2 class="mypage-title">공지사항</h2>
+
+	<div class="notice-box" style="max-width: 1240px; margin: 0 auto 60px; padding: 0 20px;">
+
+		<div class="notice-write-btn" th:if="${session.hjloginMember != null and session.hjloginMember.id == 'admin'}">
+			<a href="/notice/hjins">글 등록</a>
+		</div>
+
+		<table>
+			<thead>
+				<tr>
+					<th>번호</th>
+					<th>제목</th>
+					<th>작성자</th>
+					<th>작성일</th>
+					<th>조회</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="notice : ${notices.content}">
+					<td th:text="${notice.no}"></td>
+					<td style="text-align: left;">
+						<a th:href="@{/notice/hjdetail/{no}(no=${notice.no})}" th:text="${notice.title}"></a>
+					</td>
+					<td th:text="${notice.author}">작성자</td>
+					<td th:text="${#temporals.format(notice.resdate, 'yyyy-MM-dd')}"></td>
+					<td th:text="${notice.hits}"></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<!-- ✅ 이 안에 같이 넣으면 정렬도 같이 됨 -->
+		<ul class="pagination">
+			<li th:classappend="${notices.first} ? 'disabled'">
+				<a th:href="@{/notice/hjlist(page=${notices.number - 1})}">&laquo;</a>
+			</li>
+			<li th:each="i : ${#numbers.sequence(0, notices.totalPages - 1)}"
+				th:classappend="${notices.number == i} ? 'active'">
+				<a th:href="@{/notice/hjlist(page=${i})}" th:text="${i + 1}">1</a>
+			</li>
+			<li th:classappend="${notices.last} ? 'disabled'">
+				<a th:href="@{/notice/hjlist(page=${notices.number + 1})}">&raquo;</a>
+			</li>
+		</ul>
+	</div>
+
+	<th:block th:replace="~{fragments/hjfooter :: footer}"></th:block>
+</body>
+
+</html>

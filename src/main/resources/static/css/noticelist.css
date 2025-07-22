@@ -1,0 +1,140 @@
+.notice-container {
+	display: flex;
+	max-width: 1400px;
+	margin: 200px auto;
+	padding: 0 20px;
+}
+
+.notice-sidebar {
+	width: 200px;
+	height: 170px;
+	margin: 55px 50px 0 0px;
+	border-top: 1px solid #cbcbcb;
+}
+
+.notice-sidebar h3 {
+	font-size: 22px;
+	margin-bottom: 15px;
+	padding: 20px;
+	border-bottom: 1px solid #cbcbcb;
+}
+
+.notice-sidebar ul {
+	list-style: none;
+	padding: 18px;
+}
+
+.notice-sidebar li {
+	margin-bottom: 15px;
+}
+
+.notice-sidebar a {
+	text-decoration: none;
+	color: #333;
+	font-size: 16px;
+}
+
+.notice-sidebar a.on {
+	font-weight: bold;
+	color: red;
+}
+
+.notice-content {
+	flex: 1;
+}
+
+/* ✅ 공지사항 헤더: 제목 + 버튼 수평 정렬 */
+.notice-header {
+	position: relative;
+	display: flex;
+	justify-content: center;  /* 공지사항 h2 가운데 정렬 */
+	align-items: center;
+	margin-bottom: 30px;
+}
+
+.notice-header h2 {
+	font-size: 28px;
+	margin: 0 auto;   /* 중앙 정렬 */
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.notice-header .add-notice-btn {
+	position: absolute;
+	right: 0;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+/* ✅ 공지사항 등록 버튼 */
+.add-notice-btn {
+	display: inline-block;
+	padding: 10px 20px;
+	background-color: #000;
+	color: #fff;
+	text-decoration: none;
+	font-size: 14px;
+	border-radius: 5px;
+}
+
+/* ✅ 공지사항 테이블 */
+.notice-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.notice-table th,
+.notice-table td {
+	border-bottom: 1px solid #ddd;
+	padding: 15px;
+	text-align: center;
+	font-size: 16px;
+}
+
+.notice-title {
+	text-align: left;
+}
+
+.notice-title a {
+	color: #333;
+	text-decoration: none;
+}
+
+.notice-title a:hover {
+	text-decoration: underline;
+}
+
+/* ✅ 페이징 스타일 (부트스트랩 구조 대응) */
+nav[aria-label="Page navigation"] {
+	display: flex;
+	justify-content: center;
+	margin-top: 40px;
+}
+nav .pagination .page-item {
+	display: inline-block;
+	margin: 0 3px;
+}
+
+nav .pagination .page-link {
+	display: block;
+	padding: 6px 12px;
+	border: 1px solid #ccc;
+	color: #333;
+	text-decoration: none;
+	border-radius: 4px;
+	font-size: 14px;
+}
+
+nav .pagination .page-item.active .page-link {
+	background-color: red;
+	color: white;
+	border-color: red;
+	font-weight: bold;
+}
+
+nav .pagination .page-item.disabled .page-link {
+	color: #ccc;
+	pointer-events: none;
+	border-color: #eee;
+}

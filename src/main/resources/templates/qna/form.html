@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>삼양 질문 등록</title>
+
+	<th:block th:replace="~{fragments/header :: style}"></th:block>
+	<th:block th:replace="~{fragments/header :: script}"></th:block>
+	<th:block th:replace="~{fragments/footer :: style}"></th:block>
+	<th:block th:replace="~{fragments/footer :: script}"></th:block>
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		.header {
+			background: #fff !important;
+			border-bottom: 1px solid #e6e6e6 !important;
+		}
+
+		.header .menu>li>a {
+			color: #111 !important;
+		}
+
+		.header .login-box a {
+			color: #111 !important;
+			border-color: #333;
+		}
+
+		#logoImg {
+			content: url('/img/mainlogo2.png');
+		}
+
+		.submenu-wrap {
+			display: none;
+		}
+
+		/* 전체 wrapper */
+		.form-wrapper {
+			width: 100%;
+			max-width: 960px;
+			margin: 111px auto 0;
+			padding: 50px 20px;
+			font-family: 'Noto Sans KR', sans-serif;
+			color: #333;
+		}
+
+		/* 제목 + 안내 문구 */
+		h2.form-title {
+			font-size: 24px;
+			font-weight: 700;
+			margin-bottom: 8px;
+		}
+
+		.form-subtext {
+			font-size: 13px;
+			color: #555;
+			line-height: 1.6;
+			margin-bottom: 25px;
+			padding-bottom: 15px;
+			position: relative;
+		}
+
+		.form-subtext::after {
+			content: '* 필수항목입니다';
+			position: absolute;
+			top: 0;
+			right: 0;
+			color: #d14747;
+			font-size: 12px;
+		}
+
+		/* 각 항목 영역 */
+		.form-group {
+			display: flex;
+			border-bottom: 1px solid #e0e0e0;
+			background-color: #f8f8f8;
+		}
+
+		.form-group.border-top {
+			border-top: 2px solid #444;
+		}
+
+		.form-label {
+			width: 180px;
+			padding: 20px 15px;
+			font-weight: 500;
+			font-size: 14px;
+			color: #333;
+			background-color: #f8f8f8;
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+		}
+
+		.form-content {
+			flex: 1;
+			padding: 18px 20px;
+			background-color: #fff;
+		}
+
+		/* 필드 */
+		input[type="text"],
+		select,
+		textarea {
+			width: 100%;
+			padding: 10px;
+			font-size: 14px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			background-color: #fff;
+		}
+
+		select {
+			height: 42px;
+		}
+
+		textarea {
+			height: 160px;
+			resize: none;
+		}
+
+		/* 약관 박스 */
+		.checkbox-wrap {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			padding: 20px;
+			border-top: 1px solid #ddd;
+			font-size: 13px;
+			color: #555;
+		}
+
+		/* 버튼 */
+		.btn-area {
+			text-align: right;
+			margin-top: 40px;
+		}
+
+		.btn-submit,
+		.btn-cancel {
+			width: 100px;
+			height: 40px;
+			border: none;
+			border-radius: 3px;
+			font-size: 14px;
+			font-weight: bold;
+			cursor: pointer;
+			margin-left: 8px;
+		}
+
+		.btn-submit {
+			background-color: #ea5a0f;
+			color: #fff;
+		}
+
+		.btn-cancel {
+			background-color: #777;
+			color: #fff;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/header :: header}"></th:block>
+
+	<div class="form-wrapper">
+		<h2 class="form-title">고객문의</h2>
+		<p class="form-subtext">
+			삼양에 대한 소중한 의견을 들려주세요.<br>
+		</p>
+
+		<form th:action="@{/qna/new}" method="post" th:object="${qna}">
+			<input type="hidden" th:field="*{level}" value="1" />
+
+			<!-- 제목 -->
+			<div class="form-group border-top">
+				<div class="form-label"><span style="color:red">*</span> 제목</div>
+				<div class="form-content">
+					<input type="text" th:field="*{title}" required />
+				</div>
+			</div>
+
+			<!-- 문의유형 -->
+			<div class="form-group">
+				<div class="form-label"><span style="color:red">*</span> 문의유형</div>
+				<div class="form-content">
+					<select th:field="*{category}" required>
+						<option value="">선택하세요</option>
+						<option value="product">제품문의</option>
+						<option value="company">기업 일반 정보</option>
+						<option value="site">홈페이지 이용</option>
+						<option value="recruit">채용</option>
+						<option value="etc">기타</option>
+					</select>
+				</div>
+			</div>
+
+			<!-- 내용 -->
+			<div class="form-group">
+				<div class="form-label"><span style="color:red">*</span> 내용</div>
+				<div class="form-content">
+					<textarea th:field="*{content}" required></textarea>
+				</div>
+			</div>
+
+			<!-- 약관 동의 -->
+			<div class="form-group">
+				<div class="form-label"><span style="color:red">*</span> 약관동의</div>
+				<div class="form-content" style="display: flex; align-items: center; gap: 6px;">
+					<input type="checkbox" id="agree" required />
+					<label for="agree" style="font-size: 13px; color: #555;">고객문의의 회신을 위한 개인정보 수집에 동의합니다.</label>
+					<button type="button" style="margin-left: auto; padding: 4px 8px; font-size: 12px;">약관보기</button>
+				</div>
+			</div>
+
+			<!-- 버튼 -->
+			<div class="btn-area">
+				<button type="submit" class="btn-submit">저장</button>
+				<button type="button" class="btn-cancel" onclick="history.back()">취소</button>
+			</div>
+		</form>
+	</div>
+
+	<th:block th:replace="~{fragments/footer :: footer}"></th:block>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			const form = document.querySelector("form");
+
+			form.addEventListener("submit", function (e) {
+				const title = document.querySelector('[name="title"]');
+				const category = document.querySelector('[name="category"]');
+				const content = document.querySelector('[name="content"]');
+				const agree = document.getElementById("agree");
+
+				if (!title.value.trim()) {
+					alert("제목을 입력해주세요.");
+					title.focus();
+					e.preventDefault();
+					return;
+				}
+				if (!category.value) {
+					alert("문의유형을 선택해주세요.");
+					category.focus();
+					e.preventDefault();
+					return;
+				}
+				if (!content.value.trim()) {
+					alert("내용을 입력해주세요.");
+					content.focus();
+					e.preventDefault();
+					return;
+				}
+				if (!agree.checked) {
+					alert("약관동의에 체크해주세요.");
+					agree.focus();
+					e.preventDefault();
+					return;
+				}
+				// 통과 → 자동으로 POST 요청 → 컨트롤러에서 redirect:/qna/list 처리됨
+			});
+		});
+	</script>
+</body>
+
+</html>

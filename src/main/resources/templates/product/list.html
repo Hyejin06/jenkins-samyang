@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>삼양 제품 목록</title>
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<th:block th:replace="~{fragments/header :: style}"></th:block>
+	<th:block th:replace="~{fragments/header :: script}"></th:block>
+	<th:block th:replace="~{fragments/footer :: style}"></th:block>
+	<th:block th:replace="~{fragments/footer :: script}"></th:block>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		.header {
+			background: #fff !important;
+			border-bottom: 1px solid #e6e6e6 !important;
+		}
+
+		.header .menu>li>a {
+			color: #111 !important;
+		}
+
+		.header .login-box a {
+			color: #111 !important;
+			border-color: #333;
+		}
+
+		#logoImg {
+			content: url('/img/mainlogo2.png');
+			/* 남색 로고 고정 */
+		}
+
+		.submenu-wrap {
+			display: none;
+		}
+
+		.product-tabs {
+			margin-top: 110px;
+			display: flex;
+			justify-content: center;
+			gap: 30px;
+			padding: 20px 0;
+			background: #fff;
+		}
+
+		.product-tabs li {
+			text-align: center;
+			width: 200px;
+			list-style: none;
+		}
+
+		.product-tabs a {
+
+			line-height: 120px;
+			font-size: 23px;
+			color: #323232;
+			padding: 10px;
+			transition: all 0.3s ease;
+		}
+
+		.product-tabs a.active {
+			color: #ff6400;
+			font-weight: bold;
+			border-color: #ff6400;
+		}
+
+		.product-banner {
+			margin: 0 auto;
+			width: 1140px;
+			height: 450px;
+		}
+
+		.product-list {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 40px;
+			margin: 40px auto 100px;
+			max-width: 1200px;
+		}
+
+		.product-card {
+			text-align: center;
+			width: 200px;
+		}
+
+		.product-card img {
+			width: 180px;
+			height: 180px;
+		}
+
+		.product-card p {
+			margin: 10px 0 20px 0;
+			color: #323232;
+			font-size: 22px;
+			font-weight: 350;
+			line-height: 1.3;
+		}
+
+		.product-register {
+			max-width: 1140px;
+			margin: 30px auto 0;
+			text-align: right;
+		}
+
+		.product-register a {
+			display: inline-block;
+			padding: 10px 20px;
+			background-color: #ff4d00;
+			color: white;
+			font-weight: bold;
+			text-decoration: none;
+			border-radius: 4px;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/header :: header}"></th:block>
+
+	<!-- 카테고리 탭 (최상단) -->
+	<ul class="product-tabs">
+		<li><a th:href="@{/product/list(category='ramyun')}" th:classappend="${category}=='ramyun' ? 'active'">삼양라면</a>
+		</li>
+		<li><a th:href="@{/product/list(category='buldak')}" th:classappend="${category}=='buldak' ? 'active'">불닭볶음면</a>
+		</li>
+		<li><a th:href="@{/product/list(category='map')}" th:classappend="${category}=='map' ? 'active'">맵탱</a></li>
+		<li><a th:href="@{/product/list(category='jack')}" th:classappend="${category}=='jack' ? 'active'">잭앤펄스</a></li>
+		<li><a th:href="@{/product/list(category='jaja')}" th:classappend="${category}=='jaja' ? 'active'">짜짜로니</a></li>
+	</ul>
+
+	<!-- 배너 이미지 -->
+	<div class="product-banner">
+		<img th:if="${category == 'ramyun'}" src="/img/ramunbenner.jpg" alt="ramyun" style="width: 100%;">
+		<img th:if="${category == 'buldak'}" src="/img/buldakbenner.jpg" alt="buldak" style="width: 100%;">
+		<img th:if="${category == 'map'}" src="/img/mapbenner.jpg" alt="map" style="width: 100%;">
+		<img th:if="${category == 'jack'}" src="/img/jackbenner.jpg" alt="jack" style="width: 100%;">
+		<img th:if="${category == 'jaja'}" src="/img/jajabenner.jpg" alt="jaja" style="width: 100%;">
+	</div>
+
+	<div class="product-register">
+		<a th:if="${session.loginMember != null and session.loginMember.id == 'admin'}" href="/product/ins">상품 등록</a>
+	</div>
+
+	<!-- 상품 리스트 -->
+	<div class="product-list">
+		<div class="product-card" th:each="p : ${products}"
+			th:onclick="|location.href='@{/product/detail/{no}(no=${p.no})}'|" style="cursor:pointer;">
+			<img th:src="@{${p.img1}}" alt="상품 이미지">
+			<p th:text="${p.pname}"></p>
+		</div>
+	</div>
+
+	<th:block th:replace="fragments/footer :: footer"></th:block>
+
+</body>
+
+</html>

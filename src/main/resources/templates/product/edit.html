@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>삼양 제품 정보 수정</title>
+
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<th:block th:replace="~{fragments/header :: style}"></th:block>
+	<th:block th:replace="~{fragments/header :: script}"></th:block>
+	<th:block th:replace="~{fragments/footer :: style}"></th:block>
+	<th:block th:replace="~{fragments/footer :: script}"></th:block>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			overflow-x: hidden;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		.header {
+			background: #fff !important;
+			border-bottom: 1px solid #e6e6e6 !important;
+		}
+
+		.header .menu>li>a {
+			color: #111 !important;
+		}
+
+		.header .login-box a {
+			color: #111 !important;
+			border-color: #333;
+		}
+
+		#logoImg {
+			content: url('/img/mainlogo2.png');
+			/* 남색 로고 고정 */
+		}
+
+		.submenu-wrap {
+			display: none;
+		}
+
+		.edit-wrapper {
+			width: 100%;
+			max-width: 960px;
+			margin: 130px auto 50px;
+			padding: 50px 20px;
+			color: #333;
+		}
+
+		h2.edit-title {
+			font-size: 24px;
+			font-weight: 700;
+			margin-bottom: 8px;
+		}
+
+		.edit-subtext {
+			font-size: 13px;
+			color: #555;
+			line-height: 1.6;
+			margin-bottom: 25px;
+			padding-bottom: 15px;
+			position: relative;
+		}
+
+		.edit-group {
+			display: flex;
+			border-bottom: 1px solid #e0e0e0;
+			background-color: #f8f8f8;
+		}
+
+		.edit-group.border-top {
+			border-top: 2px solid #444;
+		}
+
+		.edit-label {
+			width: 180px;
+			padding: 20px 15px;
+			font-weight: 500;
+			font-size: 14px;
+			color: #333;
+			background-color: #f8f8f8;
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+		}
+
+		.edit-content {
+			flex: 1;
+			padding: 18px 20px;
+			background-color: #fff;
+		}
+
+		.edit-wrapper input[type="text"],
+		.edit-wrapper input[type="number"],
+		.edit-wrapper select,
+		.edit-wrapper textarea,
+		.edit-wrapper input[type="file"] {
+			width: 100%;
+			padding: 10px;
+			font-size: 14px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			background-color: #fff;
+		}
+
+		select {
+			height: 42px;
+		}
+
+		textarea {
+			height: 120px;
+			resize: none;
+		}
+
+		.btn-area {
+			text-align: right;
+			margin-top: 40px;
+		}
+
+		.btn-submit,
+		.btn-cancel {
+			width: 100px;
+			height: 40px;
+			border: none;
+			border-radius: 3px;
+			font-size: 14px;
+			font-weight: bold;
+			cursor: pointer;
+			margin-left: 8px;
+		}
+
+		.btn-submit {
+			background-color: #ea5a0f;
+			color: #fff;
+		}
+
+		.btn-cancel {
+			background-color: #777;
+			color: #fff;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/header :: header}"></th:block>
+
+	<div class="edit-wrapper">
+		<h2 class="edit-title">제품 정보 수정</h2>
+		<p class="edit-subtext">수정할 상품 정보를 입력해주세요.</p>
+		<form th:action="@{/product/update}" th:object="${product}" method="post" enctype="multipart/form-data">
+			<input type="hidden" th:field="*{no}">
+
+			<div class="edit-group border-top">
+				<div class="edit-label">카테고리</div>
+				<div class="edit-content">
+					<strong th:text="*{cate}"></strong>
+					<input type="hidden" th:field="*{cate}">
+				</div>
+			</div>
+
+			<div class="edit-group">
+				<div class="edit-label">제품명</div>
+				<div class="edit-content">
+					<input type="text" th:field="*{pname}" required>
+				</div>
+			</div>
+
+			<div class="edit-group">
+				<div class="edit-label">제품 설명</div>
+				<div class="edit-content">
+					<textarea th:field="*{comment}" required></textarea>
+				</div>
+			</div>
+
+			<div class="edit-group">
+				<div class="edit-label">판매가</div>
+				<div class="edit-content">
+					<input type="number" th:field="*{price}" min="1000" step="10" required>
+				</div>
+			</div>
+
+			<div class="edit-group">
+				<div class="edit-label">메인 이미지</div>
+				<div class="edit-content">
+					<img th:src="*{img1}" alt="" style="max-width: 200px; display: block; margin-bottom: 10px;">
+					<input type="file" name="file1" accept=".jpg, .jpeg, .png, .gif, .webp">
+					<input type="hidden" th:field="*{img1}">
+				</div>
+			</div>
+
+			<div class="btn-area">
+				<button type="submit" class="btn-submit">수정</button>
+				<button type="button" class="btn-cancel" onclick="history.back()">취소</button>
+			</div>
+		</form>
+	</div>
+
+	<th:block th:replace="~{fragments/footer :: footer}"></th:block>
+</body>
+
+</html>

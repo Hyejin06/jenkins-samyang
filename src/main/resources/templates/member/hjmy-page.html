@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>서브큐 마이페이지</title>
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<th:block th:replace="~{fragments/hjheader :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjheader :: script}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: script}"></th:block>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			overflow-x: hidden;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		.mypage-title {
+			text-align: center;
+			font-size: 32px;
+			font-weight: 700;
+			margin: 100px 0 40px;
+		}
+
+		.mypage-info-bg {
+			width: 100%;
+			background: #f8f8f8;
+			padding: 60px 0;
+		}
+
+		/* 안쪽은 기존처럼 중앙 정렬 */
+		.mypage-info-box {
+			max-width: 1400px;
+			margin: 0 auto;
+			padding: 0 60px;
+			display: flex;
+			align-items: center;
+			gap: 60px;
+			justify-content: flex-start;
+			box-sizing: border-box;
+			background: none;
+			/* ✅ 회색 제거 */
+		}
+
+		.grade-info {
+			flex: 1;
+			display: flex;
+			align-items: center;
+			gap: 20px;
+		}
+
+		.grade-info img {
+			width: 100px;
+			height: 108px;
+		}
+
+		.grade-content {
+			flex: 1;
+		}
+
+		.grade-text-wrap {
+			max-width: 400px;
+			/* 원하는 만큼 넓게 지정 가능 */
+			width: 100%;
+		}
+
+		.grade-text-line {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.grade-label {
+			font-size: 20px;
+			font-weight: 500;
+		}
+
+		.grade-label b {
+			line-height: 1.48;
+			font-size: 26px;
+			font-weight: 700;
+		}
+
+		.grade-btn {
+			padding: 6px 12px;
+			border: 1px solid #ccc;
+			background: #fff;
+			border-radius: 5px;
+			font-size: 13px;
+			cursor: pointer;
+		}
+
+		.grade-bar {
+			width: 100%;
+			height: 6px;
+			background: #e0e0e0;
+			border-radius: 4px;
+			margin-top: 10px;
+			position: relative;
+		}
+
+		.grade-bar::after {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: calc(var(--grade-progress, 0) * 1%);
+			height: 100%;
+			background: #ff5e5e;
+			border-radius: 4px;
+		}
+
+		.grade-status {
+			text-align: right;
+			font-size: 12px;
+			color: #888;
+			margin-top: 4px;
+		}
+
+		.mypage-summary-info {
+			display: flex;
+			gap: 80px;
+			align-items: center;
+			flex-shrink: 0;
+		}
+
+		.mypage-summary-box {
+			text-align: center;
+			min-width: 100px;
+		}
+
+		.mypage-summary-box img {
+			width: 60px;
+			height: 60px;
+			margin-bottom: 10px;
+		}
+
+		.mypage-summary-box span {
+			display: block;
+			font-size: 15px;
+			margin-bottom: 6px;
+		}
+
+		.mypage-summary-box strong a {
+			color: #d32f2f;
+			/* 기존 빨간색 유지 */
+			font-size: 20px;
+			font-weight: bold;
+			text-decoration: none;
+			/* 밑줄 제거 */
+		}
+
+		.mypage-container {
+			display: flex;
+			gap: 40px;
+			max-width: 1400px;
+			margin: 60px auto;
+			padding: 0 20px;
+		}
+
+		.mypage-left {
+			display: flex;
+			flex-direction: column;
+			width: 250px;
+			flex-shrink: 0;
+		}
+
+		.mypage-sidebar {
+			width: 250px;
+			flex-shrink: 0;
+			background: #fff;
+			border: 1px solid #eee;
+			border-radius: 12px;
+			padding: 24px 20px;
+		}
+
+		.sidebar-section {
+			margin-bottom: 30px;
+		}
+
+		.sidebar-section h4 {
+			font-size: 15px;
+			font-weight: 700;
+			margin-bottom: 10px;
+		}
+
+		.sidebar-section ul {
+			list-style: none;
+			padding-left: 0;
+		}
+
+		.sidebar-section ul li {
+			margin: 6px 0;
+		}
+
+		.sidebar-section ul li a {
+			text-decoration: none;
+			color: #333;
+			font-size: 14px;
+		}
+
+		.sidebar-section+.sidebar-section {
+			border-top: 1px solid #eee;
+			padding-top: 20px;
+		}
+
+		/* 마지막 QNA 박스는 별도 클래스로 분리 */
+		.sidebar-qna {
+			width: 250px;
+			margin: 20px auto 0;
+			background: #f8f8f8;
+			padding: 24px 20px;
+			border-radius: 12px;
+			text-align: center;
+			box-shadow: 0 0 4px rgba(0, 0, 0, 0.04);
+		}
+
+		.sidebar-qna img {
+			width: 48px;
+			margin-bottom: 12px;
+		}
+
+		.sidebar-qna p {
+			font-size: 14px;
+			color: #444;
+			line-height: 1.6;
+			margin-bottom: 10px;
+		}
+
+		.sidebar-qna a {
+			font-size: 14px;
+			font-weight: 700;
+			color: #000;
+			text-decoration: none;
+		}
+
+		.mypage-main {
+			flex: 1;
+		}
+
+		.mypage-main h3 {
+			font-size: 18px;
+			font-weight: 600;
+			margin-bottom: 16px;
+		}
+
+		.order-box {
+			background: #fff;
+			border: 1px solid #eee;
+			border-radius: 12px;
+			padding: 30px 20px;
+		}
+
+		.order-status {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 50px;
+			text-align: center;
+			position: relative;
+		}
+
+		/* 상태 항목 (입금전, 배송준비중 등) */
+		.status-item {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			font-size: 14px;
+			position: relative;
+			min-width: 80px;
+		}
+
+		.status-item img {
+			width: 40px;
+			/* 🔍 추천 크기 */
+			height: 40px;
+			object-fit: contain;
+			margin-bottom: 6px;
+		}
+
+		/* 숫자 (빨간색 강조) */
+		.status-item strong {
+			display: inline;
+			color: #d32f2f;
+			margin-left: 4px;
+			font-weight: 700;
+		}
+
+		/* > 화살표: 문자로 표현 (더 깔끔함) */
+		.status-arrow {
+			color: #aaa;
+			font-size: 18px;
+			margin: 0 8px;
+			opacity: 0.5;
+			user-select: none;
+		}
+
+		/* 만약 이미지로 하고 싶다면 이걸 사용 */
+		.status-arrow.img {
+			width: 14px;
+			height: 14px;
+			background: url('/img/arrow_path.png') no-repeat center / contain;
+			display: inline-block;
+		}
+
+		.order-divider {
+			margin: 30px auto 20px;
+			width: 100%;
+			border: none;
+			border-top: 1px solid #eee;
+		}
+
+		.order-info-summary {
+			display: flex;
+			justify-content: center;
+			gap: 40px;
+			font-size: 14px;
+			color: #999;
+			margin-top: 0;
+		}
+
+		.interest-box {
+			margin-top: 40px;
+		}
+
+		.interest-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 16px;
+		}
+
+		.interest-header h3 {
+			font-size: 18px;
+			font-weight: 600;
+		}
+
+		.interest-header button {
+			padding: 4px 10px;
+			border: 1px solid #ccc;
+			background: #fff;
+			border-radius: 6px;
+			cursor: pointer;
+			font-size: 13px;
+		}
+
+		.interest-empty {
+			height: 260px;
+			line-height: 258px;
+			/* 수직 가운데 정렬 */
+			text-align: center;
+			color: var(--bk-color2);
+			/* 검정 계열 텍스트 */
+			border: 1px solid #eee;
+			border-radius: 10px;
+			font-size: 14px;
+			background: #fff;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/hjheader :: header}"></th:block>
+
+	<h2 class="mypage-title">마이페이지</h2>
+
+	<div class="mypage-info-bg">
+		<div class="mypage-info-box">
+			<div class="grade-info">
+				<!-- 등급 아이콘: 조건에 따라 이미지 변경 -->
+				<img th:src="${session.hjloginMember.grade == 'VIP'} ? '/img/rating2.png' 
+				        : (${session.hjloginMember.grade == 'VVIP'} ? '/img/rating3.png' : '/img/rating1.png')" alt="등급 아이콘"
+					width="60" height="60" />
+
+				<!-- 회원 이름 + 등급 표시 -->
+				<div class="grade-text-wrap">
+					<!-- 1줄: 이름님의 등급은 + 버튼 -->
+					<div class="grade-text-line">
+						<p class="grade-label">
+							<b th:text="${#strings.defaultString(session.hjloginMember.name, '이름')}">이름</b>님의 등급은
+						</p>
+						<a href="#" class="grade-btn">등급별 혜택보기</a>
+					</div>
+
+					<!-- 2줄: [ Family ] 입니다 -->
+					<p class="grade-label grade-rank">
+						[ <b th:text="${#strings.defaultString(session.hjloginMember.grade, 'Family')}">Family</b> ]
+						입니다.
+					</p>
+
+					<!-- 등급 게이지 -->
+					<div class="grade-bar"
+						th:style="'--grade-progress:' + (${session.hjloginMember.gradeProgress} != null ? session.hjloginMember.gradeProgress : 0)">
+					</div>
+
+					<!-- VIP까지 남은 금액 -->
+					<div class="grade-status"
+						th:text="'[VIP]까지 ' + (${session.hjloginMember.amountToVip} != null ? session.hjloginMember.amountToVip : 0) + '원 남음'">
+					</div>
+				</div>
+			</div>
+
+			<div class="mypage-summary-info">
+				<div class="mypage-summary-box">
+					<img src="/img/icon_my1.png" alt="총주문">
+					<span th:text="'총 주문 (' + (${orderCount} ?: 0) + '회)'">총 주문 (0회)</span>
+					<strong>
+						<a href="#" th:text="(${orderTotal} ?: 0) + '원'">0원</a>
+					</strong>
+				</div>
+
+				<div class="mypage-summary-box">
+					<img src="/img/icon_my2.png" alt="적립금">
+					<span>적립금</span>
+					<strong>
+						<a href="#" th:text="(${pointAmount} ?: 0) + '원'">0원</a>
+					</strong>
+				</div>
+
+				<div class="mypage-summary-box">
+					<img src="/img/icon_my3.png" alt="쿠폰">
+					<span>쿠폰</span>
+					<strong>
+						<a href="#" th:text="(${couponCount} ?: 0) + '개'">0개</a>
+					</strong>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="mypage-container">
+		<!-- 왼쪽 사이드바 -->
+		<div class="mypage-left">
+			<div class="mypage-sidebar">
+				<div class="sidebar-section">
+					<h4>나의 주문내역</h4>
+					<ul>
+						<li><a href="#">주문내역조회</a></li>
+						<li><a href="#">정기배송조회</a></li>
+					</ul>
+				</div>
+
+				<div class="sidebar-section">
+					<h4>나의 혜택</h4>
+					<ul>
+						<li><a href="#">적립금</a></li>
+						<li><a href="#">쿠폰</a></li>
+					</ul>
+				</div>
+
+				<div class="sidebar-section">
+					<h4>나의 활동</h4>
+					<ul>
+						<li><a href="#">관심상품</a></li>
+						<li><a href="#">최근 본 상품</a></li>
+						<li><a href="#">게시물 관리</a></li>
+						<li><a href="#">리뷰 관리</a></li>
+						<li><a href="#">추천인 관리</a></li>
+					</ul>
+				</div>
+
+				<div class="sidebar-section">
+					<h4>개인정보관리</h4>
+					<ul>
+						<li><a href="/member/hjedit">회원정보수정</a></li>
+						<li><a href="#">배송지 관리</a></li>
+						<li><a href="#">로그아웃</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="sidebar-qna">
+				<img src="/img/icon_qna.png" alt="1:1 문의">
+				<p>쇼핑몰 이용 중<br>궁금한 사항이 있다면?</p>
+				<a href="#">1:1 문의하기 ></a>
+			</div>
+		</div>
+
+		<!-- 오른쪽 메인 영역 -->
+		<section class="mypage-main">
+			<h3>나의 주문처리 현황 <small style="color:#888; font-size:13px;">(최근 3개월 기준)</small></h3>
+			<div class="order-box">
+				<div class="order-status">
+					<div class="status-item">
+						<img src="/img/icon_state1.png" alt="입금전">
+						<div>입금전 <strong>0</strong></div>
+					</div>
+					<div class="status-arrow">›</div>
+
+					<div class="status-item">
+						<img src="/img/icon_state2.png" alt="배송준비중">
+						<div>배송준비중 <strong>0</strong></div>
+					</div>
+					<div class="status-arrow">›</div>
+
+					<div class="status-item">
+						<img src="/img/icon_state3.png" alt="배송중">
+						<div>배송중 <strong>0</strong></div>
+					</div>
+					<div class="status-arrow">›</div>
+
+					<div class="status-item">
+						<img src="/img/icon_state4.png" alt="배송완료">
+						<div>배송완료 <strong>0</strong></div>
+					</div>
+				</div>
+
+				<!-- 라인 추가 후 하단 내역 -->
+				<hr class="order-divider">
+
+				<div class="order-info-summary">
+					<div>취소내역 <strong>0</strong></div>
+					<div>|</div>
+					<div>교환내역 <strong>0</strong></div>
+					<div>|</div>
+					<div>반품내역 <strong>0</strong></div>
+				</div>
+			</div>
+
+			<!-- 관심상품 -->
+			<div class="interest-box">
+				<div class="interest-header">
+					<h3>관심상품</h3>
+					<button>더보기</button>
+				</div>
+				<div class="interest-empty">
+					관심상품 내역이 없습니다
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<th:block th:replace="~{fragments/hjfooter :: footer}"></th:block>
+</body>
+
+</html>

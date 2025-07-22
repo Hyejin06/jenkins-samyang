@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>서브큐 제품 상세보기</title>
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<th:block th:replace="~{fragments/hjheader :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjheader :: script}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: script}"></th:block>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			overflow-x: hidden;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		.path-wrap {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 1296px;
+			margin: 20px auto 40px;
+			padding-left: 10px;
+		}
+
+		.path {
+			display: flex;
+			align-items: center;
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		.path li {
+			display: flex;
+			align-items: center;
+			font-size: 14px;
+			color: #666;
+		}
+
+		.path li a {
+			color: #666;
+			text-decoration: none;
+			display: flex;
+			align-items: center;
+			gap: 4px;
+		}
+
+		.path li img {
+			width: 16px;
+			height: 18px;
+		}
+
+		.path li+li::before {
+			content: '';
+			width: 8px;
+			height: 16px;
+			margin: 0 8px;
+			background: transparent url(/img/arrow_path.png) no-repeat center / auto 14px;
+			display: inline-block;
+		}
+
+		/* 버튼 스타일 */
+		.btn-box-right {
+			display: flex;
+			justify-content: flex-end;
+			/* 오른쪽 정렬 */
+			gap: 10px;
+			/* 버튼 간격 */
+			margin-top: 20px;
+		}
+
+		.btn-edit {
+			background-color: #fcb900;
+			/* 노란색 */
+			color: #111;
+			padding: 6px 14px;
+			font-size: 14px;
+			font-weight: 500;
+			border: none;
+			border-radius: 4px;
+			text-decoration: none;
+		}
+
+		.btn-edit:hover {
+			background-color: #e6a800;
+		}
+
+		.btn-delete {
+			background-color: #ee3424;
+			/* 빨간색 */
+			color: white;
+			padding: 6px 14px;
+			font-size: 14px;
+			font-weight: 500;
+			border: none;
+			border-radius: 4px;
+			text-decoration: none;
+		}
+
+		.btn-delete:hover {
+			background-color: #c42d1f;
+		}
+
+		.detail-wrap {
+			display: flex;
+			max-width: 1200px;
+			margin: 0 auto;
+			gap: 40px;
+			align-items: flex-start;
+			padding: 0 20px;
+		}
+
+		.left-img-box {
+			flex: 1;
+			padding-bottom: 50px;
+		}
+
+		.left-img-box img {
+			width: 100%;
+			border-radius: 10px;
+			margin-bottom: 16px;
+		}
+
+		.right-info-box {
+			flex: 1;
+		}
+
+		.prod-cate {
+			font-size: 14px;
+			color: #999;
+			margin-bottom: 8px;
+		}
+
+		.prod-name {
+			font-size: 24px;
+			font-weight: 700;
+			margin-bottom: 20px;
+		}
+
+		.prod-desc {
+			font-size: 16px;
+			color: #444;
+			margin-bottom: 20px;
+		}
+
+		.prod-price {
+			font-size: 22px;
+			color: #d9230f;
+			font-weight: 700;
+			margin-bottom: 20px;
+		}
+
+		.order-box {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			background: #f9f9f9;
+			border-radius: 12px;
+			padding: 20px;
+			margin-bottom: 20px;
+		}
+
+		.order-info {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		.order-info .name {
+			font-size: 16px;
+			font-weight: 600;
+			color: #111;
+		}
+
+		.order-info .price {
+			font-size: 15px;
+			font-weight: 500;
+			color: #333;
+		}
+
+		/* 기존 qty-box 유지 */
+		.qty-box {
+			display: flex;
+			align-items: center;
+			border: 1px solid #ccc;
+			border-radius: 6px;
+			overflow: hidden;
+		}
+
+		.qty-box button {
+			width: 32px;
+			height: 32px;
+			background: white;
+			border: none;
+			font-size: 16px;
+			cursor: pointer;
+			border-right: 1px solid #ccc;
+		}
+
+		.qty-box button:last-child {
+			border-left: 1px solid #ccc;
+			border-right: none;
+		}
+
+		.qty-box input {
+			width: 40px;
+			height: 32px;
+			text-align: center;
+			border: none;
+			font-size: 14px;
+		}
+
+		.qty-box input[type="number"] {
+			-moz-appearance: textfield;
+			/* Firefox */
+			appearance: textfield;
+			/* Chrome/Safari */
+			text-align: center;
+			/* 가운데 정렬 */
+		}
+
+		.qty-box input::-webkit-outer-spin-button,
+		.qty-box input::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+
+		.total-price {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			font-size: 18px;
+			font-weight: 700;
+			margin-bottom: 30px;
+		}
+
+		.btn-wrap {
+			display: flex;
+			gap: 10px;
+		}
+
+		.btn-cart,
+		.btn-buy {
+			flex: 1;
+			padding: 14px;
+			text-align: center;
+			font-size: 16px;
+			font-weight: 600;
+			border-radius: 6px;
+			cursor: pointer;
+		}
+
+		.btn-cart {
+			background: white;
+			border: 1px solid #d9230f;
+			color: #d9230f;
+		}
+
+		.btn-buy {
+			background: #d9230f;
+			border: none;
+			color: white;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/hjheader :: header}"></th:block>
+
+	<div class="path-wrap">
+		<!-- ✅ 경로 표시 영역 -->
+		<ul class="path">
+			<li>
+				<a href="/hj"><img src="/img/icon_home.png" alt="홈 아이콘"><span>홈</span></a>
+			</li>
+			<li><a href="/product/hjlist">전체상품</a></li>
+		</ul>
+
+		<!-- ✅ 관리자 전용 버튼 -->
+		<div class="btn-box-right" th:if="${session.hjloginMember != null and session.hjloginMember.id == 'admin'}">
+			<a th:href="@{/product/hjedit/{no}(no=${product.no})}" class="btn-edit">상품 수정</a>
+			<a th:href="@{/product/hjdelete/{no}(no=${product.no})}" class="btn-delete"
+				onclick="return confirm('정말 삭제하시겠습니까?')">
+				상품 삭제
+			</a>
+		</div>
+	</div>
+
+	<div class="detail-wrap">
+		<!-- 좌측 이미지 -->
+		<div class="left-img-box">
+			<img th:src="@{${product.img1}}" alt="메인 이미지">
+		</div>
+
+		<!-- 우측 정보 -->
+		<div class="right-info-box">
+			<div class="prod-cate" th:text="${product.cate}">카테고리</div>
+			<div class="prod-name" th:text="${product.pname}">상품명</div>
+			<div class="prod-desc" th:text="${product.comment}">상품 설명</div>
+			<div class="prod-price" id="unitPriceStatic" th:data-price="${product.price}"
+				th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'">판매가</div>
+
+			<form th:action="@{/cart/hjadd}" method="post">
+				<!-- 상품 기본 정보 -->
+				<input type="hidden" name="productId" th:value="${product.no}" />
+				<input type="hidden" name="price" th:value="${product.price}" />
+
+				<div class="order-box">
+					<div class="order-info">
+						<div class="name" th:text="${product.pname}">상품명</div>
+						<div class="price">
+							<span id="unitPriceDynamic" th:data-price="${product.price}"
+								th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')}">판매가</span>원
+						</div>
+					</div>
+
+					<div class="qty-box">
+						<button type="button" onclick="changeQty(-1)">–</button>
+						<input type="number" id="qty" name="quantity" value="1" min="1" onchange="updateTotal()">
+						<button type="button" onclick="changeQty(1)">+</button>
+					</div>
+				</div>
+
+				<div class="total-price">
+					<span>총 상품금액</span>
+					<span id="totalPrice"
+						th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'">8,840원</span>
+				</div>
+
+				<div class="btn-wrap">
+					<button type="submit" class="btn-cart">장바구니 담기</button>
+					<button class="btn-buy">바로 구매하기</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<th:block th:replace="~{fragments/hjfooter :: footer}"></th:block>
+
+
+	<script>
+		function changeQty(diff) {
+			const qtyInput = document.getElementById('qty');
+			let qty = parseInt(qtyInput.value);
+			qty = Math.max(1, qty + diff);
+			qtyInput.value = qty;
+			updateTotal();
+		}
+
+		function updateTotal() {
+			const unitPriceEl = document.getElementById('unitPriceDynamic');
+			const unitPrice = parseInt(unitPriceEl.dataset.price);
+			const qty = parseInt(document.getElementById('qty').value);
+			const total = unitPrice * qty;
+
+			// ✅ 대괄호 안 숫자만 갱신
+			unitPriceEl.innerText = total.toLocaleString();
+
+			// ✅ 총 상품금액도 갱신
+			document.getElementById('totalPrice').innerText = total.toLocaleString() + '원';
+		}
+	</script>
+</body>
+
+</html>

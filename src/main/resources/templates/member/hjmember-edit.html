@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>서브큐 회원정보수정</title>
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<th:block th:replace="~{fragments/hjheader :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjheader :: script}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: script}"></th:block>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			overflow-x: hidden;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		.mypage-title {
+			text-align: center;
+			font-size: 32px;
+			font-weight: 700;
+			margin: 100px 0 40px;
+		}
+
+		.mypage-container {
+			display: flex;
+			gap: 40px;
+			max-width: 1400px;
+			margin: 60px auto;
+			padding: 0 20px;
+		}
+
+		.mypage-left {
+			display: flex;
+			flex-direction: column;
+			width: 250px;
+			flex-shrink: 0;
+		}
+
+		.mypage-sidebar {
+			width: 250px;
+			flex-shrink: 0;
+			background: #fff;
+			border: 1px solid #eee;
+			border-radius: 12px;
+			padding: 24px 20px;
+		}
+
+		.sidebar-section {
+			margin-bottom: 30px;
+		}
+
+		.sidebar-section h4 {
+			font-size: 15px;
+			font-weight: 700;
+			margin-bottom: 10px;
+		}
+
+		.sidebar-section ul {
+			list-style: none;
+			padding-left: 0;
+		}
+
+		.sidebar-section ul li {
+			margin: 6px 0;
+		}
+
+		.sidebar-section ul li a {
+			text-decoration: none;
+			color: #333;
+			font-size: 14px;
+		}
+
+		.sidebar-section+.sidebar-section {
+			border-top: 1px solid #eee;
+			padding-top: 20px;
+		}
+
+		/* 마지막 QNA 박스는 별도 클래스로 분리 */
+		.sidebar-qna {
+			width: 250px;
+			margin: 20px auto 0;
+			background: #f8f8f8;
+			padding: 24px 20px;
+			border-radius: 12px;
+			text-align: center;
+			box-shadow: 0 0 4px rgba(0, 0, 0, 0.04);
+		}
+
+		.sidebar-qna img {
+			width: 48px;
+			margin-bottom: 12px;
+		}
+
+		.sidebar-qna p {
+			font-size: 14px;
+			color: #444;
+			line-height: 1.6;
+			margin-bottom: 10px;
+		}
+
+		.sidebar-qna a {
+			font-size: 14px;
+			font-weight: 700;
+			color: #000;
+			text-decoration: none;
+		}
+
+		.info-wrap {
+			width: 1000px;
+			max-width: 1200px;
+			margin: 40px auto;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		.info-wrap h3 {
+			font-size: 16px;
+			font-weight: bold;
+			padding-bottom: 10px;
+			border-bottom: 1px solid #000;
+			margin-bottom: 20px;
+		}
+
+		.info-table {
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 14px;
+		}
+
+		.info-table th {
+			width: 180px;
+			text-align: left;
+			padding: 16px 10px;
+			background: #f9f9f9;
+			border-bottom: 1px solid #e0e0e0;
+			vertical-align: middle;
+		}
+
+		.info-table td {
+			padding: 16px 10px;
+			border-bottom: 1px solid #e0e0e0;
+		}
+
+		.info-table th span {
+			color: red;
+			margin-left: 4px;
+		}
+
+		.info-table input[type="text"],
+		.info-table input[type="email"],
+		.info-table input[type="password"],
+		.info-table input[type="tel"] {
+			width: 100%;
+			padding: 10px;
+			font-size: 14px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			box-sizing: border-box;
+		}
+
+		.info-table input[readonly] {
+			background: #f5f5f5;
+			color: #888;
+			cursor: not-allowed;
+		}
+
+		/* 버튼 영역 */
+		.btn-wrap {
+			text-align: center;
+			margin-top: 30px;
+		}
+
+		.btn-wrap button {
+			padding: 10px 24px;
+			font-size: 14px;
+			border-radius: 4px;
+			border: none;
+			cursor: pointer;
+			margin: 0 8px;
+		}
+
+		/* 수정 버튼 */
+		.btn-submit {
+			background-color: #005BAC;
+			color: #fff;
+		}
+
+		.btn-submit:hover {
+			background-color: #004080;
+		}
+
+		/* 취소 버튼 */
+		.btn-reset {
+			background-color: #ddd;
+			color: #333;
+		}
+
+		.btn-reset:hover {
+			background-color: #bbb;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/hjheader :: header}"></th:block>
+
+	<h2 class="mypage-title">마이페이지</h2>
+
+	<div class="mypage-container">
+		<!-- 왼쪽 사이드바 -->
+		<div class="mypage-left">
+			<div class="mypage-sidebar">
+				<div class="sidebar-section">
+					<h4>나의 주문내역</h4>
+					<ul>
+						<li><a href="#">주문내역조회</a></li>
+						<li><a href="#">정기배송조회</a></li>
+					</ul>
+				</div>
+
+				<div class="sidebar-section">
+					<h4>나의 혜택</h4>
+					<ul>
+						<li><a href="#">적립금</a></li>
+						<li><a href="#">쿠폰</a></li>
+					</ul>
+				</div>
+
+				<div class="sidebar-section">
+					<h4>나의 활동</h4>
+					<ul>
+						<li><a href="#">관심상품</a></li>
+						<li><a href="#">최근 본 상품</a></li>
+						<li><a href="#">게시물 관리</a></li>
+						<li><a href="#">리뷰 관리</a></li>
+						<li><a href="#">추천인 관리</a></li>
+					</ul>
+				</div>
+
+				<div class="sidebar-section">
+					<h4>개인정보관리</h4>
+					<ul>
+						<li><a href="/member/hjedit">회원정보수정</a></li>
+						<li><a href="#">배송지 관리</a></li>
+						<li><a href="#">로그아웃</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="sidebar-qna">
+				<img src="/img/icon_qna.png" alt="1:1 문의">
+				<p>쇼핑몰 이용 중<br>궁금한 사항이 있다면?</p>
+				<a href="#">1:1 문의하기 ></a>
+			</div>
+		</div>
+
+
+		<div class="info-wrap">
+			<h3>기본정보</h3>
+			<form th:action="@{/member/hjedit}" th:object="${member}" method="post">
+				<input type="hidden" th:field="*{no}" />
+
+				<table class="info-table">
+					<tr>
+						<th><label for="id">아이디<span>*</span></label></th>
+						<td><input type="text" id="id" th:field="*{id}" readonly></td>
+					</tr>
+					<tr>
+						<th><label for="pw">비밀번호<span>*</span></label></th>
+						<td><input type="password" id="pw" th:field="*{pw}"></td>
+					</tr>
+					<tr>
+						<th><label for="pw2">비밀번호 확인<span>*</span></label></th>
+						<td><input type="password" id="pw2"></td>
+					</tr>
+					<tr>
+						<th><label for="name">이름<span>*</span></label></th>
+						<td><input type="text" id="name" th:field="*{name}" readonly></td>
+					</tr>
+					<tr>
+						<th><label for="email">이메일</label></th>
+						<td><input type="email" id="email" th:field="*{email}"></td>
+					</tr>
+					<tr>
+						<th><label for="tel">연락처</label></th>
+						<td><input type="tel" id="tel" th:field="*{tel}"></td>
+					</tr>
+				</table>
+
+				<div class="btn-wrap">
+					<button type="submit" class="btn-submit">수정</button>
+					<button type="reset" class="btn-reset">취소</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<th:block th:replace="~{fragments/hjfooter :: footer}"></th:block>
+</body>
+
+</html>

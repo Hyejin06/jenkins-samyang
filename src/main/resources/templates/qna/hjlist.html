@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>서브큐 faq 글 목록</title>
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<th:block th:replace="~{fragments/hjheader :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjheader :: script}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: style}"></th:block>
+	<th:block th:replace="~{fragments/hjfooter :: script}"></th:block>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			overflow-x: hidden;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		.mypage-title {
+			text-align: center;
+			font-size: 32px;
+			font-weight: 700;
+			margin: 100px 0 40px;
+		}
+
+		.qna-box {
+			max-width: 1240px;
+			margin: 0 auto 80px;
+			padding: 0 20px;
+		}
+
+		.qna-write-btn {
+			text-align: right;
+			margin-bottom: 14px;
+		}
+
+		.qna-write-btn a {
+			display: inline-block;
+			background-color: #ee3424;
+			color: white;
+			padding: 8px 20px;
+			border-radius: 30px;
+			font-size: 14px;
+			font-weight: bold;
+			text-decoration: none;
+			transition: background-color 0.3s ease;
+		}
+
+		.qna-write-btn a:hover {
+			background-color: #d52c1a;
+		}
+
+		.qna-box table {
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 15px;
+			table-layout: auto;
+		}
+
+		thead {
+			border-top: 2px solid #000;
+			border-bottom: 1px solid #ccc;
+		}
+
+		thead th {
+			padding: 18px 12px;
+			color: #999;
+			font-weight: 600;
+			text-align: center;
+			font-size: 14px;
+		}
+
+		thead th:nth-child(1),
+		tbody td:nth-child(1) {
+			width: 8%;
+		}
+
+		thead th:nth-child(2) {
+			width: 52%;
+			text-align: center;
+		}
+
+		tbody td:nth-child(2) {
+			width: 52%;
+			text-align: left;
+		}
+
+		thead th:nth-child(3),
+		tbody td:nth-child(3) {
+			width: 13%;
+		}
+
+		thead th:nth-child(4),
+		tbody td:nth-child(4) {
+			width: 15%;
+		}
+
+		thead th:nth-child(5),
+		tbody td:nth-child(5) {
+			width: 12%;
+		}
+
+		tbody td {
+			padding: 20px 12px;
+			border-bottom: 1px solid #eee;
+			text-align: center;
+			font-size: 15px;
+			vertical-align: middle;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		tbody td a {
+			color: #222;
+			text-decoration: none;
+			font-weight: 500;
+			display: inline-block;
+			max-width: 100%;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		tbody td a:hover {
+			color: #ee3424;
+			text-decoration: underline;
+		}
+
+		.pagination {
+			display: flex;
+			justify-content: center;
+			margin-top: 40px;
+			margin-bottom: 100px;
+			list-style: none;
+			gap: 10px;
+		}
+
+		.pagination li {
+			display: inline-block;
+		}
+
+		.pagination a,
+		.pagination .page-link {
+			width: 36px;
+			height: 36px;
+			line-height: 36px;
+			text-align: center;
+			border-radius: 50%;
+			font-size: 14px;
+			color: #111;
+			text-decoration: none;
+			display: inline-block;
+			transition: all 0.2s ease;
+		}
+
+		.pagination .active a {
+			background-color: #ee3424;
+			color: #fff !important;
+			font-weight: bold;
+			pointer-events: none;
+		}
+
+		.pagination .disabled a,
+		.pagination .disabled .page-link {
+			color: #ccc;
+			cursor: default;
+			pointer-events: none;
+			background: none;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/hjheader :: header}"></th:block>
+
+	<h2 class="mypage-title">FAQ</h2>
+
+	<div class="qna-box">
+		<div class="qna-write-btn" th:if="${session.hjloginMember != null}">
+			<a href="/qna/hjins">질문 등록</a>
+		</div>
+
+		<table>
+			<thead>
+				<tr>
+					<th>번호</th>
+					<th>제목</th>
+					<th>작성자</th>
+					<th>작성일</th>
+					<th>조회</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="q : ${qnas}">
+					<td th:text="${q.no}"></td>
+					<td><a th:href="@{/qna/hjdetail/{no}(no=${q.no})}" th:text="${q.title}"></a></td>
+					<td th:text="${q.author}">작성자</td>
+					<td th:text="${#temporals.format(q.resdate, 'yyyy-MM-dd')}"></td>
+					<td th:text="${q.hits}"></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<ul class="pagination">
+			<li th:classappend="${qnas.first} ? 'disabled'">
+				<a th:href="@{/qna/hjlist(page=${qnas.number - 1})}">&laquo;</a>
+			</li>
+			<li th:each="i : ${#numbers.sequence(0, qnas.totalPages - 1)}"
+				th:classappend="${qnas.number == i} ? 'active'">
+				<a th:href="@{/qna/hjlist(page=${i})}" th:text="${i + 1}">1</a>
+			</li>
+			<li th:classappend="${qnas.last} ? 'disabled'">
+				<a th:href="@{/qna/hjlist(page=${qnas.number + 1})}">&raquo;</a>
+			</li>
+		</ul>
+	</div>
+
+	<th:block th:replace="~{fragments/hjfooter :: footer}"></th:block>
+</body>
+
+</html>

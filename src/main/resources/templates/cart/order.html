@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>삼양몰 주문</title>
+	<link rel="stylesheet" href="/css/reset.css" />
+	<link rel="stylesheet" href="/css/order.css" />
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+	<th:block th:replace="~{fragments/header :: style}" />
+	<th:block th:replace="~{fragments/header :: script}" />
+	<th:block th:replace="~{fragments/footer :: style}" />
+	<th:block th:replace="~{fragments/footer :: script}" />
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			overflow-x: hidden;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		.header {
+			background: #fff !important;
+			border-bottom: 1px solid #e6e6e6 !important;
+		}
+
+		.header .menu>li>a {
+			color: #111 !important;
+		}
+
+		.header .login-box a {
+			color: #111 !important;
+			border-color: #333;
+		}
+
+		#logoImg {
+			content: url('/img/mainlogo2.png');
+			/* 남색 로고 고정 */
+		}
+
+		.submenu-wrap {
+			display: none;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:replace="~{fragments/header :: header}" />
+
+	<div class="order-container">
+		<h2 class="order-title">주문서 작성</h2>
+		<div class="order-steps">
+			<strong>01 장바구니</strong> <span>&gt;</span>
+			<strong>02 주문서작성/결제</strong> <span>&gt;</span>
+			<span>03 주문완료</span>
+		</div>
+
+		<!-- 주문 상품 목록 -->
+		<div class="order-products">
+			<h3>주문 상품</h3>
+			<table class="order-table">
+				<thead>
+					<tr>
+						<th>이미지</th>
+						<th>상품명</th>
+						<th>수량</th>
+						<th>가격</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item : ${cartItems}">
+						<td><img th:src="@{${item.img1}}" alt="상품 이미지" class="thumb" /></td>
+						<td th:text="${item.pname}">상품명</td>
+						<td th:text="${item.quantity}">1</td>
+						<td th:text="${#numbers.formatInteger(item.price * item.quantity, 3, 'COMMA')} + '원'">가격</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<!-- 결제 요약 -->
+		<div class="order-summary">
+			<p>총 상품금액: <span th:text="${#numbers.formatInteger(totalPrice, 3, 'COMMA')} + '원'"></span></p>
+			<p>배송비: <span th:text="${#numbers.formatInteger(delivery, 3, 'COMMA')} + '원'"></span></p>
+			<p class="order-total">
+				총 결제금액: <strong th:text="${#numbers.formatInteger(finalPrice, 3, 'COMMA')} + '원'"></strong>
+			</p>
+		</div>
+
+		<!-- 주문자 정보 입력 -->
+		<div class="order-user">
+			<h3>주문자 정보</h3>
+			<form id="orderForm" class="order-form">
+				<label for="name">이름</label>
+				<input type="text" id="name" name="name" required />
+
+				<label for="phone">연락처</label>
+				<input type="text" id="phone" name="phone" required />
+
+				<label for="postcode">주소</label>
+				<div style="display: flex; gap: 10px; margin-bottom: 10px;">
+					<input type="text" id="postcode" name="postcode" placeholder="우편번호" readonly required
+						style="flex:1;" />
+					<button type="button" onclick="execDaumPostcode()">우편번호 찾기</button>
+				</div>
+				<input type="text" id="address" name="address" placeholder="기본 주소" readonly required />
+				<input type="text" id="detailAddress" name="detailAddress" placeholder="상세 주소" required />
+
+				<!-- 결제 버튼 -->
+				<button id="payment-button" type="button" class="btn-order"
+					th:attr="data-amount=${finalPrice}">결제하기</button>
+			</form>
+		</div>
+	</div>
+
+	<!-- TossPayments SDK -->
+	<script src="https://js.tosspayments.com/v1"></script>
+	<script>
+		function execDaumPostcode() {
+			new daum.Postcode({
+				oncomplete: function (data) {
+					document.getElementById('postcode').value = data.zonecode;
+					document.getElementById('address').value = data.roadAddress || data.jibunAddress;
+					document.getElementById('detailAddress').focus();
+				}
+			}).open();
+		}
+
+		document.addEventListener("DOMContentLoaded", function () {
+			const button = document.getElementById("payment-button");
+
+			button.addEventListener("click", function () {
+				const name = document.getElementById("name").value.trim();
+				const phone = document.getElementById("phone").value.trim();
+				const postcode = document.getElementById("postcode").value.trim();
+				const address = document.getElementById("address").value.trim();
+				const detailAddress = document.getElementById("detailAddress").value.trim();
+
+				if (!name || !phone || !postcode || !address || !detailAddress) {
+					alert("이름, 연락처, 주소를 모두 입력해주세요.");
+					return;
+				}
+
+				const tossPayments = TossPayments("test_ck_Z1aOwX7K8m7lpy5EgKE9VyQxzvNP");
+				const amount = parseInt(button.dataset.amount) || 0;
+
+				tossPayments.requestPayment("카드", {
+					amount: amount,
+					orderId: "order-" + new Date().getTime(),
+					orderName: "삼양몰 주문 상품",
+					customerName: name,
+					successUrl: window.location.origin +
+						"/cart/success"
+						+ "?orderId=" + encodeURIComponent("order-" + new Date().getTime())
+						+ "&postcode=" + encodeURIComponent(postcode)
+						+ "&address=" + encodeURIComponent(address)
+						+ "&detailAddress=" + encodeURIComponent(detailAddress)
+						+ "&amount=" + amount,
+					failUrl: window.location.origin + "/cart/fail"
+				}).catch(function (error) {
+					console.error("결제 실패", error);
+				});
+			});
+		});
+	</script>
+
+	<th:block th:replace="~{fragments/footer :: footer}" />
+</body>
+
+</html>

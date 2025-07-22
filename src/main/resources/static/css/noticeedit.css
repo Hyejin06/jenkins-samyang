@@ -1,0 +1,62 @@
+.notice-form-container {
+  max-width: 1000px;
+  margin: 200px auto;
+  padding: 30px;
+  border: 1px solid #ddd;
+  background: #fff;
+}
+
+.notice-form-container h2 {
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.notice-form .form-group {
+  margin-bottom: 20px;
+}
+
+.notice-form label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.notice-form input[type="text"],
+.notice-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  border-radius: 4px;
+}
+
+.notice-form textarea {
+  resize: vertical;
+}
+
+.form-actions {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.btn-submit {
+  background-color: #000;
+  color: white;
+  padding: 10px 25px;
+  border: none;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  margin-left: 15px;
+  color: #666;
+  text-decoration: none;
+  font-size: 15px;
+}
+.btn-cancel:hover {
+  text-decoration: underline;
+}
